@@ -1,3 +1,3 @@
-tutorial: https://www.youtube.com/watch?v=2aeMRB8LL4o&ab_channel=CodeWithAntonio : 00:40:39
+tutorial: https://www.youtube.com/watch?v=2aeMRB8LL4o&ab_channel=CodeWithAntonio : 00:56:20
 
 github repo: https://github.com/ajfm88/spotify-clone
