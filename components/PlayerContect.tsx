@@ -108,13 +108,13 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
         >
             <div className="flex w-full justify-start">
                 <div className="flex items-center gap-x-4">
-                    <MediaItem data={song} />
+                    <MediaItem data={song} isplayer />
                     <LikeButton songId={song.id} />
                 </div>
             </div>
             <div className="flex md:hidden coll-auto w-full justify-end items-center">
                 <div
-                    onClick={() => { }}
+                    onClick={handlePlay}
                     className="
                 h-10
                 w-10
@@ -163,13 +163,13 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             <div className="hidden md:flex justify-end pr-2">
                 <div className="flex items-center gap-x-2 w-[120px]">
                     <VolumeIcon
-                    onClick={toggleMute}
-                    className="cursor-pointer"
-                    size={34}
+                        onClick={toggleMute}
+                        className="cursor-pointer"
+                        size={34}
                     />
                     <Slider
-                    value={volume}
-                    onChange={(value) => setVolume(value)}
+                        value={volume}
+                        onChange={(value) => setVolume(value)}
                     />
                 </div>
             </div>

@@ -9,18 +9,20 @@ import { twMerge } from "tailwind-merge";
 interface MediaItemProps {
     data: Song;
     onClick?: (id: string) => void;
+    isplayer?: boolean;
 }
 
 const MediaItem: React.FC<MediaItemProps> = ({
     data,
-    onClick
+    onClick,
+    isplayer
 }) => {
     const imageUrl = useLoadImage(data);
 
     const songId = data.id;
     const { activateId } = usePlayer();
 
-    const playing = songId === activateId;
+    const playing = songId === activateId && !isplayer;
 
     const handleClick = () => {
         if (onClick) {
