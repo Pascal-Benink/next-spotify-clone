@@ -11,7 +11,7 @@ import usePlayer from "@/hooks/usePlayer";
 import { useEffect, useState } from "react";
 import useSound from "use-sound";
 import toast from "react-hot-toast";
-import { getAudioDuration } from "@/lib/getDuration";
+import { getAudioDuration, getAudioDurationInSecconds } from "@/lib/getDuration";
 import PlayerSlider from "./PlayerSlider";
 
 interface PlayerContentProps {
@@ -106,15 +106,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 
     useEffect(() => {
         if (sound) {
-            sound.on('load', () => {
-                const duration = sound.duration();
-                const minutes = Math.floor(duration / 60);
-                const seconds = Math.floor(duration % 60);
-                const formattedDuration = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-                setDuration(formattedDuration);
-                setDurationInSeconds(duration);
-            });
-
             const interval = setInterval(() => {
                 const currentTime = sound.seek();
                 const minutes = Math.floor(currentTime / 60);
@@ -134,6 +125,13 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
                 toast.error(error);
             } else {
                 setDuration(formattedDuration);
+            }
+        });
+        getAudioDurationInSecconds(songUrl, (durationInSeconds, error) => {
+            if (error) {
+                toast.error(error);
+            } else {
+                setDurationInSeconds(durationInSeconds);
             }
         });
     }, [songUrl]);

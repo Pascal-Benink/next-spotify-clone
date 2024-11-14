@@ -14,3 +14,19 @@ export const getAudioDuration = (
         callback(null, `Failed to load audio: ${e.message}`);
     });
 };
+
+export const getAudioDurationInSecconds = (
+    url: string,
+    callback: (durationInSeconds: number | null, error?: string) => void
+): void => {
+    const audio = new Audio(url);
+
+    audio.addEventListener('loadedmetadata', () => {
+        const duration = audio.duration;
+        callback(duration);
+    });
+
+    audio.addEventListener('error', (e) => {
+        callback(null, `Failed to load audio: ${e.message}`);
+    });
+};

@@ -21,6 +21,13 @@ const PlayerSlider: React.FC<PlayerSliderProps> = ({
     {
         currentTime = 0;
     }
+    const realduration = 1;
+
+    // console.log(`currentTime: ${currentTime} / duration: ${duration} = ${currentTime / duration}`);
+
+    const realcurrentTime = (currentTime / duration) * realduration;
+
+    // console.log(realcurrentTime);
 
     return (
         <RadixSlider.Root
@@ -30,12 +37,12 @@ const PlayerSlider: React.FC<PlayerSliderProps> = ({
         items-center
         select-none
         touch-none
-        w-[240px]
+        w-[30vw]
         mx-2
         h-10
         "
-            defaultValue={[duration]}
-            value={[currentTime]}
+            defaultValue={[1]}
+            value={[realcurrentTime]}
             // onValueChange={handleChange}
             max={1}
             step={0.1}
