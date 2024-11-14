@@ -10,6 +10,8 @@ import Slider from "./Slider";
 import usePlayer from "@/hooks/usePlayer";
 import { useEffect, useState } from "react";
 import useSound from "use-sound";
+import toast from "react-hot-toast";
+import { getAudioDuration } from "@/lib/getDuration";
 
 interface PlayerContentProps {
     song: Song;
@@ -23,6 +25,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     const player = usePlayer();
     const [volume, setVolume] = useState(1);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [duration, setDuration] = useState<string | null>(null);
 
     const Icon = isPlaying ? BsPauseFill : BsPlayFill;
     const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
@@ -97,6 +100,16 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
         }
     }
 
+    useEffect(() => {
+        getAudioDuration(songUrl, (formattedDuration, error) => {
+            if (error) {
+                toast.error(error);
+            } else {
+                setDuration(formattedDuration);
+            }
+        });
+    }, [songUrl]);
+
     return (
         <div
             className="
@@ -140,7 +153,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     w-full
     max-w-[722px]
     gap-x-6
-    bg-red-500
     "
             >
                 <div className="flex items-center gap-x-6">
@@ -163,7 +175,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
                     </div>
                     <AiFillStepForward size={30} className="text-neutral-400 cursor-pointer hover:text-white transition" onClick={onPlayNext} />
                 </div>
-                {/* <p className="mt-2 text-center">{duration}</p> */}
+                <p className="mt-2 text-center">{duration}</p>
             </div>
             <div className="hidden md:flex justify-end pr-2">
                 <div className="flex items-center gap-x-2 w-[120px]">
