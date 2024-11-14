@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import useSound from "use-sound";
 import toast from "react-hot-toast";
 import { getAudioDuration } from "@/lib/getDuration";
+import PlayerSlider from "./PlayerSlider";
 
 interface PlayerContentProps {
     song: Song;
@@ -26,6 +27,9 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     const [volume, setVolume] = useState(1);
     const [isPlaying, setIsPlaying] = useState(false);
     const [duration, setDuration] = useState<string | null>(null);
+    const [durationInSeconds, setDurationInSeconds] = useState<number | null>(null);
+    const [currentTime, setCurrentTime] = useState<string | null>(null);
+    const [currentTimeInSeconds, setCurrentTimeInSeconds] = useState<number | null>(null);
 
     const Icon = isPlaying ? BsPauseFill : BsPlayFill;
     const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
@@ -99,6 +103,30 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             setVolume(0);
         }
     }
+
+    useEffect(() => {
+        if (sound) {
+            sound.on('load', () => {
+                const duration = sound.duration();
+                const minutes = Math.floor(duration / 60);
+                const seconds = Math.floor(duration % 60);
+                const formattedDuration = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                setDuration(formattedDuration);
+                setDurationInSeconds(duration);
+            });
+
+            const interval = setInterval(() => {
+                const currentTime = sound.seek();
+                const minutes = Math.floor(currentTime / 60);
+                const seconds = Math.floor(currentTime % 60);
+                const formattedCurrentTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                setCurrentTime(formattedCurrentTime);
+                setCurrentTimeInSeconds(currentTime);
+            }, 1000);
+
+            return () => clearInterval(interval);
+        }
+    }, [sound]);
 
     useEffect(() => {
         getAudioDuration(songUrl, (formattedDuration, error) => {
@@ -175,7 +203,11 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
                     </div>
                     <AiFillStepForward size={30} className="text-neutral-400 cursor-pointer hover:text-white transition" onClick={onPlayNext} />
                 </div>
-                <p className="mt-2 text-center">{duration}</p>
+                <div className="flex flex-row">
+                    <p className="mt-2 text-center">{currentTime}</p>
+                    <PlayerSlider duration={durationInSeconds} currentTime={currentTimeInSeconds} />
+                    <p className="mt-2 text-center">{duration}</p>
+                </div>
             </div>
             <div className="hidden md:flex justify-end pr-2">
                 <div className="flex items-center gap-x-2 w-[120px]">
