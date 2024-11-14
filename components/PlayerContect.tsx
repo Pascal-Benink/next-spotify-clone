@@ -131,34 +131,39 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             </div>
             <div
                 className="
-            hidden
-            h-full
-            md:flex
-            justify-center
-            items-center
-            w-full
-            max-w-[722px]
-            gap-x-6
-            "
+    hidden
+    h-full
+    md:flex
+    flex-col
+    justify-center
+    items-center
+    w-full
+    max-w-[722px]
+    gap-x-6
+    bg-red-500
+    "
             >
-                <AiFillStepBackward size={30} className="text-neutral-400 cursor-pointer hover:text-white transition" onClick={onPlayPrevious} />
-                <div
-                    onClick={handlePlay}
-                    className="
-                    flex
-                    items-center
-                    justify-center
-                    h-10
-                    w-10
-                    rounded-full
-                    bg-white
-                    p-1
-                    cursor-pointer
-                    "
-                >
-                    <Icon size={30} className="text-black" />
+                <div className="flex items-center gap-x-6">
+                    <AiFillStepBackward size={30} className="text-neutral-400 cursor-pointer hover:text-white transition" onClick={onPlayPrevious} />
+                    <div
+                        onClick={handlePlay}
+                        className="
+            flex
+            items-center
+            justify-center
+            h-10
+            w-10
+            rounded-full
+            bg-white
+            p-1
+            cursor-pointer
+            "
+                    >
+                        <Icon size={30} className="text-black" />
+                    </div>
+                    <AiFillStepForward size={30} className="text-neutral-400 cursor-pointer hover:text-white transition" onClick={onPlayNext} />
                 </div>
-                <AiFillStepForward size={30} className="text-neutral-400 cursor-pointer hover:text-white transition" onClick={onPlayNext} />
+                {/* <p className="mt-2 text-center">{duration}</p> */}
             </div>
             <div className="hidden md:flex justify-end pr-2">
                 <div className="flex items-center gap-x-2 w-[120px]">
