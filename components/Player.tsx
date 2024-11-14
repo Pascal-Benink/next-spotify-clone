@@ -23,7 +23,8 @@ const Player = () => {
         bg-black
         w-full
         py-2
-        h-[80px]
+        md:h-[80px]
+        h-[90px]
         px-4
         "
         >

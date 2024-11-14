@@ -37,7 +37,7 @@ const PlayerSlider: React.FC<PlayerSliderProps> = ({
         items-center
         select-none
         touch-none
-        w-full
+        w-[88%]
         md:w-[30vw]
         mx-2
         h-10

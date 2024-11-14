@@ -137,24 +137,28 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     }, [songUrl]);
 
     return (
-        <div
-            className="
+        <div className="h-full">
+
+
+            <div
+                className="
         grid
         grid-cols-2
         md:grid-cols-3
+        grid-rows-1
         h-full
         "
-        >
-            <div className="flex w-full justify-start">
-                <div className="flex items-center gap-x-4 md:mb-5">
-                    <MediaItem data={song} isplayer />
-                    <LikeButton songId={song.id} />
+            >
+                <div className="flex w-full justify-start">
+                    <div className="flex items-center gap-x-4 md:mb-4">
+                        <MediaItem data={song} isplayer />
+                        <LikeButton songId={song.id} />
+                    </div>
                 </div>
-            </div>
-            <div className="flex md:hidden coll-auto w-full justify-end items-center">
-                <div
-                    onClick={handlePlay}
-                    className="
+                <div className="flex md:hidden coll-auto w-full justify-end items-center">
+                    <div
+                        onClick={handlePlay}
+                        className="
                 h-10
                 w-10
                 flex
@@ -164,12 +168,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
                 bg-white
                 cursor-pointer
                 "
-                >
-                    <Icon size={30} className="text-black" />
+                    >
+                        <Icon size={30} className="text-black" />
+                    </div>
                 </div>
-            </div>
-            <div
-                className="
+                <div
+                    className="
     hidden
     h-full
     md:flex
@@ -180,12 +184,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     max-w-[722px]
     gap-x-6
     "
-            >
-                <div className="flex items-center gap-x-6">
-                    <AiFillStepBackward size={30} className="text-neutral-400 cursor-pointer hover:text-white transition" onClick={onPlayPrevious} />
-                    <div
-                        onClick={handlePlay}
-                        className="
+                >
+                    <div className="flex items-center gap-x-6">
+                        <AiFillStepBackward size={30} className="text-neutral-400 cursor-pointer hover:text-white transition" onClick={onPlayPrevious} />
+                        <div
+                            onClick={handlePlay}
+                            className="
             flex
             items-center
             justify-center
@@ -196,29 +200,33 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             p-1
             cursor-pointer
             "
-                    >
-                        <Icon size={30} className="text-black" />
+                        >
+                            <Icon size={30} className="text-black" />
+                        </div>
+                        <AiFillStepForward size={30} className="text-neutral-400 cursor-pointer hover:text-white transition" onClick={onPlayNext} />
                     </div>
-                    <AiFillStepForward size={30} className="text-neutral-400 cursor-pointer hover:text-white transition" onClick={onPlayNext} />
+                    <div className="flex flex-row">
+                        <p className="mt-2 text-center">{currentTime}</p>
+                        <PlayerSlider duration={durationInSeconds} currentTime={currentTimeInSeconds} />
+                        <p className="mt-2 text-center">{duration}</p>
+                    </div>
                 </div>
-                <div className="flex flex-row">
-                    <p className="mt-2 text-center">{currentTime}</p>
-                    <PlayerSlider duration={durationInSeconds} currentTime={currentTimeInSeconds} />
-                    <p className="mt-2 text-center">{duration}</p>
+                <div className="hidden md:flex justify-end pr-2 md:mb-4">
+                    <div className="flex items-center gap-x-2 w-[120px]">
+                        <VolumeIcon
+                            onClick={toggleMute}
+                            className="cursor-pointer"
+                            size={34}
+                        />
+                        <Slider
+                            value={volume}
+                            onChange={(value) => setVolume(value)}
+                        />
+                    </div>
                 </div>
             </div>
-            <div className="hidden md:flex justify-end pr-2 md:mb-5">
-                <div className="flex items-center gap-x-2 w-[120px]">
-                    <VolumeIcon
-                        onClick={toggleMute}
-                        className="cursor-pointer"
-                        size={34}
-                    />
-                    <Slider
-                        value={volume}
-                        onChange={(value) => setVolume(value)}
-                    />
-                </div>
+            <div className="block md:hidden w-full fixed bottom-0">
+                <PlayerSlider duration={durationInSeconds} currentTime={currentTimeInSeconds} />
             </div>
         </div>
     );
