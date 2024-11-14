@@ -1,8 +1,10 @@
 "use client";
 
 import useLoadImage from "@/hooks/useLoadImage";
+import usePlayer from "@/hooks/usePlayer";
 import { Song } from "@/types";
 import Image from "next/image";
+import { twMerge } from "tailwind-merge";
 
 interface MediaItemProps {
     data: Song;
@@ -14,6 +16,11 @@ const MediaItem: React.FC<MediaItemProps> = ({
     onClick
 }) => {
     const imageUrl = useLoadImage(data);
+
+    const songId = data.id;
+    const { activateId } = usePlayer();
+
+    const playing = songId === activateId;
 
     const handleClick = () => {
         if (onClick) {
@@ -54,7 +61,7 @@ const MediaItem: React.FC<MediaItemProps> = ({
                 />
             </div>
             <div className="flex flex-col gap-y-1 overflow-hidden">
-                <p className="text-white truncate">{data.title}</p>
+                <p className={twMerge("text-white truncate", playing && "text-green-500")}>{data.title}</p>
                 <p className="text-neutral-400 text-sm truncate">{data.author}</p>
             </div>
         </div>

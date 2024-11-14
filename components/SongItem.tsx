@@ -4,17 +4,26 @@ import useLoadImage from "@/hooks/useLoadImage";
 import { Song } from "@/types";
 import Image from "next/image";
 import PlayButton from "./PlayButton";
+import { twMerge } from "tailwind-merge";
+import usePlayer from "@/hooks/usePlayer";
 
 interface SongItemProps {
     data: Song;
     onClick: (id: string) => void;
+    // playing?: boolean;
 }
 
 const SongItem: React.FC<SongItemProps> = ({
     data,
-    onClick
+    onClick,
+    // playing = false,
 }) => {
     const imagePath = useLoadImage(data);
+
+    const songId = data.id;
+    const { activateId } = usePlayer();
+
+    const playing = songId === activateId;
 
     return (
         <div
@@ -44,7 +53,7 @@ const SongItem: React.FC<SongItemProps> = ({
                 />
             </div>
             <div className="flex flex-col items-start w-full pt-4 gap-y-1">
-                <p className="font-semibold truncate w-full">
+                <p className={twMerge("font-semibold truncate w-full", playing && "text-green-500")}>
                     {data.title}
                 </p>
                 <p className="text-neutral-400 text-sm pb-4 w-full truncate">

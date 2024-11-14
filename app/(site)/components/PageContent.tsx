@@ -2,6 +2,7 @@
 
 import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
+import usePlayer from "@/hooks/usePlayer";
 import { Song } from "@/types";
 
 interface PageContentProps {
