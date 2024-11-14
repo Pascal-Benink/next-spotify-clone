@@ -2,6 +2,9 @@ import getLikedSongs from "@/actions/getLikedSongs";
 import Header from "@/components/Header";
 import Image from "next/image";
 import LikedContent from "./components/LikedContent";
+import PlayButton from "@/components/PlayButton";
+import { FaPlay } from "react-icons/fa";
+import useOnPlay from "@/hooks/useOnPlay";
 
 export const revalidate = 0;
 
@@ -24,7 +27,7 @@ const Liked = async () => {
                     className="mt-20"
                 >
                     <div
-                    className="
+                        className="
                     flex
                     flex-col
                     md:flex-row
@@ -32,15 +35,15 @@ const Liked = async () => {
                     "
                     >
                         <div className="relative h-32 w-32 lg:h-44 lg:w-44">
-                            <Image 
-                            fill
-                            alt="Playlist"
-                            className="object-cover"
-                            src={"/images/liked.png"}
+                            <Image
+                                fill
+                                alt="Playlist"
+                                className="object-cover"
+                                src={"/images/liked.png"}
                             />
                         </div>
                         <div
-                        className="
+                            className="
                         flex
                         flex-col
                         gap-y-2
@@ -58,11 +61,13 @@ const Liked = async () => {
                             ">
                                 Liked Songs
                             </h1>
+
                         </div>
                     </div>
                 </div>
+                <PlayButton songs={songs} />
             </Header>
-            <LikedContent songs={songs}/>
+            <LikedContent songs={songs} />
         </div>
     );
 }
