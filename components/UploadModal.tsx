@@ -13,7 +13,7 @@ import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 
-const uploadModal = () => {
+const UploadModal = () => {
     const router = useRouter();
     const uploadModal = useUploadModal();
 
@@ -114,6 +114,7 @@ const uploadModal = () => {
             reset();
             uploadModal.onClose();
         } catch (error) {
+            console.error(error);
             toast.error("Something went wrong");
         } finally {
             setIsLoading(false);
@@ -172,4 +173,4 @@ const uploadModal = () => {
     );
 }
 
-export default uploadModal;
+export default UploadModal;

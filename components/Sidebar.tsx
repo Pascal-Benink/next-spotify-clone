@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import React, { act, useMemo } from "react";
+import React, { useMemo } from "react";
 import { BiSearch } from "react-icons/bi";
 import { HiHome } from "react-icons/hi";
 import Box from "./Box";

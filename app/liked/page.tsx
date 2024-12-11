@@ -2,9 +2,6 @@ import getLikedSongs from "@/actions/getLikedSongs";
 import Header from "@/components/Header";
 import Image from "next/image";
 import LikedContent from "./components/LikedContent";
-import PlayButton from "@/components/PlayButton";
-import { FaPlay } from "react-icons/fa";
-import useOnPlay from "@/hooks/useOnPlay";
 
 export const revalidate = 0;
 
@@ -65,7 +62,6 @@ const Liked = async () => {
                         </div>
                     </div>
                 </div>
-                <PlayButton songs={songs} />
             </Header>
             <LikedContent songs={songs} />
         </div>
