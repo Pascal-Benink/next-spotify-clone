@@ -5,11 +5,11 @@ import useOnPlay from "@/hooks/useOnPlay";
 import { Song } from "@/types";
 import { useRef } from "react";
 
-interface PageContentProps {
+interface SongContentProps {
     songs: Song[];
 }
 
-const PageContent: React.FC<PageContentProps> = ({
+const SongContent: React.FC<SongContentProps> = ({
     songs
 }) => {
     const onPlay = useOnPlay(songs);
@@ -38,7 +38,7 @@ const PageContent: React.FC<PageContentProps> = ({
         <div
             className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 lx:grid-cols-5 2xl:grid-cols-8 gap-4 ml-4"
         >
-            {songs.slice(0, 16).map((item) => (
+            {songs.map((item) => (
                 <SongItem
                     key={item.id}
                     onClick={(id: string) => { onPlay(id) }}
@@ -46,26 +46,7 @@ const PageContent: React.FC<PageContentProps> = ({
                 />
             ))}
         </div>
-        // <div className="relative">
-        //     <button onClick={scrollLeft} className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full">
-        //         &lt;
-        //     </button>
-        //     <div ref={scrollContainerRef} className="overflow-hidden truncate">
-        //         <div className="grid grid-rows-2 gap-4 ml-4 grid-flow-col">
-        //             {songs.map((item) => (
-        //                 <SongItem
-        //                     key={item.id}
-        //                     onClick={(id: string) => { onPlay(id) }}
-        //                     data={item}
-        //                 />
-        //             ))}
-        //         </div>
-        //     </div>
-        //     <button onClick={scrollRight} className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full">
-        //         &gt;
-        //     </button>
-        // </div>
     );
 }
 
-export default PageContent;
+export default SongContent;
