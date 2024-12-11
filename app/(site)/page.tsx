@@ -62,6 +62,38 @@ export default async function Home() {
           <PageContent songs={songs} />
         </div>
       </div>
+      <div className="mt-2 mb-7 px-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-white text-2xl font-semibold">
+            My Playlists
+          </h1>
+          {/* <Link href="/songs">
+            <p className="text-white text-sm font-semibold mr-3 hover:underline">
+              View All
+            </p>
+          </Link> */}
+        </div>
+        <div>
+          {/* <PageContent songs={songs} /> */}
+          <p className="text-red-500">This is in development</p>
+        </div>
+      </div>
+      <div className="mt-2 mb-7 px-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-white text-2xl font-semibold">
+            Public Playlists
+          </h1>
+          {/* <Link href="/songs">
+            <p className="text-white text-sm font-semibold mr-3 hover:underline">
+              View All
+            </p>
+          </Link> */}
+        </div>
+        <div>
+          {/* <PageContent songs={songs} /> */}
+          <p className="text-red-500">This is in development</p>
+        </div>
+      </div>
     </div>
   )
 }
