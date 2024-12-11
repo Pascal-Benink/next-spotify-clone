@@ -17,6 +17,7 @@ const MediaItem: React.FC<MediaItemProps> = ({
     onClick,
     isplayer
 }) => {
+    const player = usePlayer();
     const imageUrl = useLoadImage(data);
 
     const songId = data.id;
@@ -29,13 +30,13 @@ const MediaItem: React.FC<MediaItemProps> = ({
             onClick(data.id);
         }
 
-        // TODO: defould turn on player
+        return player.setId(data.id);
     }
 
-    return ( 
+    return (
         <div
-        onClick={handleClick}
-        className="
+            onClick={handleClick}
+            className="
         flex
         items-center
         gap-x-3
@@ -47,7 +48,7 @@ const MediaItem: React.FC<MediaItemProps> = ({
         "
         >
             <div
-            className="
+                className="
             relative
             rounded-md
             min-h-[48px]
@@ -55,11 +56,11 @@ const MediaItem: React.FC<MediaItemProps> = ({
 
             "
             >
-                <Image 
-                fill
-                src={imageUrl || "/images/liked.png"}   
-                alt="mediaItem"
-                className="object-cover"
+                <Image
+                    fill
+                    src={imageUrl || "/images/liked.png"}
+                    alt="mediaItem"
+                    className="object-cover"
                 />
             </div>
             <div className="flex flex-col gap-y-1 overflow-hidden">
@@ -67,7 +68,7 @@ const MediaItem: React.FC<MediaItemProps> = ({
                 <p className="text-neutral-400 text-sm truncate">{data.author}</p>
             </div>
         </div>
-     );
+    );
 }
- 
+
 export default MediaItem;

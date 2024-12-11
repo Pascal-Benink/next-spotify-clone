@@ -31,7 +31,6 @@ const Library: React.FC<LibraryProps> = ({
         if (!subscription) {
             return subscribeModal.onOpen();
         }
-        // TODO: check of subs
 
         return uploadModal.onOpen();
     }
