@@ -15,18 +15,6 @@ const SongContent: React.FC<SongContentProps> = ({
     const onPlay = useOnPlay(songs);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    const scrollLeft = () => {
-        if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollBy({ left: -600, behavior: 'smooth' });
-        }
-    };
-
-    const scrollRight = () => {
-        if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollBy({ left: 600, behavior: 'smooth' });
-        }
-    };
-
     if (songs.length === 0) {
         return (
             <div className="mt-4 text-neutral-400">
