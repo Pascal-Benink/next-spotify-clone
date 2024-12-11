@@ -28,6 +28,9 @@ const AccountContent = () => {
             const { url, error } = await postData({
                 url: '/api/create-portal-link'
             })
+            if (error) {
+                throw new Error(error.message);
+            }
             window.location.assign(url);
         } catch (error) {
             toast.error((error as Error)?.message);
@@ -56,6 +59,7 @@ const AccountContent = () => {
                         You are currently on the <b>{subscription?.prices?.product?.name}</b> plan.
                     </p>
                     <Button
+                        disabled={loading || isLoading}
                         onClick={redirectToCustomerPortal}
                         className="w-[300px]"
                     >
