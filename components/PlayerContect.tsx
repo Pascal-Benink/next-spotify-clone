@@ -25,6 +25,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 }) => {
     const player = usePlayer();
     const [volume, setVolume] = useState(1);
+    const [numberVolume, setNumberVolume] = useState(1);
     const [isPlaying, setIsPlaying] = useState(false);
     const [duration, setDuration] = useState<string | null>(null);
     const [durationInSeconds, setDurationInSeconds] = useState<number | null>(null);
@@ -98,7 +99,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 
     const toggleMute = () => {
         if (volume === 0) {
-            setVolume(1);
+            setVolume(numberVolume);
         } else {
             setVolume(0);
         }
@@ -220,7 +221,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
                         />
                         <Slider
                             value={volume}
-                            onChange={(value) => setVolume(value)}
+                            onChange={(value) => {
+                                setVolume(value)
+                                setNumberVolume(value)
+                            }}
                         />
                     </div>
                 </div>

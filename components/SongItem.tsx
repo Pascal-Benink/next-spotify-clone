@@ -42,6 +42,7 @@ const SongItem: React.FC<SongItemProps> = ({
         hover:bg-neutral-400/10
         transition
         p-3
+        w-[10vw]
         "
         >
             <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
