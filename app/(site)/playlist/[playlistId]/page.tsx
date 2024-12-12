@@ -3,6 +3,8 @@ import getPlaylist from "@/actions/getPlaylist";
 import Header from "@/components/Header";
 import { getImage } from "@/lib/getImage";
 import Image from "next/image";
+import getPlaylistSongs from "@/actions/getPlaylistSongs";
+import PlaylistContent from "./components/PlaylistContent";
 
 export const revalidate = 0;
 
@@ -19,6 +21,8 @@ const PlaylistPage = async ({params}: Props) => {
     console.log(playlist, playlist.name);
 
     const imagePath = await getImage(playlist.image_path);
+
+    const songs = await getPlaylistSongs(playlistId);
 
     return (
         <div
@@ -75,7 +79,7 @@ const PlaylistPage = async ({params}: Props) => {
                     </div>
                 </div>
             </Header>
-            {/* <LikedContent songs={songs} /> */}
+            <PlaylistContent songs={songs} />
         </div>
     );
 }
