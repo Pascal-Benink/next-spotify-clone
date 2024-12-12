@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
+import CheckBox from "./CheckBox";
 
 const CreatePlaylistModal = () => {
     const router = useRouter();
@@ -32,6 +33,7 @@ const CreatePlaylistModal = () => {
             description: '',
             name: '',
             image: null,
+            isPublic: false,
         }
     })
 
@@ -52,7 +54,7 @@ const CreatePlaylistModal = () => {
                 toast.error("Missing fields");
                 return;
             }
-            
+
             const uniqueID = uniqid();
 
             // upload image
@@ -60,14 +62,14 @@ const CreatePlaylistModal = () => {
                 data: imageData,
                 error: imageError
             } = await supabaseClient
-            .storage
-            .from('images')
-            .upload(`image-${values.name}-${uniqueID}`, imageFile, {
-                cacheControl: '3600',
-                upsert: false,
-            });
+                .storage
+                .from('images')
+                .upload(`image-${values.name}-${uniqueID}`, imageFile, {
+                    cacheControl: '3600',
+                    upsert: false,
+                });
 
-            if (imageError){
+            if (imageError) {
                 setIsLoading(false);
                 return toast.error("Failed to upload image");
             }
@@ -75,15 +77,16 @@ const CreatePlaylistModal = () => {
             const {
                 error: supabaseError
             } = await supabaseClient
-            .from(`playlists`)
-            .insert({
-                user_id: user.id,
-                name: values.name,
-                description: values.description,
-                image_path: imageData.path,             
-            });
+                .from(`playlists`)
+                .insert({
+                    user_id: user.id,
+                    name: values.name,
+                    description: values.description,
+                    is_public: values.isPublic,
+                    image_path: imageData.path,
+                });
 
-            if (supabaseError){
+            if (supabaseError) {
                 setIsLoading(false);
                 return toast.error(supabaseError.message);
             }
@@ -120,6 +123,12 @@ const CreatePlaylistModal = () => {
                     disabled={isLoading}
                     {...register('description', { required: true })}
                     placeholder="Playlist Description"
+                />
+                <CheckBox
+                    id="isPublic"
+                    label="Public Playlist"
+                    disabled={isLoading}
+                    {...register('isPublic')}
                 />
                 <div>
                     <div className="pb-1">

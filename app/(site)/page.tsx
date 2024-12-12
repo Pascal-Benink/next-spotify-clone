@@ -3,11 +3,14 @@ import Header from "@/components/Header";
 import ListItem from "@/components/ListItem";
 import PageContent from "./components/PageContent";
 import Link from "next/link";
+import PlaylistContent from "./components/PlaylistContent";
+import getPlaylists from "@/actions/getPlaylists";
 
 export const revalidate = 0;
 
 export default async function Home() {
   const songs = await getSongs();
+  const playlists = await getPlaylists();
 
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
@@ -75,7 +78,8 @@ export default async function Home() {
         </div>
         <div>
           {/* <PageContent songs={songs} /> */}
-          <p className="text-red-500">This is in development</p>
+          <PlaylistContent playlists={playlists} />
+          {/* <p className="text-red-500">This is in development</p> */}
         </div>
       </div>
       <div className="mt-2 mb-7 px-6">

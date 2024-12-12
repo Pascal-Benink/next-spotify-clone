@@ -1,9 +1,11 @@
 import { useAuthModal } from "@/hooks/useAuthModal";
+import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
 import { useSubscribeModal } from "@/hooks/useSubscribeModal";
 import { useUser } from "@/hooks/useUser";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 // import toast from "react-hot-toast";
 import { MdPlaylistAdd, MdPlaylistAddCheck } from "react-icons/md";
 
@@ -19,9 +21,35 @@ const PlaylistButton: React.FC<PlaylistButtonProps> = ({
 
     const authModal = useAuthModal();
     const subscribeModal = useSubscribeModal();
+    const createPlaylistModal = useCreatePlaylistModal();
     const { user, subscription } = useUser();
 
     const [isInPlaylist, setIsInPlaylist] = useState(false);
+    const [userHasPLaylist, setUserHasPlaylist] = useState(false);
+
+    useEffect(() => {
+        if (!user?.id) {
+            return;
+        }
+
+        const checkUserPlaylist = async () => {
+            const { data, error } = await supabaseClient
+                .from("playlists")
+                .select("id")
+                .eq("user_id", user.id)
+                .single();
+
+            if (error || !data) {
+                // toast.error("You need to create a playlist first!");
+            }
+
+            if (data) {
+                setUserHasPlaylist(true);
+            }
+        };
+
+        checkUserPlaylist();
+    }, [supabaseClient, user?.id]);
 
     useEffect(() => {
         if (!user?.id) {
@@ -53,6 +81,11 @@ const PlaylistButton: React.FC<PlaylistButtonProps> = ({
 
         if (!subscription) {
             return subscribeModal.onOpen();
+        }
+
+        if (!userHasPLaylist) {
+            toast.error("You need to create a playlist first!");
+            return createPlaylistModal.onOpen();
         }
 
         // if (isInPlaylist)
