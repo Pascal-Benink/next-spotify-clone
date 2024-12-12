@@ -7,25 +7,30 @@ const getPlaylistSongs = async (playlistId: string): Promise<Song[]> => {
         cookies: cookies
     });
 
-    const { data, error } = await supabase
-    .from('playlist_songs')
-    .select('*, songs(*)')
-    .eq('playlist_id', playlistId)
-    .order('created_at', { ascending: true });
+    try {
+        const { data, error } = await supabase
+            .from('playlist_songs')
+            .select('*, songs(*)')
+            .eq('playlist_id', playlistId)
+            .order('created_at', { ascending: true });
 
-    if (error) {
-        console.error(error);
+        if (error) {
+            console.error('Error fetching playlist songs:', error);
+            return [];
+        }
+
+        if (!data) {
+            console.warn('No data returned for playlist songs');
+            return [];
+        }
+
+        return data.map((item) => ({
+            ...item.songs,
+        }));
+    } catch (err) {
+        console.error('Fetch failed:', err);
         return [];
     }
-
-    if (!data)
-    {
-        return [];
-    }
-
-    return data.map((item) => ({
-        ...item.songs,
-    }));
 }
 
 export default getPlaylistSongs;

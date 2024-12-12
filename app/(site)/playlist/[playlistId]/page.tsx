@@ -17,11 +17,7 @@ type Props = {
 const PlaylistPage = async ({params}: Props) => {
     const playlistId = params.playlistId;
     const playlist = await getPlaylist(playlistId);
-
-    console.log(playlist, playlist.name);
-
     const imagePath = await getImage(playlist.image_path);
-
     const songs = await getPlaylistSongs(playlistId);
 
     return (
