@@ -6,17 +6,14 @@ import PlayButton from "./PlayButton";
 import { twMerge } from "tailwind-merge";
 import usePlayer from "@/hooks/usePlayer";
 import useLoadPlaylistImage from "@/hooks/useLoadPlaylistImage";
+import Link from "next/link";
 
 interface PlaylistItemProps {
     data: Playlist;
-    onClick: (id: string) => void;
-    // playing?: boolean;
 }
 
 const PlaylistItem: React.FC<PlaylistItemProps> = ({
     data,
-    onClick,
-    // playing = false,
 }) => {
     const imagePath = useLoadPlaylistImage(data);
 
@@ -26,9 +23,9 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({
     const playing = playlistId === activateId;
 
     return (
-        <div
-            onClick={() => onClick(data.id)}
-            className="relative
+        <Link href={`/playlist/${playlistId}`}>
+            <div
+                className="relative
         group
         flex
         flex-col
@@ -44,24 +41,24 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({
         p-3
         w-[10vw]
         "
-        >
-            <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
-                <Image
-                    className="object-cover"
-                    src={imagePath || '/images/liked.png'}
-                    fill
-                    alt="Image"
-                />
-            </div>
-            <div className="flex flex-col items-start w-full pt-4 gap-y-1">
-                <p className={twMerge("font-semibold truncate w-full", playing && "text-green-500")}>
-                    {data.name}
-                </p>
-                {/* <p className="text-neutral-400 text-sm pb-4 w-full truncate">
+            >
+                <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
+                    <Image
+                        className="object-cover"
+                        src={imagePath || '/images/liked.png'}
+                        fill
+                        alt="Image"
+                    />
+                </div>
+                <div className="flex flex-col items-start w-full pt-4 gap-y-1">
+                    <p className={twMerge("font-semibold truncate w-full", playing && "text-green-500")}>
+                        {data.name}
+                    </p>
+                    {/* <p className="text-neutral-400 text-sm pb-4 w-full truncate">
                     By: {data.author}
                 </p> */}
-            </div>
-            {/* <div
+                </div>
+                {/* <div
                 className='
           absolute 
           bottom-24 
@@ -70,7 +67,8 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({
             >
                 <PlayButton />
             </div> */}
-        </div>
+            </div>
+        </Link>
     );
 }
 

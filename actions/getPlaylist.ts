@@ -2,7 +2,7 @@ import { Playlist } from "@/types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
-const getPlaylists = async (): Promise<Playlist[]> => {
+const getPlaylist = async (id: string): Promise<Playlist> => {
     const supabase = createServerComponentClient({
         cookies: cookies
     });
@@ -10,7 +10,9 @@ const getPlaylists = async (): Promise<Playlist[]> => {
     const { data, error } = await supabase
     .from('playlists')
     .select('*')
-    .order('created_at', { ascending: false });
+    .eq('id', id)
+    .order('created_at', { ascending: false })
+    .single();
 
     if (error) {
         console.error(error);
@@ -19,4 +21,4 @@ const getPlaylists = async (): Promise<Playlist[]> => {
     return (data as any) || [];
 }
 
-export default getPlaylists;
+export default getPlaylist;
