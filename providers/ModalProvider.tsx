@@ -35,7 +35,7 @@ const ModalProvider: React.FC<ModalProviderProps> = ({
             <SubscribeModal products={products} />
             <AlbumUploadModal />
             <CreatePlaylistModal />
-            <AddToPlaylistModal/>
+            <AddToPlaylistModal />
         </>
     );
 }

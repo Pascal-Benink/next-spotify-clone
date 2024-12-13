@@ -90,7 +90,7 @@ const PlaylistButton: React.FC<PlaylistButtonProps> = ({
             return createPlaylistModal.onOpen();
         }
         console.log("Opening addToPlaylistModal with songId: ", songId);
-        addToPlaylistModal.onOpen();
+        addToPlaylistModal.onOpen(songId);
     }
 
     return (

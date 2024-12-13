@@ -24,6 +24,8 @@ const AddToPlaylistModal = () => {
     const [playlists, setPlaylists] = useState<any[]>([]);
     const [selectedPlaylists, setSelectedPlaylists] = useState<string[]>([]);
 
+    const songId = addToPlaylistModal.songId;
+
     useEffect(() => {
         const fetchPlaylists = async () => {
             if (user) {
@@ -61,39 +63,40 @@ const AddToPlaylistModal = () => {
     };
 
     const onSubmit: SubmitHandler<FieldValues> = async () => {
-        // try {
-        //     setIsLoading(true);
+        console.log("Added songId ", songId, "to Playlist", selectedPlaylists);
+        try {
+            setIsLoading(true);
 
-        //     if (selectedPlaylists.length === 0) {
-        //         toast.error("Please select at least one playlist");
-        //         return;
-        //     }
+            if (selectedPlaylists.length === 0) {
+                toast.error("Please select at least one playlist");
+                return;
+            }
 
-        //     const insertPromises = selectedPlaylists.map(playlistId => {
-        //         return supabaseClient
-        //             .from('playlist_songs')
-        //             .insert({
-        //                 playlist_id: playlistId,
-        //                 song_id: addToPlaylistModal.songId, // Use songId from hook
-        //             });
-        //     });
+            const insertPromises = selectedPlaylists.map(playlistId => {
+                return supabaseClient
+                    .from('playlist_songs')
+                    .insert({
+                        playlist_id: playlistId,
+                        song_id: addToPlaylistModal.songId, // Use songId from hook
+                    });
+            });
 
-        //     const results = await Promise.all(insertPromises);
+            const results = await Promise.all(insertPromises);
 
-        //     const hasError = results.some(result => result.error);
-        //     if (hasError) {
-        //         toast.error("Failed to add song to playlists");
-        //     } else {
-        //         toast.success("Song added to playlists successfully");
-        //         router.refresh();
-        //         addToPlaylistModal.onClose();
-        //     }
-        // } catch (error) {
-        //     console.error(error);
-        //     toast.error("Something went wrong");
-        // } finally {
-        //     setIsLoading(false);
-        // }
+            const hasError = results.some(result => result.error);
+            if (hasError) {
+                toast.error("Failed to add song to playlists");
+            } else {
+                toast.success("Song added to playlists successfully");
+                router.refresh();
+                addToPlaylistModal.onClose();
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
