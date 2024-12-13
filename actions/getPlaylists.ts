@@ -14,10 +14,10 @@ const getPlaylists = async (): Promise<Playlist[]> => {
     } = await supabase.auth.getSession();
 
     const { data, error } = await supabase
-    .from('playlists')
-    .select('*')
-    .eq('user_id', session?.user.id)
-    .order('created_at', { ascending: false });
+        .from('playlists')
+        .select('*')
+        .eq('user_id', session?.user.id)
+        .order('created_at', { ascending: false });
 
     if (error) {
         console.error(error);
