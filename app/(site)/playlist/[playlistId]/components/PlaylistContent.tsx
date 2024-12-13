@@ -40,7 +40,7 @@ const PlaylistContent: React.FC<PlaylistContentProps> = ({
             text-neutral-400
             ">
                 <p className="flex flex-row">
-                    No Songs In this Playist. You can add them {" "}<Link href={"/search"} className="hover:underline ml-2">
+                    No Songs In this Playist. You can add them {" "}<Link href={"/search"} className="hover:underline ml-1.5">
                         here
                     </Link>
                 </p>
