@@ -14,7 +14,6 @@ const UsablePlayButton: React.FC<UsablePlayButtonProps> = ({songs}) => {
         <button
             className="
         transition 
-        opacity-0
         rounded-full
         flex
         items-center
@@ -23,9 +22,6 @@ const UsablePlayButton: React.FC<UsablePlayButtonProps> = ({songs}) => {
         drop-shadow-md
         translate
         translate-y-1/4
-        group-hover:opacity-100
-        group-hover:translate-y-0
-        hover:scale-110
         "
             onClick={() => onPlay(songs[0].id)}
         >

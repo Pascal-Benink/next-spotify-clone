@@ -5,6 +5,7 @@ import { getImage } from "@/lib/getImage";
 import Image from "next/image";
 import getPlaylistSongs from "@/actions/getPlaylistSongs";
 import PlaylistContent from "./components/PlaylistContent";
+import UsablePlayButton from "@/components/UsablePlayButton";
 
 export const revalidate = 0;
 
@@ -14,7 +15,7 @@ type Props = {
     };
 }
 
-const PlaylistPage = async ({params}: Props) => {
+const PlaylistPage = async ({ params }: Props) => {
     const playlistId = params.playlistId;
     const playlist = await getPlaylist(playlistId);
     const imagePath = await getImage(playlist.image_path);
@@ -75,6 +76,9 @@ const PlaylistPage = async ({params}: Props) => {
                     </div>
                 </div>
             </Header>
+            <div className="felx flex-row gap-x-3 ml-5">
+                <UsablePlayButton songs={songs} />
+            </div>
             <PlaylistContent songs={songs} />
         </div>
     );
