@@ -63,9 +63,13 @@ const PlaylistButton: React.FC<PlaylistButtonProps> = ({
                 .select("playlist_id, playlists(user_id)")
                 .eq("song_id", songId)
                 .eq("playlists.user_id", user.id)
-                .single();
+
+            if (error) {
+                console.error("Error fetching playlist song: ", error, "soingId: ", songId);
+            }
 
             if (!error && data) {
+                console.log("Data: ", data);
                 setIsInPlaylist(true);
             }
         };

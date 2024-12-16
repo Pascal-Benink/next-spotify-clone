@@ -30,26 +30,41 @@ const AddToPlaylistModal = () => {
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [selectedPlaylists, setSelectedPlaylists] = useState<string[]>([]);
 
+    const { isOpen } = addToPlaylistModal;
     const songId = addToPlaylistModal.songId;
 
     useEffect(() => {
         const fetchPlaylists = async () => {
-            if (user) {
-                const { data, error } = await supabaseClient
+            if (user && isOpen) {
+                const { data: playlistsData, error: playlistsError } = await supabaseClient
                     .from('playlists')
                     .select('*')
                     .eq('user_id', user.id);
 
-                if (error) {
+                if (playlistsError) {
                     toast.error("Failed to fetch playlists");
                 } else {
-                    setPlaylists(data);
+                    setPlaylists(playlistsData);
+                }
+
+                const { data: playlistSongsData, error: playlistSongsError } = await supabaseClient
+                    .from('playlist_songs')
+                    .select('playlist_id')
+                    .eq('song_id', songId)
+                    .eq('user_id', user.id);
+
+                if (playlistSongsError) {
+                    toast.error("Failed to fetch playlists containing the song");
+                    console.error("Error fetching playlists containing the song:", playlistSongsError);
+                } else {
+                    const playlistIds = playlistSongsData.map((item: { playlist_id: string }) => item.playlist_id);
+                    setSelectedPlaylists(playlistIds);
                 }
             }
         };
 
         fetchPlaylists();
-    }, [user, supabaseClient, use]);
+    }, [user, supabaseClient, songId, use]);
 
     const onChange = (open: boolean) => {
         if (!open) {
