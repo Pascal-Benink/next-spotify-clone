@@ -69,7 +69,7 @@ const PlaylistButton: React.FC<PlaylistButtonProps> = ({
             }
 
             if (!error && data) {
-                console.log("Data: ", data);
+                // console.log("Data: ", data);
                 setIsInPlaylist(true);
             }
         };
