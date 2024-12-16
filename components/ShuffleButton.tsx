@@ -23,7 +23,7 @@ const ShuffleButton: React.FC<ShuffleButtonProps> = ({
         transition
         disabled:opacity-50
         "
-        disabled
+            disabled
         >
             <Icon color={doShuffle ? '#22c55e' : 'white'} size={size || 25} />
         </button>
