@@ -12,8 +12,6 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import CheckBox from "./CheckBox";
 import { Playlist } from "@/types";
-import * as Separator from "@radix-ui/react-separator";
-import { AiOutlinePlus } from "react-icons/ai";
 import { useSubscribeModal } from "@/hooks/useSubscribeModal";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
@@ -52,17 +50,6 @@ const AddToPlaylistModal = () => {
 
         fetchPlaylists();
     }, [user, supabaseClient]);
-
-    const ClickNewPlaylist = () => {
-        if (!user) {
-            return authModal.onOpen();
-        }
-        if (!subscription) {
-            return subscribeModal.onOpen();
-        }
-
-        return createPlaylistModal.onOpen();
-    }
 
     const onChange = (open: boolean) => {
         if (!open) {
