@@ -6,6 +6,7 @@ import Image from "next/image";
 import getPlaylistSongs from "@/actions/getPlaylistSongs";
 import PlaylistContent from "./components/PlaylistContent";
 import UsablePlayButton from "@/components/UsablePlayButton";
+import ShuffleButton from "@/components/ShuffleButton";
 
 export const revalidate = 0;
 
@@ -79,8 +80,9 @@ const PlaylistPage = async ({ params }: Props) => {
                     </div>
                 </div>
             </Header>
-            <div className="felx flex-row gap-x-3 ml-5 mb-3">
+            <div className="flex flex-row gap-x-3 ml-5 w-full">
                 <UsablePlayButton songs={songs} />
+                <ShuffleButton doShuffle={false} size={30} />
             </div>
             <PlaylistContent songs={songs} />
         </div>
