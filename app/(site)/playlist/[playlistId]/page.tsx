@@ -71,6 +71,9 @@ const PlaylistPage = async ({ params }: Props) => {
                             ">
                                 {playlist.name}
                             </h1>
+                            <p className="text-sm">
+                                {playlist.description}
+                            </p>
 
                         </div>
                     </div>
