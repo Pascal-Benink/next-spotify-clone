@@ -102,7 +102,8 @@ const AddToPlaylistModal = () => {
                 .from('playlist_songs')
                 .select('playlist_id, song_id')
                 .in('playlist_id', selectedPlaylists)
-                .eq('song_id', songId);
+                .eq('song_id', songId)
+                .eq('user_id', user.id);
 
             if (existingEntriesError) {
                 toast.error("Failed to check existing songs in playlists");
@@ -110,10 +111,8 @@ const AddToPlaylistModal = () => {
                 return;
             }
 
-            // Create a set of existing playlist IDs that already contain the song
             const existingPlaylistIds = new Set(existingEntries.map(entry => entry.playlist_id));
 
-            // Filter out playlists that already contain the song
             const playlistsToInsert = selectedPlaylists.filter(playlistId => !existingPlaylistIds.has(playlistId));
 
             if (playlistsToInsert.length === 0) {
