@@ -7,6 +7,7 @@ import getPlaylistSongs from "@/actions/getPlaylistSongs";
 import PlaylistContent from "./components/PlaylistContent";
 import UsablePlayButton from "@/components/UsablePlayButton";
 import ShuffleButton from "@/components/ShuffleButton";
+import ShuffleControl from "./components/Controls";
 
 export const revalidate = 0;
 
@@ -80,10 +81,7 @@ const PlaylistPage = async ({ params }: Props) => {
                     </div>
                 </div>
             </Header>
-            <div className="flex flex-row gap-x-3 ml-5 w-full">
-                <UsablePlayButton songs={songs} />
-                <ShuffleButton doShuffle={false} size={30} />
-            </div>
+            <ShuffleControl songs={songs} />
             <PlaylistContent songs={songs} />
         </div>
     );
