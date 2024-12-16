@@ -8,7 +8,6 @@ import { useEffect } from "react";
 import MediaItem from "@/components/MediaItem";
 import LikeButton from "@/components/LikeButton";
 import useOnPlay from "@/hooks/useOnPlay";
-import Button from "@/components/Button";
 import Link from "next/link";
 import PlaylistButton from "@/components/PlaylistButton";
 

@@ -2,7 +2,7 @@
 
 import { Playlist } from "@/types";
 import Image from "next/image";
-import PlayButton from "./PlayButton";
+// import PlayButton from "./PlayButton";
 import { twMerge } from "tailwind-merge";
 import usePlayer from "@/hooks/usePlayer";
 import useLoadPlaylistImage from "@/hooks/useLoadPlaylistImage";

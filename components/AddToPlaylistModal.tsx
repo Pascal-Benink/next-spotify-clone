@@ -1,6 +1,5 @@
 "use client";
 
-import uniqid from "uniqid";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
 import { useAddToPlaylistModal } from "@/hooks/useAddToPlaylistModal";
@@ -12,6 +11,7 @@ import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import CheckBox from "./CheckBox";
+import { Playlist } from "@/types";
 
 const AddToPlaylistModal = () => {
     const router = useRouter();
@@ -21,7 +21,7 @@ const AddToPlaylistModal = () => {
     const supabaseClient = useSupabaseClient();
 
     const [isLoading, setIsLoading] = useState(false);
-    const [playlists, setPlaylists] = useState<any[]>([]);
+    const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [selectedPlaylists, setSelectedPlaylists] = useState<string[]>([]);
 
     const songId = addToPlaylistModal.songId;
@@ -53,7 +53,7 @@ const AddToPlaylistModal = () => {
     };
 
     const handleCheckboxChange = (playlistId: string) => {
-        setSelectedPlaylists((prev: any) => {
+        setSelectedPlaylists((prev) => {
             if (prev.includes(playlistId)) {
                 return prev.filter((id: string) => id !== playlistId);
             } else {
