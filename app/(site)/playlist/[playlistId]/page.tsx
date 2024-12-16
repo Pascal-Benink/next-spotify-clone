@@ -8,6 +8,7 @@ import PlaylistContent from "./components/PlaylistContent";
 import UsablePlayButton from "@/components/UsablePlayButton";
 import ShuffleButton from "@/components/ShuffleButton";
 import ShuffleControl from "./components/Controls";
+import { useUser } from "@/hooks/useUser";
 
 export const revalidate = 0;
 
@@ -18,10 +19,12 @@ type Props = {
 }
 
 const PlaylistPage = async ({ params }: Props) => {
+    const { user } = useUser();
     const playlistId = params.playlistId;
     const playlist = await getPlaylist(playlistId);
     const imagePath = await getImage(playlist.image_path);
     const songs = await getPlaylistSongs(playlistId);
+    const isOwner = user ? playlist.user_id === user.id : false;
 
     return (
         <div
@@ -81,7 +84,7 @@ const PlaylistPage = async ({ params }: Props) => {
                     </div>
                 </div>
             </Header>
-            <ShuffleControl songs={songs} />
+            <ShuffleControl songs={songs} isOwner={isOwner} />
             <PlaylistContent songs={songs} />
         </div>
     );

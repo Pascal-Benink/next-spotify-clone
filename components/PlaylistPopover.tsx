@@ -2,11 +2,9 @@
 
 import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { FaEllipsisH } from "react-icons/fa";import { HiOutlineTrash } from "react-icons/hi";
-;
+import { FaEllipsisH } from "react-icons/fa";import { HiOutlineTrash } from "react-icons/hi";;
 
 const PlaylistPopover = () => {
-
     return (
         <div>
             <DropdownMenu.Root>
