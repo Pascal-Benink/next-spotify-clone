@@ -98,13 +98,36 @@ const AddToPlaylistModal = () => {
                 return;
             }
 
-            const insertPromises = selectedPlaylists.map(playlistId => {
+            const { data: existingEntries, error: existingEntriesError } = await supabaseClient
+                .from('playlist_songs')
+                .select('playlist_id, song_id')
+                .in('playlist_id', selectedPlaylists)
+                .eq('song_id', songId);
+
+            if (existingEntriesError) {
+                toast.error("Failed to check existing songs in playlists");
+                console.error(existingEntriesError);
+                return;
+            }
+
+            // Create a set of existing playlist IDs that already contain the song
+            const existingPlaylistIds = new Set(existingEntries.map(entry => entry.playlist_id));
+
+            // Filter out playlists that already contain the song
+            const playlistsToInsert = selectedPlaylists.filter(playlistId => !existingPlaylistIds.has(playlistId));
+
+            if (playlistsToInsert.length === 0) {
+                toast("The selected playlists already contain this song");
+                return;
+            }
+
+            const insertPromises = playlistsToInsert.map(playlistId => {
                 return supabaseClient
                     .from('playlist_songs')
                     .insert({
                         user_id: user.id,
                         playlist_id: playlistId,
-                        song_id: addToPlaylistModal.songId, // Use songId from hook
+                        song_id: songId, // Use songId from hook
                     });
             });
 
