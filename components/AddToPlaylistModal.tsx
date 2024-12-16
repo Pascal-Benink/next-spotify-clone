@@ -12,11 +12,19 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import CheckBox from "./CheckBox";
 import { Playlist } from "@/types";
+import * as Separator from "@radix-ui/react-separator";
+import { AiOutlinePlus } from "react-icons/ai";
+import { useSubscribeModal } from "@/hooks/useSubscribeModal";
+import { useAuthModal } from "@/hooks/useAuthModal";
+import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
 
 const AddToPlaylistModal = () => {
+    const subscribeModal = useSubscribeModal();
+    const authModal = useAuthModal();
+    const createPlaylistModal = useCreatePlaylistModal();
     const router = useRouter();
     const addToPlaylistModal = useAddToPlaylistModal();
-    const { user } = useUser();
+    const { user, subscription } = useUser();
     const { handleSubmit } = useForm();
     const supabaseClient = useSupabaseClient();
 
@@ -44,6 +52,17 @@ const AddToPlaylistModal = () => {
 
         fetchPlaylists();
     }, [user, supabaseClient]);
+
+    const ClickNewPlaylist = () => {
+        if (!user) {
+            return authModal.onOpen();
+        }
+        if (!subscription) {
+            return subscribeModal.onOpen();
+        }
+
+        return createPlaylistModal.onOpen();
+    }
 
     const onChange = (open: boolean) => {
         if (!open) {
@@ -124,6 +143,10 @@ const AddToPlaylistModal = () => {
                         disabled={isLoading}
                     />
                 ))}
+                <Separator.Root className="my-[15px] bg-violet6 data-[orientation=horizontal]:h-px data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px" />
+                <div className="flex flex-row justify-between cursor-pointer focus:outline-none hover:text-white px-3" onClick={ClickNewPlaylist}>
+                    Create New Playlist <AiOutlinePlus size={20} className="text-neutral-400" />
+                </div>
                 <Button disabled={isLoading} type="submit">
                     Add to Playlist
                 </Button>
