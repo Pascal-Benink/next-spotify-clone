@@ -70,7 +70,9 @@ const PlaylistButton: React.FC<PlaylistButtonProps> = ({
 
             if (!error && data) {
                 // console.log("Data: ", data);
-                setIsInPlaylist(true);
+                if (data.length !== 0) {
+                    setIsInPlaylist(true);
+                }
             }
         };
 
@@ -87,13 +89,13 @@ const PlaylistButton: React.FC<PlaylistButtonProps> = ({
         if (!subscription) {
             return subscribeModal.onOpen();
         }
-        console.log("userHasPLaylist: ", userHasPLaylist);
+        // console.log("userHasPLaylist: ", userHasPLaylist);
 
         if (!userHasPLaylist) {
             toast.error("You need to create a playlist first!");
             return createPlaylistModal.onOpen();
         }
-        console.log("Opening addToPlaylistModal with songId: ", songId);
+        // console.log("Opening addToPlaylistModal with songId: ", songId);
         addToPlaylistModal.onOpen(songId);
     }
 
