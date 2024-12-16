@@ -2,8 +2,7 @@
 
 import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { FaEllipsisH, FaChevronRight, FaCheck } from "react-icons/fa";
-import { GoDotFill } from "react-icons/go";
+import { FaEllipsisH } from "react-icons/fa";;
 
 const PlaylistPopover = () => {
 
