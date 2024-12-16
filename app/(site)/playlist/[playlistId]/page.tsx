@@ -76,7 +76,7 @@ const PlaylistPage = async ({ params }: Props) => {
                     </div>
                 </div>
             </Header>
-            <div className="felx flex-row gap-x-3 ml-5">
+            <div className="felx flex-row gap-x-3 ml-5 mb-3">
                 <UsablePlayButton songs={songs} />
             </div>
             <PlaylistContent songs={songs} />
