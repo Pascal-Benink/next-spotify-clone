@@ -17,12 +17,12 @@ import { useAuthModal } from "@/hooks/useAuthModal";
 import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
 
 const AddToPlaylistModal = () => {
-    const subscribeModal = useSubscribeModal();
-    const authModal = useAuthModal();
-    const createPlaylistModal = useCreatePlaylistModal();
+    // const subscribeModal = useSubscribeModal();
+    // const authModal = useAuthModal();
+    // const createPlaylistModal = useCreatePlaylistModal();
     const router = useRouter();
     const addToPlaylistModal = useAddToPlaylistModal();
-    const { user, subscription } = useUser();
+    const { user } = useUser();
     const { handleSubmit } = useForm();
     const supabaseClient = useSupabaseClient();
 
