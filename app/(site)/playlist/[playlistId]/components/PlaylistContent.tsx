@@ -10,6 +10,7 @@ import LikeButton from "@/components/LikeButton";
 import useOnPlay from "@/hooks/useOnPlay";
 import Button from "@/components/Button";
 import Link from "next/link";
+import PlaylistButton from "@/components/PlaylistButton";
 
 interface PlaylistContentProps {
     songs: Song[];
@@ -61,6 +62,7 @@ const PlaylistContent: React.FC<PlaylistContentProps> = ({
                             data={song}
                         />
                     </div>
+                    <PlaylistButton songId={song.id} />
                     <LikeButton songId={song.id} />
                 </div>
             ))}

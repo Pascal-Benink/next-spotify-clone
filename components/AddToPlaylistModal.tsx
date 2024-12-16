@@ -72,10 +72,16 @@ const AddToPlaylistModal = () => {
                 return;
             }
 
+            if (!user) {
+                toast.error("Please login to add songs to playlist");
+                return;
+            }
+
             const insertPromises = selectedPlaylists.map(playlistId => {
                 return supabaseClient
                     .from('playlist_songs')
                     .insert({
+                        user_id: user.id,
                         playlist_id: playlistId,
                         song_id: addToPlaylistModal.songId, // Use songId from hook
                     });
@@ -86,6 +92,7 @@ const AddToPlaylistModal = () => {
             const hasError = results.some(result => result.error);
             if (hasError) {
                 toast.error("Failed to add song to playlists");
+                console.error(results);
             } else {
                 toast.success("Song added to playlists successfully");
                 router.refresh();
