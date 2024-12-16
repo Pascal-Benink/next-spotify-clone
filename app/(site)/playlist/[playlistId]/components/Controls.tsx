@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import ShuffleButton from "@/components/ShuffleButton";
 import UsablePlayButton from "@/components/UsablePlayButton";
+import PlaylistPopover from "@/components/PlaylistPopover";
 
 interface ShuffleControlProps {
     songs: any[];
@@ -16,9 +17,10 @@ const ShuffleControl: React.FC<ShuffleControlProps> = ({ songs }) => {
     }
 
     return (
-        <div className="flex flex-row gap-x-3 ml-5 w-full">
+        <div className="flex flex-row gap-x-3 ml-5 w-full items-center">
             <UsablePlayButton songs={songs} />
             <ShuffleButton doShuffle={shuffle} onShuffle={handleShuffle} size={30} />
+            <PlaylistPopover />
         </div>
     );
 }
