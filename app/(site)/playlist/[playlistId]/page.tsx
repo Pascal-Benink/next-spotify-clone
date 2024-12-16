@@ -5,10 +5,8 @@ import { getImage } from "@/lib/getImage";
 import Image from "next/image";
 import getPlaylistSongs from "@/actions/getPlaylistSongs";
 import PlaylistContent from "./components/PlaylistContent";
-import UsablePlayButton from "@/components/UsablePlayButton";
-import ShuffleButton from "@/components/ShuffleButton";
 import ShuffleControl from "./components/Controls";
-import { useUser } from "@/hooks/useUser";
+import getUser from "@/actions/getUser";
 
 export const revalidate = 0;
 
@@ -19,7 +17,7 @@ type Props = {
 }
 
 const PlaylistPage = async ({ params }: Props) => {
-    const { user } = useUser();
+    const user = await getUser();
     const playlistId = params.playlistId;
     const playlist = await getPlaylist(playlistId);
     const imagePath = await getImage(playlist.image_path);
