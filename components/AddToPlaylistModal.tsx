@@ -143,10 +143,6 @@ const AddToPlaylistModal = () => {
                         disabled={isLoading}
                     />
                 ))}
-                <Separator.Root className="my-[15px] bg-violet6 data-[orientation=horizontal]:h-px data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px" />
-                <div className="flex flex-row justify-between cursor-pointer focus:outline-none hover:text-white px-3" onClick={ClickNewPlaylist}>
-                    Create New Playlist <AiOutlinePlus size={20} className="text-neutral-400" />
-                </div>
                 <Button disabled={isLoading} type="submit">
                     Add to Playlist
                 </Button>
