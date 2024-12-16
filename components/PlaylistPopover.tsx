@@ -6,9 +6,6 @@ import { FaEllipsisH, FaChevronRight, FaCheck } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 
 const PlaylistPopover = () => {
-    const [bookmarksChecked, setBookmarksChecked] = React.useState(true);
-    const [urlsChecked, setUrlsChecked] = React.useState(false);
-    const [person, setPerson] = React.useState("pedro");
 
     return (
         <div>
