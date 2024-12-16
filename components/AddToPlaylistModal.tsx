@@ -25,7 +25,7 @@ const AddToPlaylistModal = () => {
     const { user } = useUser();
     const { handleSubmit } = useForm();
     const supabaseClient = useSupabaseClient();
-
+    let use = 0
     const [isLoading, setIsLoading] = useState(false);
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [selectedPlaylists, setSelectedPlaylists] = useState<string[]>([]);
@@ -49,7 +49,7 @@ const AddToPlaylistModal = () => {
         };
 
         fetchPlaylists();
-    }, [user, supabaseClient]);
+    }, [user, supabaseClient, use]);
 
     const onChange = (open: boolean) => {
         if (!open) {
@@ -109,6 +109,8 @@ const AddToPlaylistModal = () => {
             toast.error("Something went wrong");
         } finally {
             setIsLoading(false);
+            setSelectedPlaylists([]);
+            use = use + 1
         }
     };
 
