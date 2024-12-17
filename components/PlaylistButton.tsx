@@ -11,10 +11,12 @@ import { MdPlaylistAdd, MdPlaylistAddCheck } from "react-icons/md";
 
 interface PlaylistButtonProps {
     songId: string;
+    color?: string;
 }
 
 const PlaylistButton: React.FC<PlaylistButtonProps> = ({
-    songId
+    songId,
+    color = 'white'
 }) => {
     // const router = useRouter();
     const { supabaseClient } = useSessionContext();
@@ -107,7 +109,7 @@ const PlaylistButton: React.FC<PlaylistButtonProps> = ({
         transition
         "
         >
-            <Icon color={'white'} size={25} />
+            <Icon color={color} size={25} />
         </button>
     );
 }

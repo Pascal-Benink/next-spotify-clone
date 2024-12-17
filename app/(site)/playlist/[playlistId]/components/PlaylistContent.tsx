@@ -10,13 +10,16 @@ import LikeButton from "@/components/LikeButton";
 import useOnPlay from "@/hooks/useOnPlay";
 import Link from "next/link";
 import PlaylistButton from "@/components/PlaylistButton";
+import PlaylistItemDropdown from "@/components/PlaylistitemDropdown";
 
 interface PlaylistContentProps {
     songs: Song[];
+    PlaylistId: string;
 }
 
 const PlaylistContent: React.FC<PlaylistContentProps> = ({
-    songs
+    songs,
+    PlaylistId,
 }) => {
     const router = useRouter();
     const { isLoading, user } = useUser();
@@ -61,7 +64,8 @@ const PlaylistContent: React.FC<PlaylistContentProps> = ({
                             data={song}
                         />
                     </div>
-                    <PlaylistButton songId={song.id} />
+                    <PlaylistItemDropdown songId={song.id} playlistId={PlaylistId} />
+                    {/* <PlaylistButton songId={song.id} /> */}
                     <LikeButton songId={song.id} />
                 </div>
             ))}
