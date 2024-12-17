@@ -15,11 +15,13 @@ import PlaylistItemDropdown from "@/components/PlaylistitemDropdown";
 interface PlaylistContentProps {
     songs: Song[];
     PlaylistId: string;
+    isOwner: boolean;
 }
 
 const PlaylistContent: React.FC<PlaylistContentProps> = ({
     songs,
     PlaylistId,
+    isOwner
 }) => {
     const router = useRouter();
     const { isLoading, user } = useUser();
@@ -64,7 +66,7 @@ const PlaylistContent: React.FC<PlaylistContentProps> = ({
                             data={song}
                         />
                     </div>
-                    <PlaylistItemDropdown songId={song.id} playlistId={PlaylistId} />
+                    <PlaylistItemDropdown songId={song.id} playlistId={PlaylistId} isOwner={isOwner} />
                     {/* <PlaylistButton songId={song.id} /> */}
                     <LikeButton songId={song.id} />
                 </div>
