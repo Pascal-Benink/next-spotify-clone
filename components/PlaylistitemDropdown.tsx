@@ -69,8 +69,8 @@ const PlaylistItemDropdown = ({ songId, playlistId }: PlaylistItemDropdownProps)
                     >
                         Remove From Playlist <BiTrash size={20} className="text-neutral-400" />
                     </DropdownMenu.Item>
-                    <DropdownMenu.Item className="flex flex-row justify-end cursor-pointer focus:outline-none hover:text-white px-3">
-                        <PlaylistButton songId={songId} color="#9CA3AF"/>
+                    <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none hover:text-white px-3">
+                        Add to playlist <PlaylistButton songId={songId} color="#9CA3AF"/>
                     </DropdownMenu.Item>
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>
