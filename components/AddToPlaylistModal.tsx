@@ -12,14 +12,8 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import CheckBox from "./CheckBox";
 import { Playlist } from "@/types";
-import { useSubscribeModal } from "@/hooks/useSubscribeModal";
-import { useAuthModal } from "@/hooks/useAuthModal";
-import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
 
 const AddToPlaylistModal = () => {
-    // const subscribeModal = useSubscribeModal();
-    // const authModal = useAuthModal();
-    // const createPlaylistModal = useCreatePlaylistModal();
     const router = useRouter();
     const addToPlaylistModal = useAddToPlaylistModal();
     const { user } = useUser();
