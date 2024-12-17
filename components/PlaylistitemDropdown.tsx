@@ -2,15 +2,14 @@
 
 import React, { useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { AiOutlinePlus, AiOutlineUp } from "react-icons/ai";
-import { useSubscribeModal } from "@/hooks/useSubscribeModal";
 import { useAuthModal } from "@/hooks/useAuthModal";
-import { useUploadModal } from "@/hooks/useUploadModal";
 import { useUser } from "@/hooks/useUser";
-import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
 import { BiTrash } from "react-icons/bi";
 import PlaylistButton from "./PlaylistButton";
 import { FaEllipsisH } from "react-icons/fa";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface PlaylistItemDropdownProps {
     songId: string;
@@ -20,6 +19,8 @@ interface PlaylistItemDropdownProps {
 
 const PlaylistItemDropdown = ({ songId, playlistId, isOwner }: PlaylistItemDropdownProps) => {
     const authModal = useAuthModal();
+    const supabaseClient = useSupabaseClient();
+    const router = useRouter();
 
     const { user } = useUser();
 
@@ -29,12 +30,25 @@ const PlaylistItemDropdown = ({ songId, playlistId, isOwner }: PlaylistItemDropd
         setIsOpen(!isOpen);
     };
 
-    const ClickRemovefromPlaylist = () => {
+    const ClickRemovefromPlaylist = async () => {
         if (!user) {
             return authModal.onOpen();
         }
 
+        const { error } = await supabaseClient
+        .from('playlist_songs')
+        .delete()
+        .eq('song_id', songId)
+        .eq('playlist_id', playlistId)
+        .eq('user_id', user.id);
 
+        if (error) {
+            toast.error("Failed to remove song from playlist");
+            console.error("Error removing song from playlist:", error);
+        } else {
+            toast.success("Song removed from playlist");
+            router.refresh()
+        }
     }
 
     return (

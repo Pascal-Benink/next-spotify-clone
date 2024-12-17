@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ShuffleButton from "@/components/ShuffleButton";
 import UsablePlayButton from "@/components/UsablePlayButton";
 import PlaylistPopover from "@/components/PlaylistPopover";
+import { Song } from "@/types";
 
 interface ShuffleControlProps {
-    songs: any[];
+    songs: Song[];
     isOwner: boolean;
 }
 

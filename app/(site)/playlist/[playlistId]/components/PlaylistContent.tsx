@@ -9,7 +9,6 @@ import MediaItem from "@/components/MediaItem";
 import LikeButton from "@/components/LikeButton";
 import useOnPlay from "@/hooks/useOnPlay";
 import Link from "next/link";
-import PlaylistButton from "@/components/PlaylistButton";
 import PlaylistItemDropdown from "@/components/PlaylistitemDropdown";
 
 interface PlaylistContentProps {
