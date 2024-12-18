@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import ShuffleButton from "@/components/ShuffleButton";
 import UsablePlayButton from "@/components/UsablePlayButton";
 import PlaylistPopover from "@/components/PlaylistPopover";
