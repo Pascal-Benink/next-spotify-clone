@@ -2,14 +2,15 @@
 
 import LikeButton from "@/components/LikeButton";
 import MediaItem from "@/components/MediaItem";
+import PlaylistButton from "@/components/PlaylistButton";
 import useOnPlay from "@/hooks/useOnPlay";
 import { Song } from "@/types";
 
-interface SearchContentProps {
+interface SongSearchContentProps {
     songs: Song[];
 }
 
-const SearchContent: React.FC<SearchContentProps> = ({
+const SongSearchContent: React.FC<SongSearchContentProps> = ({
     songs
 }) => {
     const onPlay = useOnPlay(songs);
@@ -44,6 +45,7 @@ const SearchContent: React.FC<SearchContentProps> = ({
                         data={song}
                         />
                     </div>
+                    <PlaylistButton songId={song.id}/>
                     <LikeButton songId={song.id} />
                 </div>
             ))}
@@ -51,4 +53,4 @@ const SearchContent: React.FC<SearchContentProps> = ({
     );
 }
 
-export default SearchContent;
+export default SongSearchContent;
