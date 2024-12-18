@@ -23,6 +23,7 @@ const AddToPlaylistModal = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [selectedPlaylists, setSelectedPlaylists] = useState<string[]>([]);
+    const [initialSelectedPlaylists, setInitialSelectedPlaylists] = useState<string[]>([]);
 
     const { isOpen } = addToPlaylistModal;
     const songId = addToPlaylistModal.songId;
@@ -47,8 +48,6 @@ const AddToPlaylistModal = () => {
                     .eq('song_id', songId)
                     .eq('user_id', user.id);
 
-                console.log("SongId", playlistSongsData, playlistSongsError);
-
                 if (playlistSongsError) {
                     toast.error("Failed to fetch playlists containing the song");
                     console.error("Error fetching playlists containing the song:", playlistSongsError);
@@ -56,6 +55,7 @@ const AddToPlaylistModal = () => {
                     console.log("PlaylistSongsData", playlistSongsData);
                     const playlistIds = playlistSongsData.map((item: { playlist_id: string }) => item.playlist_id);
                     setSelectedPlaylists(playlistIds);
+                    setInitialSelectedPlaylists(playlistIds);
                     console.log("PlaylistIds", playlistIds);
                 }
             }
@@ -164,7 +164,7 @@ const AddToPlaylistModal = () => {
                         label={playlist.name}
                         checked={selectedPlaylists.includes(playlist.id)}
                         onChange={() => handleCheckboxChange(playlist.id)}
-                        disabled={isLoading}
+                        disabled={isLoading || initialSelectedPlaylists.includes(playlist.id)}
                     />
                 ))}
                 <Button disabled={isLoading} type="submit">
