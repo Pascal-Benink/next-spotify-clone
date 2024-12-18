@@ -142,7 +142,6 @@ const AddToPlaylistModal = () => {
                 console.error(results);
             } else {
                 toast.success("Song added to playlists successfully");
-                router.refresh();
                 addToPlaylistModal.onClose();
             }
         } catch (error) {
@@ -152,6 +151,7 @@ const AddToPlaylistModal = () => {
             setIsLoading(false);
             setSelectedPlaylists([]);
             use = use + 1
+            router.refresh();
         }
     };
 
