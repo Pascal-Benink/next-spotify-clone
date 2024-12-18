@@ -22,7 +22,7 @@ const ShuffleControl: React.FC<ShuffleControlProps> = ({ playlistId, songs, isOw
     return (
         <div className="flex flex-row gap-x-3 ml-5 w-full items-center">
             <UsablePlayButton songs={songs} />
-            <ShuffleButton doShuffle={shuffle} onShuffle={handleShuffle} size={30} />
+            <ShuffleButton size={30} />
             {isOwner && (
                 <PlaylistPopover playlistId={playlistId} />
             )}
