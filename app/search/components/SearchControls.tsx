@@ -1,6 +1,8 @@
 "use client"
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Button from '@/components/Button';
+import { twMerge } from 'tailwind-merge';
 
 const SearchControls: React.FC = () => {
     const router = useRouter();
@@ -19,10 +21,20 @@ const SearchControls: React.FC = () => {
     };
 
     return (
-        <div>
-            <button onClick={() => handleButtonClick('songs')}>Songs</button>
-            <button onClick={() => handleButtonClick('playlists')}>Playlists</button>
-            {type && <button onClick={() => handleButtonClick()}>Show All</button>}
+        <div className='flex gap-x-2'>
+            <Button onClick={() => handleButtonClick('songs')} className={twMerge(
+                'w-[120px] bg-white',
+                type === 'songs' && 'bg-green-500'
+            )}>
+                Songs
+            </Button>
+            <Button onClick={() => handleButtonClick('playlists')} className={twMerge(
+                'w-[120px] bg-white',
+                type === 'playlists' && 'bg-green-500'
+            )}>
+                Playlists
+            </Button>
+            {type && <Button onClick={() => handleButtonClick()} className='w-[120px] bg-transparent text-white'>Show All</Button>}
         </div>
     );
 };
