@@ -3,19 +3,20 @@
 import LikeButton from "@/components/LikeButton";
 import MediaItem from "@/components/MediaItem";
 import PlaylistButton from "@/components/PlaylistButton";
+import PlaylistMediaItem from "@/components/PlaylistMediaItem";
 import useOnPlay from "@/hooks/useOnPlay";
-import { Song } from "@/types";
+import { Playlist, Song } from "@/types";
 
-interface SearchContentProps {
-    songs: Song[];
+interface PlaylistSearchContentProps {
+    playlists: Playlist[];
 }
 
-const SearchContent: React.FC<SearchContentProps> = ({
-    songs
+const PlaylistSearchContent: React.FC<PlaylistSearchContentProps> = ({
+    playlists
 }) => {
-    const onPlay = useOnPlay(songs);
+    // const onPlay = useOnPlay(playlists);
 
-    if (songs.length === 0) {
+    if (playlists.length === 0) {
         return (
             <div
             className="
@@ -27,30 +28,30 @@ const SearchContent: React.FC<SearchContentProps> = ({
             text-neutral-400
             "
             >
-                <p>No songs found</p>
+                <p>No playlists found</p>
             </div>
         )
     }
 
     return (
         <div className="felx felx-col gap-y-2 w-ful px-6">
-            {songs.map((song) => (
+            {playlists.map((playlist) => (
                 <div
-                key={song.id}
+                key={playlist.id}
                 className="flex items center gap-x-4 w-full"
                 >
                     <div className="flex-1">
-                        <MediaItem 
-                        onClick={(id: string) => {onPlay(id)}}
-                        data={song}
+                        <PlaylistMediaItem 
+                        // onClick={(id: string) => {onPlay(id)}}
+                        data={playlist}
                         />
                     </div>
-                    <PlaylistButton songId={song.id}/>
-                    <LikeButton songId={song.id} />
+                    {/* <PlaylistButton playlistId={playlist.id}/>
+                    <LikeButton playlistId={playlist.id} /> */}
                 </div>
             ))}
         </div>
     );
 }
 
-export default SearchContent;
+export default PlaylistSearchContent;
