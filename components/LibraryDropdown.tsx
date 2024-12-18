@@ -62,10 +62,10 @@ const LibraryDropdown = () => {
                     className="py-2 min-w-[220px] rounded-md bg-neutral-800 p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
                     sideOffset={5}
                 >
-                    <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none hover:text-white px-3" onClick={ClickNewSong}>
+                    <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none text-neutral-400 hover:text-neutral-300 px-3 mb-1.5 transition" onClick={ClickNewSong}>
                         Upload New Song <AiOutlinePlus size={20} className="text-neutral-400" />
                     </DropdownMenu.Item>
-                    <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none hover:text-white px-3" onClick={ClickNewPlaylist}>
+                    <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none text-neutral-400 hover:text-neutral-300 px-3 mt-1.5 transition" onClick={ClickNewPlaylist}>
                         Create New Playlist <AiOutlinePlus size={20} className="text-neutral-400" />
                     </DropdownMenu.Item>
                 </DropdownMenu.Content>
