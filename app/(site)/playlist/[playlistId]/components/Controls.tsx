@@ -7,11 +7,12 @@ import PlaylistPopover from "@/components/PlaylistPopover";
 import { Song } from "@/types";
 
 interface ShuffleControlProps {
+    playlistId: string;
     songs: Song[];
     isOwner: boolean;
 }
 
-const ShuffleControl: React.FC<ShuffleControlProps> = ({ songs, isOwner }) => {
+const ShuffleControl: React.FC<ShuffleControlProps> = ({ playlistId, songs, isOwner }) => {
     const [shuffle, setShuffle] = useState<boolean>(false);
 
     const handleShuffle = () => {
@@ -23,7 +24,7 @@ const ShuffleControl: React.FC<ShuffleControlProps> = ({ songs, isOwner }) => {
             <UsablePlayButton songs={songs} />
             <ShuffleButton doShuffle={shuffle} onShuffle={handleShuffle} size={30} />
             {isOwner && (
-                <PlaylistPopover />
+                <PlaylistPopover playlistId={playlistId} />
             )}
         </div>
     );
