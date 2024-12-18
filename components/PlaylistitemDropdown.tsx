@@ -1,15 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
 import { BiTrash } from "react-icons/bi";
-import PlaylistButton from "./PlaylistButton";
 import { FaEllipsisH } from "react-icons/fa";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { MdPlaylistAddCheck } from "react-icons/md";
+import { useSubscribeModal } from "@/hooks/useSubscribeModal";
+import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
+import { useAddToPlaylistModal } from "@/hooks/useAddToPlaylistModal";
 
 interface PlaylistItemDropdownProps {
     songId: string;
@@ -19,12 +22,41 @@ interface PlaylistItemDropdownProps {
 
 const PlaylistItemDropdown = ({ songId, playlistId, isOwner }: PlaylistItemDropdownProps) => {
     const authModal = useAuthModal();
+    const subscribeModal = useSubscribeModal();
     const supabaseClient = useSupabaseClient();
+    const createPlaylistModal = useCreatePlaylistModal();
+    const addToPlaylistModal = useAddToPlaylistModal();
     const router = useRouter();
 
-    const { user } = useUser();
+    const { user, subscription } = useUser();
 
     const [isOpen, setIsOpen] = useState(false);
+
+    const [userHasPLaylist, setUserHasPlaylist] = useState(false);
+
+    useEffect(() => {
+        if (!user?.id) {
+            return;
+        }
+
+        const checkUserPlaylist = async () => {
+            const { data, error } = await supabaseClient
+                .from("playlists")
+                .select("id")
+                .eq("user_id", user.id);
+
+            if (error || !data) {
+                console.log(error, "data: ", data);
+                // toast.error("You need to create a playlist first!");
+            }
+
+            if (data) {
+                setUserHasPlaylist(true);
+            }
+        };
+
+        checkUserPlaylist();
+    }, [supabaseClient, user?.id]);
 
     const handleToggle = () => {
         setIsOpen(!isOpen);
@@ -36,11 +68,11 @@ const PlaylistItemDropdown = ({ songId, playlistId, isOwner }: PlaylistItemDropd
         }
 
         const { error } = await supabaseClient
-        .from('playlist_songs')
-        .delete()
-        .eq('song_id', songId)
-        .eq('playlist_id', playlistId)
-        .eq('user_id', user.id);
+            .from('playlist_songs')
+            .delete()
+            .eq('song_id', songId)
+            .eq('playlist_id', playlistId)
+            .eq('user_id', user.id);
 
         if (error) {
             toast.error("Failed to remove song from playlist");
@@ -49,6 +81,24 @@ const PlaylistItemDropdown = ({ songId, playlistId, isOwner }: PlaylistItemDropd
             toast.success("Song removed from playlist");
             router.refresh()
         }
+    }
+
+    const ClickAddToPlaylist = async () => {
+        if (!user) {
+            return authModal.onOpen();
+        }
+
+        if (!subscription) {
+            return subscribeModal.onOpen();
+        }
+        // console.log("userHasPLaylist: ", userHasPLaylist);
+
+        if (!userHasPLaylist) {
+            toast.error("You need to create a playlist first!");
+            return createPlaylistModal.onOpen();
+        }
+        console.log("Opening addToPlaylistModal with songId: ", songId);
+        addToPlaylistModal.onOpen(songId);
     }
 
     return (
@@ -70,14 +120,17 @@ const PlaylistItemDropdown = ({ songId, playlistId, isOwner }: PlaylistItemDropd
                 >
                     {isOwner && (
                         <DropdownMenu.Item
-                            className="flex flex-row justify-between cursor-pointer focus:outline-none hover:text-white px-3"
+                            className="flex flex-row justify-between cursor-pointer focus:outline-none text-neutral-400 hover:text-neutral-300 px-3 mb-1.5 transition"
                             onClick={ClickRemovefromPlaylist}
                         >
                             Remove From Playlist <BiTrash size={20} className="text-neutral-400" />
                         </DropdownMenu.Item>
                     )}
-                    <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none hover:text-white px-3">
-                        Add to playlist <PlaylistButton songId={songId} color="#9CA3AF" />
+                    <DropdownMenu.Item
+                        className="flex flex-row justify-between cursor-pointer focus:outline-none text-neutral-400 hover:text-neutral-300 px-3 mt-1.5 transition"
+                        onClick={ClickAddToPlaylist}
+                    >
+                        Add to playlist <MdPlaylistAddCheck size={20} className="text-neutral-400" />
                     </DropdownMenu.Item>
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>

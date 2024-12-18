@@ -47,12 +47,16 @@ const AddToPlaylistModal = () => {
                     .eq('song_id', songId)
                     .eq('user_id', user.id);
 
+                console.log("SongId", playlistSongsData, playlistSongsError);
+
                 if (playlistSongsError) {
                     toast.error("Failed to fetch playlists containing the song");
                     console.error("Error fetching playlists containing the song:", playlistSongsError);
                 } else {
+                    console.log("PlaylistSongsData", playlistSongsData);
                     const playlistIds = playlistSongsData.map((item: { playlist_id: string }) => item.playlist_id);
                     setSelectedPlaylists(playlistIds);
+                    console.log("PlaylistIds", playlistIds);
                 }
             }
         };
