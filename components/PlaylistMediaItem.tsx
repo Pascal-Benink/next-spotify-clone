@@ -1,37 +1,31 @@
 "use client";
 
-import useLoadImage from "@/hooks/useLoadImage";
 import useLoadPlaylistImage from "@/hooks/useLoadPlaylistImage";
-import usePlayer from "@/hooks/usePlayer";
 import { Playlist } from "@/types";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 
 interface MediaItemProps {
     data: Playlist;
     onClick?: (id: string) => void;
-    isplayer?: boolean;
 }
 
 const PlaylistMediaItem: React.FC<MediaItemProps> = ({
     data,
     onClick,
-    isplayer
 }) => {
-    const player = usePlayer();
+    const router = useRouter();
     const imageUrl = useLoadPlaylistImage(data);
 
-    const songId = data.id;
-    const { activateId } = usePlayer();
-
-    const playing = songId === activateId && !isplayer;
+    const playlistId = data.id;
 
     const handleClick = () => {
         if (onClick) {
             onClick(data.id);
         }
 
-        return player.setId(data.id);
+        router.push(`/playlist/${playlistId}`);
     }
 
     return (
@@ -65,7 +59,7 @@ const PlaylistMediaItem: React.FC<MediaItemProps> = ({
                 />
             </div>
             <div className="flex flex-col gap-y-1 overflow-hidden">
-                <p className={twMerge("text-white truncate", playing && "text-green-500")}>{data.name}</p>
+                <p className={twMerge("text-white truncate")}>{data.name}</p>
                 <p className="text-neutral-400 text-sm truncate">{data.description}</p>
             </div>
         </div>

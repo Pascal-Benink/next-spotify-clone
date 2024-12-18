@@ -1,6 +1,8 @@
 import { Playlist } from "@/types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import toast from "react-hot-toast";
 
 const getPlaylist = async (id: string): Promise<Playlist> => {
     const supabase = createServerComponentClient({
@@ -25,7 +27,9 @@ const getPlaylist = async (id: string): Promise<Playlist> => {
     }
 
     if (!data || (data.user_id !== session?.user.id && !data.is_public)) {
-        throw new Error("You do not have access to this playlist.");
+        // throw new Error("You do not have access to this playlist.");
+        // toast.error("You do not have access to this playlist.");
+        return redirect('/');
     }
 
     return (data as any) || [];

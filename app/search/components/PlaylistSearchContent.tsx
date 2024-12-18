@@ -42,7 +42,6 @@ const PlaylistSearchContent: React.FC<PlaylistSearchContentProps> = ({
                 >
                     <div className="flex-1">
                         <PlaylistMediaItem 
-                        // onClick={(id: string) => {onPlay(id)}}
                         data={playlist}
                         />
                     </div>

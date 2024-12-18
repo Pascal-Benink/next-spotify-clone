@@ -53,9 +53,9 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({
                     <p className={twMerge("font-semibold truncate w-full", playing && "text-green-500")}>
                         {data.name}
                     </p>
-                    {/* <p className="text-neutral-400 text-sm pb-4 w-full truncate">
-                    By: {data.author}
-                </p> */}
+                    <p className="text-neutral-400 text-sm pb-4 w-full truncate">
+                        {data.description}
+                    </p>
                 </div>
                 {/* <div
                 className='
