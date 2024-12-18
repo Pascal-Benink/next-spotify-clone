@@ -54,7 +54,7 @@ export default async function Home() {
       </div> */}
       <div className="mt-2 mb-7 px-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-white text-2xl font-semibold">
+          <h1 className="text-white text-2xl font-semibold mb-2">
             Newest Songs
           </h1>
           <Link href="/songs">
@@ -69,7 +69,7 @@ export default async function Home() {
       </div>
       <div className="mt-2 mb-7 px-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-white text-2xl font-semibold">
+          <h1 className="text-white text-2xl font-semibold mb-2">
             My Playlists
           </h1>
           {/* <Link href="/songs">
@@ -86,7 +86,7 @@ export default async function Home() {
       </div>
       <div className="mt-2 mb-7 px-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-white text-2xl font-semibold">
+          <h1 className="text-white text-2xl font-semibold mb-2">
             Public Playlists
           </h1>
           {/* <Link href="/songs">
