@@ -21,7 +21,7 @@ const Search = async ({ searchParams }: SearchProps) => {
     let songs = await getSongsByTitle(title);
     let playlists = await getPlaylistsByTitle(title);
 
-    if (!title && !type) {
+    if (!type) {
         console.log("No search params");
         songs = songs.slice(0, 7);
         playlists = playlists.slice(0, 7);
