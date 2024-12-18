@@ -126,7 +126,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
         if (sound) {
             const interval = setInterval(() => {
                 const currentTime = sound.seek();
-                console.log(currentTime, "currentTime");
                 const minutes = Math.floor(currentTime / 60);
                 const seconds = Math.floor(currentTime % 60);
                 const formattedCurrentTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
