@@ -13,11 +13,6 @@ interface ShuffleControlProps {
 }
 
 const ShuffleControl: React.FC<ShuffleControlProps> = ({ playlistId, songs, isOwner }) => {
-    const [shuffle, setShuffle] = useState<boolean>(false);
-
-    const handleShuffle = () => {
-        setShuffle(!shuffle);
-    }
 
     return (
         <div className="flex flex-row gap-x-3 ml-5 w-full items-center">
