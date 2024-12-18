@@ -44,6 +44,10 @@ const CreatePlaylistModal = () => {
         }
     }
 
+    const sanitizeFileName = (name: string) => {
+        return name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    }    
+
     const onSubmit: SubmitHandler<FieldValues> = async (values) => {
         try {
             setIsLoading(true);
@@ -56,6 +60,7 @@ const CreatePlaylistModal = () => {
             }
 
             const uniqueID = uniqid();
+            const sanitizedFileName = sanitizeFileName(values.name);
 
             // upload image
             const {
@@ -64,7 +69,7 @@ const CreatePlaylistModal = () => {
             } = await supabaseClient
                 .storage
                 .from('images')
-                .upload(`image-${values.name}-${uniqueID}`, imageFile, {
+                .upload(`image-${sanitizedFileName}-${uniqueID}`, imageFile, {
                     cacheControl: '3600',
                     upsert: false,
                 });

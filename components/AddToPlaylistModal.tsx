@@ -12,10 +12,12 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import CheckBox from "./CheckBox";
 import { Playlist } from "@/types";
+import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
 
 const AddToPlaylistModal = () => {
     const router = useRouter();
     const addToPlaylistModal = useAddToPlaylistModal();
+    const createPlaylistModal = useCreatePlaylistModal();
     const { user } = useUser();
     const { handleSubmit } = useForm();
     const supabaseClient = useSupabaseClient();
@@ -39,6 +41,10 @@ const AddToPlaylistModal = () => {
                 if (playlistsError) {
                     toast.error("Failed to fetch playlists");
                 } else {
+                    if (playlistsData.length === 0) {
+                        toast("You need to create a playlist first!");
+                        createPlaylistModal.onOpen();
+                    }
                     setPlaylists(playlistsData);
                 }
 

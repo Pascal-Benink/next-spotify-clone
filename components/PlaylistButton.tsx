@@ -59,19 +59,21 @@ const PlaylistButton: React.FC<PlaylistButtonProps> = ({
             return;
         }
 
+        console.log(user.id)
+
         const fetchData = async () => {
             const { data, error } = await supabaseClient
                 .from("playlist_songs")
-                .select("playlist_id, playlists(user_id)")
+                .select("playlist_id")
                 .eq("song_id", songId)
-                .eq("playlists.user_id", user.id)
+                .eq("user_id", user.id)
 
             if (error) {
                 console.error("Error fetching playlist song: ", error, "soingId: ", songId);
             }
 
             if (!error && data) {
-                // console.log("Data: ", data);
+                console.log("Data: ", data);
                 if (data.length !== 0) {
                     setIsInPlaylist(true);
                 }
@@ -109,7 +111,7 @@ const PlaylistButton: React.FC<PlaylistButtonProps> = ({
         transition
         "
         >
-            <Icon color={color} size={25} />
+            <Icon color={isInPlaylist ? '#22c55e' : color} size={25} />
         </button>
     );
 }
