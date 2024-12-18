@@ -1,11 +1,7 @@
 "use client"
 
-import LikeButton from "@/components/LikeButton";
-import MediaItem from "@/components/MediaItem";
-import PlaylistButton from "@/components/PlaylistButton";
 import PlaylistMediaItem from "@/components/PlaylistMediaItem";
-import useOnPlay from "@/hooks/useOnPlay";
-import { Playlist, Song } from "@/types";
+import { Playlist } from "@/types";
 
 interface PlaylistSearchContentProps {
     playlists: Playlist[];
