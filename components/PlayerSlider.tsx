@@ -5,47 +5,39 @@ import * as RadixSlider from "@radix-ui/react-slider";
 interface PlayerSliderProps {
     duration: number | null;
     currentTime: number | null;
-    // handleChange?: (value: number) => void;
+    onSeek: (value: number) => void;
 }
 
 const PlayerSlider: React.FC<PlayerSliderProps> = ({
     duration,
     currentTime,
-    // handleChange
+    onSeek,
 }) => {
-    if (!duration)
-    {
-        duration = 1;
-    }
-    if (!currentTime)
-    {
-        currentTime = 0;
-    }
-    const realduration = 1;
+    if (!duration) duration = 1;
+    if (!currentTime) currentTime = 0;
 
-    // console.log(`currentTime: ${currentTime} / duration: ${duration} = ${currentTime / duration}`);
+    const percentage = (currentTime / duration) * 100; 
 
-    const realcurrentTime = (currentTime / duration) * realduration;
-
-    // console.log(realcurrentTime);
+    const handleValueChange = (value: number[]) => {
+        const newTime = (value[0] / 100) * duration!;
+        onSeek(newTime); 
+    };
 
     return (
         <RadixSlider.Root
             className="
-        relative
-        flex
-        items-center
-        select-none
-        touch-none
-        w-[88%]
-        md:w-[30vw]
-        mx-2
-        h-10
-        "
-            defaultValue={[1]}
-            value={[realcurrentTime]}
-            // onValueChange={handleChange}
-            max={1}
+                relative
+                flex
+                items-center
+                select-none
+                touch-none
+                w-[30vw]
+                mx-2
+                h-10
+            "
+            value={[percentage]}
+            onValueChange={handleValueChange}
+            max={100}
             step={0.1}
             aria-label="Duration"
         >

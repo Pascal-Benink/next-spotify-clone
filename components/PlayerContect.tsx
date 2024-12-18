@@ -39,9 +39,22 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     const Icon = isPlaying ? BsPauseFill : BsPlayFill;
     const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
+    const handleSeek = (value: number) => {
+        if (sound) {
+            sound.seek(value);
+        }
+    };
+
     const onPlayNext = () => {
         if (player.ids.length === 0) {
             return;
+        }
+
+        if (player.shuffle)
+        {
+            const randomIndex = Math.floor(Math.random() * player.ids.length);
+            const randomSong = player.ids[randomIndex];
+            return player.setId(randomSong);
         }
 
         const currentIndex = player.ids.findIndex((id) => id === player.activateId);
@@ -217,7 +230,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
                     </div>
                     <div className="flex flex-row">
                         <p className="mt-2 text-center">{currentTime}</p>
-                        <PlayerSlider duration={durationInSeconds} currentTime={currentTimeInSeconds} />
+                        <PlayerSlider duration={durationInSeconds} currentTime={currentTimeInSeconds} onSeek={handleSeek}/>
                         <p className="mt-2 text-center">{duration}</p>
                     </div>
                 </div>
@@ -239,7 +252,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
                 </div>
             </div>
             <div className="block md:hidden w-full fixed bottom-0">
-                <PlayerSlider duration={durationInSeconds} currentTime={currentTimeInSeconds} />
+                <PlayerSlider duration={durationInSeconds} currentTime={currentTimeInSeconds} onSeek={handleSeek}/>
             </div>
         </div>
     );
