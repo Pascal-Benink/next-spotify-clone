@@ -59,8 +59,6 @@ const PlaylistButton: React.FC<PlaylistButtonProps> = ({
             return;
         }
 
-        console.log(user.id)
-
         const fetchData = async () => {
             const { data, error } = await supabaseClient
                 .from("playlist_songs")
@@ -73,7 +71,6 @@ const PlaylistButton: React.FC<PlaylistButtonProps> = ({
             }
 
             if (!error && data) {
-                console.log("Data: ", data);
                 if (data.length !== 0) {
                     setIsInPlaylist(true);
                 }

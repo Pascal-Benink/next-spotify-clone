@@ -14,8 +14,15 @@ interface SearchProps {
 export const revalidate = 0;
 
 const Search = async ({ searchParams }: SearchProps) => {
-    const songs = await getSongsByTitle(searchParams.title);
-    const playlists = await getPlaylistsByTitle(searchParams.title);
+    let songs = await getSongsByTitle(searchParams.title);
+    let playlists = await getPlaylistsByTitle(searchParams.title);
+
+    if (!searchParams.title)
+    {
+        console.log("No search params");
+        songs = songs.slice(0, 7);
+        playlists = playlists.slice(0, 7);
+    }
 
     return (
         <div
