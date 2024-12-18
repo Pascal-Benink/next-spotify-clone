@@ -72,6 +72,13 @@ export interface Playlist {
     is_public: boolean;
 }
 
+export interface PlaylistSong {
+    id: string;
+    playlist_id: string;
+    song_id: number;
+    user_id: string;
+}
+
 export interface ProductWithPrice extends Product {
     prices?: Price[];
 }
