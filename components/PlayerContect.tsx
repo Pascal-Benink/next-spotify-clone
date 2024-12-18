@@ -13,6 +13,7 @@ import useSound from "use-sound";
 import toast from "react-hot-toast";
 import { getAudioDuration, getAudioDurationInSecconds } from "@/lib/getDuration";
 import PlayerSlider from "./PlayerSlider";
+import PlaylistButton from "./PlaylistButton";
 
 interface PlayerContentProps {
     song: Song;
@@ -24,7 +25,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     songUrl
 }) => {
     const player = usePlayer();
-    const [volume, setVolume] = useState(1);
+    const [volume, setVolume] = useState<number>(() => {
+        const savedVolume = localStorage.getItem('volume');
+        return savedVolume ? parseFloat(savedVolume) : 1;
+    });
     const [numberVolume, setNumberVolume] = useState(1);
     const [isPlaying, setIsPlaying] = useState(false);
     const [duration, setDuration] = useState<string | null>(null);
@@ -137,6 +141,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
         });
     }, [songUrl]);
 
+    useEffect(() => {
+        localStorage.setItem('volume', volume.toString());
+    }, [volume]);
+
     return (
         <div className="h-full">
 
@@ -154,6 +162,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
                     <div className="flex items-center gap-x-4 md:mb-4">
                         <MediaItem data={song} isplayer />
                         <LikeButton songId={song.id} />
+                        <PlaylistButton songId={song.id}/>
                     </div>
                 </div>
                 <div className="flex md:hidden coll-auto w-full justify-end items-center">

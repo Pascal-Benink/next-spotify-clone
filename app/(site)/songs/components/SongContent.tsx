@@ -3,7 +3,6 @@
 import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
 import { Song } from "@/types";
-import { useRef } from "react";
 
 interface SongContentProps {
     songs: Song[];
@@ -13,7 +12,6 @@ const SongContent: React.FC<SongContentProps> = ({
     songs
 }) => {
     const onPlay = useOnPlay(songs);
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     if (songs.length === 0) {
         return (
