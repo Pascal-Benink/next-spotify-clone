@@ -3,7 +3,7 @@ import * as ContextMenu from "@radix-ui/react-context-menu";
 import { HiChevronRight } from "react-icons/hi";
 import { FaTrashAlt } from "react-icons/fa";
 import { RiPlayListFill } from "react-icons/ri";
-import { MdOutlineModeEditOutline } from "react-icons/md";
+import { MdOutlineModeEditOutline, MdPlaylistAdd } from "react-icons/md";
 import { Playlist } from "@/types";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useUser } from "@/hooks/useUser";
@@ -111,13 +111,30 @@ const PlaylistRightClickContent: React.FC<PlaylistRightClickContentProps> = ({ i
 					disabled={!user}
 				>
 					<div className="absolute left-0 inline-flex w-[25px] items-center justify-center">
-						<RiPlayListFill />
+						<MdPlaylistAdd />
 					</div>
 					{!user ? (
-						<p>Login to add To Playlist</p>
+						<p>Login to add to other Playlist</p>
 					) : (
 						<p>
-							Add To Playlist
+							Add to other Playlist
+						</p>
+					)}
+
+				</ContextMenu.Item>
+				<ContextMenu.Item className="group relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none text-green-600 
+				outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1"
+					onClick={handleClonePlaylist}
+					disabled={!subscription}
+				>
+					<div className="absolute left-0 inline-flex w-[25px] items-center justify-center">
+						<RiPlayListFill />
+					</div>
+					{!subscription ? (
+						<p>Upgrade to pro to clone Playlist</p>
+					) : (
+						<p>
+							Clone Playlist
 						</p>
 					)}
 
@@ -157,7 +174,7 @@ const PlaylistRightClickContent: React.FC<PlaylistRightClickContentProps> = ({ i
 										</div>
 										Edit Playlist
 									</ContextMenu.Item>
-									<ContextMenu.Separator className="m-[5px] h-px bg-neutral-700" />
+									{/* <ContextMenu.Separator className="m-[5px] h-px bg-neutral-700" />
 									<ContextMenu.Item className="relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none text-green-600 o
 									utline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1"
 										onClick={handleAddLyrics}
@@ -166,7 +183,7 @@ const PlaylistRightClickContent: React.FC<PlaylistRightClickContentProps> = ({ i
 											<CiTextAlignCenter />
 										</div>
 										Add lyrics
-									</ContextMenu.Item>
+									</ContextMenu.Item> */}
 								</ContextMenu.SubContent>
 							</ContextMenu.Portal>
 						</ContextMenu.Sub>
