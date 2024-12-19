@@ -12,6 +12,7 @@ import { useAddToPlaylistModal } from "@/hooks/useAddToPlaylistModal";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useSubscribeModal } from "@/hooks/useSubscribeModal";
 import toast from "react-hot-toast";
+import { CiTextAlignCenter } from "react-icons/ci";
 
 interface SongRightClickContentProps {
 	isOwner: boolean;
@@ -171,10 +172,16 @@ const SongRightClickContent: React.FC<SongRightClickContentProps> = ({ isOwner, 
 									alignOffset={-5}
 								>
 									<ContextMenu.Item className="relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none text-green-600 outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1">
+										<div className="absolute left-0 inline-flex w-[25px] items-center justify-center">
+											<MdOutlineModeEditOutline />
+										</div>
 										Edit Song
 									</ContextMenu.Item>
 									<ContextMenu.Separator className="m-[5px] h-px bg-neutral-700" />
 									<ContextMenu.Item className="relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none text-green-600 outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1">
+										<div className="absolute left-0 inline-flex w-[25px] items-center justify-center">
+											<CiTextAlignCenter />
+										</div>
 										Add lyrics
 									</ContextMenu.Item>
 								</ContextMenu.SubContent>
