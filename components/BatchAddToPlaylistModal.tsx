@@ -90,8 +90,9 @@ const BatchAddToPlaylistModal = () => {
                             key={playlist.id}
                             onClick={() => onSubmit(playlist.id)}
                             disabled={isLoading}
+                            className="bg-neutral-400"
                         >
-                            Add all songs to {playlist.name}
+                            Add all songs to playlist: {playlist.name}
                         </Button>
                     ))}
             </form>
