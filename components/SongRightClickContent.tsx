@@ -1,18 +1,41 @@
 import React from "react";
 import * as ContextMenu from "@radix-ui/react-context-menu";
 import { HiChevronRight } from "react-icons/hi";
-import { FaCheck, FaDownload, FaTrashAlt } from "react-icons/fa";
-import { RxDotFilled } from "react-icons/rx";
+import { FaTrashAlt } from "react-icons/fa";
 import { MdOutlineModeEditOutline } from "react-icons/md";
+import { Song } from "@/types";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useUser } from "@/hooks/useUser";
+import { TbDownload, TbDownloadOff } from "react-icons/tb";
 
 interface SongRightClickContentProps {
 	isOwner: boolean;
+	song: Song
 }
 
-const SongRightClickContent: React.FC<SongRightClickContentProps> = ({ isOwner }) => {
-	const [bookmarksChecked, setBookmarksChecked] = React.useState(true);
-	const [urlsChecked, setUrlsChecked] = React.useState(false);
-	const [person, setPerson] = React.useState("pedro");
+const SongRightClickContent: React.FC<SongRightClickContentProps> = ({ isOwner, song }) => {
+	const supabaseClient = useSupabaseClient();
+	const { subscription } = useUser();
+
+	const handleDownload = async () => {
+		const { data, error } = await supabaseClient
+			.storage
+			.from('songs')
+			.download(song.song_path);
+
+		if (error) {
+			console.error('Error downloading file:', error);
+			return;
+		}
+
+		const url = URL.createObjectURL(data);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = `${song.title}.mp3`;
+		document.body.appendChild(a);
+		a.click();
+		a.remove();
+	}
 
 	return (
 		<ContextMenu.Portal>
@@ -20,11 +43,24 @@ const SongRightClickContent: React.FC<SongRightClickContentProps> = ({ isOwner }
 				className="min-w-[220px] overflow-hidden rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] bg-neutral-950"
 			>
 				<ContextMenu.Item className="group relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none text-green-600 
-				outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1">
+				outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1"
+					onClick={handleDownload}
+					disabled={!subscription}
+				>
 					<div className="absolute left-0 inline-flex w-[25px] items-center justify-center">
-						<FaDownload />
+						{!subscription ? (
+							<TbDownloadOff />
+						) : (
+							<TbDownload />
+						)}
 					</div>
-					Download Song
+					{!subscription ? (
+						<p>Upgrade to pro to Download</p>
+					) : (
+						<p>
+							Download Song
+						</p>
+					)}
 				</ContextMenu.Item>
 
 

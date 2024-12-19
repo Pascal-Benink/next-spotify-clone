@@ -81,7 +81,7 @@ const SongItem: React.FC<SongItemProps> = ({
                     </div>
                 </div>
             </ContextMenu.Trigger>
-            <SongRightClickContent isOwner={isOwner} />
+            <SongRightClickContent isOwner={isOwner} song={data}/>
         </ContextMenu.Root>
     );
 }
