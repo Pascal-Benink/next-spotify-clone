@@ -12,10 +12,12 @@ import LibraryDropdown from "./LibraryDropdown";
 
 interface LibraryProps {
     songs: Song[];
+    userId: string | undefined;
 }
 
 const Library: React.FC<LibraryProps> = ({
-    songs
+    songs,
+    userId
 }) => {
     // const subscribeModal = useSubscribeModal();
     // const authModal = useAuthModal();
@@ -49,6 +51,7 @@ const Library: React.FC<LibraryProps> = ({
                         onClick={(id: string) => { onPlay(id) }}
                         key={item.id}
                         data={item}
+                        isOwner={item.user_id === userId}
                     />
                 ))}
             </div>

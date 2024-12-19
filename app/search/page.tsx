@@ -5,6 +5,7 @@ import SearchInput from "@/components/SearchInput";
 import SongSearchContent from "./components/SongSearchContent";
 import PlaylistSearchContent from "./components/PlaylistSearchContent";
 import SearchControls from "./components/SearchControls";
+import getUser from "@/actions/getUser";
 
 interface SearchProps {
     searchParams: {
@@ -20,6 +21,7 @@ const Search = async ({ searchParams }: SearchProps) => {
 
     let songs = await getSongsByTitle(title);
     let playlists = await getPlaylistsByTitle(title);
+    const user = await getUser();
 
     if (!type) {
         console.log("No search params");
@@ -53,7 +55,7 @@ const Search = async ({ searchParams }: SearchProps) => {
                         <h2 className="text-white text-xl font-semibold px-6">
                             Songs
                         </h2>
-                        <SongSearchContent songs={songs} />
+                        <SongSearchContent songs={songs} userId={user?.id}/>
                     </div>
                     <div>
                         <h2 className="text-white text-xl font-semibold px-6">
@@ -68,7 +70,7 @@ const Search = async ({ searchParams }: SearchProps) => {
                     <h2 className="text-white text-xl font-semibold px-6">
                         Songs
                     </h2>
-                    <SongSearchContent songs={songs} />
+                    <SongSearchContent songs={songs} userId={user?.id}/>
                 </div>
             )}
             {type === 'playlists' && (
