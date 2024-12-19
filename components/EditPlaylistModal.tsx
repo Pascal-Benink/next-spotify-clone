@@ -144,9 +144,9 @@ const PlaylistEditModal = () => {
                     placeholder="Playlist Name"
                 />
                 <Input
-                    id="author"
+                    id="description"
                     disabled={isLoading}
-                    {...register('author', { required: true })}
+                    {...register('description', { required: true })}
                     placeholder="Playlist Description"
                 />
                 <CheckBox
