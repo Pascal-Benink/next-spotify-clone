@@ -12,6 +12,7 @@ import AddToPlaylistModal from "@/components/AddToPlaylistModal";
 import DeletePlaylistModal from "@/components/DeletePlaylistModal";
 import DeleteSongModal from "@/components/DeleteSongModal";
 import SongEditModal from "@/components/EditSongModal";
+import AddLyricsModal from "@/components/AddLyricsModal";
 
 interface ModalProviderProps {
     products: ProductWithPrice[];
@@ -41,6 +42,7 @@ const ModalProvider: React.FC<ModalProviderProps> = ({
             <DeletePlaylistModal />
             <DeleteSongModal />
             <SongEditModal />
+            <AddLyricsModal />
         </>
     );
 }
