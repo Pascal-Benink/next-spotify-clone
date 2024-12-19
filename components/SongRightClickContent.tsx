@@ -14,6 +14,7 @@ import { useSubscribeModal } from "@/hooks/useSubscribeModal";
 import toast from "react-hot-toast";
 import { CiTextAlignCenter } from "react-icons/ci";
 import { useDeleteSongModal } from "@/hooks/useDeleteSongModal";
+import { useEditSongModal } from "@/hooks/useEditSongModal";
 
 interface SongRightClickContentProps {
 	isOwner: boolean;
@@ -26,6 +27,7 @@ const SongRightClickContent: React.FC<SongRightClickContentProps> = ({ isOwner, 
 	const subscribeModal = useSubscribeModal();
 	const createPlaylistModal = useCreatePlaylistModal();
 	const addToPlaylistModal = useAddToPlaylistModal();
+	const editSongModal = useEditSongModal();
 	const deleteSongModal = useDeleteSongModal();
 	const { user, subscription } = useUser();
 
@@ -120,6 +122,10 @@ const SongRightClickContent: React.FC<SongRightClickContentProps> = ({ isOwner, 
 		deleteSongModal.onOpen(song.id);
 	}
 
+	const handleEditSong = async () => {
+		editSongModal.onOpen(song.id);
+	}
+
 	return (
 		<ContextMenu.Portal>
 			<ContextMenu.Content
@@ -162,7 +168,10 @@ const SongRightClickContent: React.FC<SongRightClickContentProps> = ({ isOwner, 
 						<ContextMenu.Separator className="m-[5px] h-px bg-neutral-700" />
 
 						<ContextMenu.Sub>
-							<ContextMenu.SubTrigger className="group relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none text-green-600 outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[highlighted]:data-[state=open]:bg-green-500 data-[state=open]:bg-green-300 data-[disabled]:text-mauve8 data-[highlighted]:data-[state=open]:text-violet1 data-[highlighted]:text-violet1 data-[state=open]:text-green-600">
+							<ContextMenu.SubTrigger className="group relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none text-green-600 
+							utline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[highlighted]:data-[state=open]:bg-green-500 data-[state=open]:bg-green-300 data-[disabled]:text-mauve8 
+							data-[highlighted]:data-[state=open]:text-violet1 data-[highlighted]:text-violet1 data-[state=open]:text-green-600"
+							>
 								<div className="absolute left-0 inline-flex w-[25px] items-center justify-center">
 									<MdOutlineModeEditOutline />
 								</div>
@@ -177,7 +186,10 @@ const SongRightClickContent: React.FC<SongRightClickContentProps> = ({ isOwner, 
 									sideOffset={2}
 									alignOffset={-5}
 								>
-									<ContextMenu.Item className="relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none text-green-600 outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1">
+									<ContextMenu.Item className="relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none text-green-600 
+									outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1"
+										onClick={handleEditSong}
+									>
 										<div className="absolute left-0 inline-flex w-[25px] items-center justify-center">
 											<MdOutlineModeEditOutline />
 										</div>
