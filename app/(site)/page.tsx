@@ -6,6 +6,7 @@ import Link from "next/link";
 import PlaylistContent from "./components/PlaylistContent";
 import getPlaylists from "@/actions/getPlaylists";
 import getPublicPlaylists from "@/actions/getPublicPlaylists";
+import getUser from "@/actions/getUser";
 
 export const revalidate = 0;
 
@@ -13,6 +14,9 @@ export default async function Home() {
   const songs = await getSongs();
   const playlists = await getPlaylists();
   const publicPlaylists = await getPublicPlaylists();
+  const user = await getUser();
+
+  const userId = user?.id;
 
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
@@ -64,7 +68,7 @@ export default async function Home() {
           </Link>
         </div>
         <div>
-          <PageContent songs={songs} />
+          <PageContent songs={songs} userId={userId} />
         </div>
       </div>
       <div className="mt-2 mb-7 px-6">

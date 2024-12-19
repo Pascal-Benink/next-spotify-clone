@@ -8,10 +8,12 @@ import { Song } from "@/types";
 
 interface SongSearchContentProps {
     songs: Song[];
+    userId: string | undefined;
 }
 
 const SongSearchContent: React.FC<SongSearchContentProps> = ({
-    songs
+    songs,
+    userId
 }) => {
     const onPlay = useOnPlay(songs);
 
@@ -43,6 +45,7 @@ const SongSearchContent: React.FC<SongSearchContentProps> = ({
                         <MediaItem 
                         onClick={(id: string) => {onPlay(id)}}
                         data={song}
+                        isOwner={song.user_id === userId}
                         />
                     </div>
                     <PlaylistButton songId={song.id}/>

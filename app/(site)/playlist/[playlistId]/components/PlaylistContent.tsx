@@ -63,6 +63,7 @@ const PlaylistContent: React.FC<PlaylistContentProps> = ({
                         <MediaItem
                             onClick={(id: string) => { onPlay(id) }}
                             data={song}
+                            isOwner={isOwner}
                         />
                     </div>
                     <PlaylistItemDropdown songId={song.id} playlistId={PlaylistId} isOwner={isOwner} />

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-import Modal from "@/components/Modal";
 import AuthModal from "@/components/AuthModal";
 import UploadModal from "@/components/UploadModal";
 import SubscribeModal from "@/components/SubscribeModal";
@@ -10,6 +9,10 @@ import { ProductWithPrice } from "@/types";
 import AlbumUploadModal from "@/components/AlbumUploadModal";
 import CreatePlaylistModal from "@/components/CreatePlaylistModal";
 import AddToPlaylistModal from "@/components/AddToPlaylistModal";
+import DeletePlaylistModal from "@/components/DeletePlaylistModal";
+import DeleteSongModal from "@/components/DeleteSongModal";
+import SongEditModal from "@/components/EditSongModal";
+import AddLyricsModal from "@/components/AddLyricsModal";
 
 interface ModalProviderProps {
     products: ProductWithPrice[];
@@ -36,6 +39,10 @@ const ModalProvider: React.FC<ModalProviderProps> = ({
             <AlbumUploadModal />
             <CreatePlaylistModal />
             <AddToPlaylistModal />
+            <DeletePlaylistModal />
+            <DeleteSongModal />
+            <SongEditModal />
+            <AddLyricsModal />
         </>
     );
 }

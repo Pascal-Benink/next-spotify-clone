@@ -2,11 +2,13 @@ import getLikedSongs from "@/actions/getLikedSongs";
 import Header from "@/components/Header";
 import Image from "next/image";
 import LikedContent from "./components/LikedContent";
+import getUser from "@/actions/getUser";
 
 export const revalidate = 0;
 
 const Liked = async () => {
     const songs = await getLikedSongs();
+    const user = await getUser();
 
     return (
         <div
@@ -63,7 +65,7 @@ const Liked = async () => {
                     </div>
                 </div>
             </Header>
-            <LikedContent songs={songs} />
+            <LikedContent songs={songs} userId={user?.id}/>
         </div>
     );
 }

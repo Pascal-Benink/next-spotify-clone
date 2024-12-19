@@ -14,9 +14,10 @@ import { twMerge } from "tailwind-merge";
 interface SidebarProps {
     children: React.ReactNode;
     songs: Song[];
+    userId: string | undefined;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({children, songs}) => {
+const Sidebar: React.FC<SidebarProps> = ({children, songs, userId}) => {
     const pathname = usePathname();
     const player = usePlayer();
 
@@ -69,7 +70,7 @@ const Sidebar: React.FC<SidebarProps> = ({children, songs}) => {
                     </div>
                 </Box>
                 <Box className="overflow-y-auto h-full">
-                    <Library songs={songs} />
+                    <Library songs={songs} userId={userId}/>
                 </Box>
             </div>
             <main className="h-full flex-1 overflow-y-auto py-2">

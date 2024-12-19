@@ -11,10 +11,12 @@ import useOnPlay from "@/hooks/useOnPlay";
 
 interface LikedContentProps {
     songs: Song[];
+    userId: string | undefined;
 }
 
 const LikedContent: React.FC<LikedContentProps> = ({
-    songs
+    songs,
+    userId
 }) => {
     const router = useRouter();
     const { isLoading, user } = useUser();
@@ -53,6 +55,7 @@ const LikedContent: React.FC<LikedContentProps> = ({
                         <MediaItem 
                         onClick={(id: string) => {onPlay(id)}}
                         data={song}
+                        isOwner={song.user_id === userId}
                         />
                     </div>
                     <LikeButton songId={song.id} />

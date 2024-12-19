@@ -6,10 +6,12 @@ import { Song } from "@/types";
 
 interface SongContentProps {
     songs: Song[];
+    userId: string | undefined;
 }
 
 const SongContent: React.FC<SongContentProps> = ({
-    songs
+    songs,
+    userId
 }) => {
     const onPlay = useOnPlay(songs);
 
@@ -29,6 +31,7 @@ const SongContent: React.FC<SongContentProps> = ({
                     key={item.id}
                     onClick={(id: string) => { onPlay(id) }}
                     data={item}
+                    isOwner={item.user_id === userId}
                 />
             ))}
         </div>
