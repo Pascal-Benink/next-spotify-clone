@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
-import CheckBox from "./CheckBox";
 import { Playlist } from "@/types";
 import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
 
@@ -64,7 +63,36 @@ const BatchAddToPlaylistModal = () => {
                 return;
             }
 
+            const { data: existingPlaylistSongs, error: existingPlaylistSongsError } = await supabaseClient
+                .from('playlist_songs')
+                .select('song_id')
+                .eq('playlist_id', playlistId);
 
+            if (existingPlaylistSongsError) {
+                toast.error("Failed to add songs to playlist");
+                console.error(existingPlaylistSongsError);
+                return;
+            }
+
+            const existingSongIds = existingPlaylistSongs.map(playlistSong => playlistSong.song_id);
+
+            const filteredSongId = songId.filter(songId => !existingSongIds.includes(songId));
+            
+            const { error } = await supabaseClient
+                .from('playlist_songs')
+                .insert(filteredSongId.map(song_id => ({ 
+                    playlist_id: playlistId, 
+                    song_id,
+                    user_id: user.id
+                })));
+
+            if (error) {
+                toast.error("Failed to add songs to playlist");
+                console.error(error);
+                return;
+            }
+
+            toast.success("Added songs to playlist");
         } catch (error) {
             console.error(error);
             toast.error("Something went wrong");
