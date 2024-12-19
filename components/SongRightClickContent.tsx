@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as ContextMenu from "@radix-ui/react-context-menu";
 import { HiChevronRight } from "react-icons/hi";
 import { FaTrashAlt } from "react-icons/fa";
-import { MdOutlineModeEditOutline } from "react-icons/md";
+import { MdOutlineModeEditOutline, MdPlaylistAdd, MdPlaylistAddCheck } from "react-icons/md";
 import { Song } from "@/types";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useUser } from "@/hooks/useUser";
 import { TbDownload, TbDownloadOff } from "react-icons/tb";
+import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
+import { useAddToPlaylistModal } from "@/hooks/useAddToPlaylistModal";
+import { useAuthModal } from "@/hooks/useAuthModal";
+import { useSubscribeModal } from "@/hooks/useSubscribeModal";
+import toast from "react-hot-toast";
 
 interface SongRightClickContentProps {
 	isOwner: boolean;
@@ -15,7 +20,60 @@ interface SongRightClickContentProps {
 
 const SongRightClickContent: React.FC<SongRightClickContentProps> = ({ isOwner, song }) => {
 	const supabaseClient = useSupabaseClient();
-	const { subscription } = useUser();
+	const authModal = useAuthModal();
+	const subscribeModal = useSubscribeModal();
+	const createPlaylistModal = useCreatePlaylistModal();
+	const addToPlaylistModal = useAddToPlaylistModal();
+	const { user, subscription } = useUser();
+
+	const [isInPlaylist, setIsInPlaylist] = useState(false);
+	const [userHasPlaylist, setUserHasPlaylist] = useState(false);
+
+	useEffect(() => {
+		if (!user?.id) {
+			return;
+		}
+
+		const checkUserPlaylist = async () => {
+			const { data, error } = await supabaseClient
+				.from("playlists")
+				.select("id")
+				.eq("user_id", user.id);
+
+			if (error || !data) {
+				console.log(error, "data: ", data);
+				// toast.error("You need to create a playlist first!");
+			}
+
+			if (data) {
+				setUserHasPlaylist(true);
+			}
+		};
+
+		checkUserPlaylist();
+
+		const fetchData = async () => {
+			const { data, error } = await supabaseClient
+				.from("playlist_songs")
+				.select("playlist_id")
+				.eq("song_id", song.id)
+				.eq("user_id", user.id)
+
+			if (error) {
+				console.error("Error fetching playlist song: ", error, "soingId: ", song.id);
+			}
+
+			if (!error && data) {
+				if (data.length !== 0) {
+					setIsInPlaylist(true);
+				}
+			}
+		};
+
+		fetchData();
+	}, [song.id, supabaseClient, user?.id]);
+
+	const Icon = isInPlaylist ? MdPlaylistAddCheck : MdPlaylistAdd;
 
 	const handleDownload = async () => {
 		const { data, error } = await supabaseClient
@@ -35,6 +93,24 @@ const SongRightClickContent: React.FC<SongRightClickContentProps> = ({ isOwner, 
 		document.body.appendChild(a);
 		a.click();
 		a.remove();
+	}
+
+	const handleAddToPlaylist = async () => {
+		if (!user) {
+			return authModal.onOpen();
+		}
+
+		if (!subscription) {
+			return subscribeModal.onOpen();
+		}
+		// console.log("userHasPLaylist: ", userHasPLaylist);
+
+		if (!userHasPlaylist) {
+			toast.error("You need to create a playlist first!");
+			return createPlaylistModal.onOpen();
+		}
+		// console.log("Opening addToPlaylistModal with song.id: ", song.id);
+		addToPlaylistModal.onOpen(song.id);
 	}
 
 	return (
@@ -61,6 +137,15 @@ const SongRightClickContent: React.FC<SongRightClickContentProps> = ({ isOwner, 
 							Download Song
 						</p>
 					)}
+				</ContextMenu.Item>
+				<ContextMenu.Item className="group relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none text-green-600 
+				outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1"
+					onClick={handleAddToPlaylist}
+				>
+					<div className="absolute left-0 inline-flex w-[25px] items-center justify-center">
+						<Icon />
+					</div>
+					Add To Playlist
 				</ContextMenu.Item>
 
 

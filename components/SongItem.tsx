@@ -7,9 +7,6 @@ import PlayButton from "./PlayButton";
 import { twMerge } from "tailwind-merge";
 import usePlayer from "@/hooks/usePlayer";
 import * as ContextMenu from "@radix-ui/react-context-menu";
-import { HiChevronRight } from "react-icons/hi";
-import { FaCheck } from "react-icons/fa";
-import { RxDotFilled } from "react-icons/rx";
 import SongRightClickContent from "./SongRightClickContent";
 
 interface SongItemProps {
@@ -33,7 +30,7 @@ const SongItem: React.FC<SongItemProps> = ({
     const playing = songId === activateId;
 
     return (
-        <ContextMenu.Root>
+        <ContextMenu.Root modal={false}>
             <ContextMenu.Trigger>
                 <div
                     onClick={() => onClick(data.id)}
