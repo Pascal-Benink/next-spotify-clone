@@ -81,8 +81,8 @@ const AddLyricsModal = () => {
 
     return (
         <Modal
-            title="Upload Content"
-            description="Upload your content to the platform"
+            title="Add Lyrics"
+            description="Add your Lyrics to the song"
             isOpen={addLyricsModal.isOpen}
             onChange={onChange}
         >
