@@ -1,9 +1,11 @@
 import Header from "@/components/Header";
 import PageContent from "./components/SongContent";
 import getSongs from "@/actions/getSongs";
+import getUser from "@/actions/getUser";
 
 const SongListPage = async () => {
     const songs = await getSongs();
+    const user = await getUser();
 
     return (
         <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
@@ -24,7 +26,7 @@ const SongListPage = async () => {
                         All Songs
                     </h1>
                 </div>
-                <PageContent songs={songs} />
+                <PageContent songs={songs} userId={user?.id}/>
             </div>
         </div>
     );
