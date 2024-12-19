@@ -38,6 +38,45 @@ const MediaItem: React.FC<MediaItemProps> = ({
         return player.setId(data.id);
     }
 
+    if (isplayer) {
+        return (
+            <div
+                onClick={handleClick}
+                className="
+flex
+items-center
+gap-x-3
+cursor-pointer
+hover:bg-neutral-800/50
+w-full
+p-2
+rounded-md
+"
+            >
+                <div
+                    className="
+    relative
+    rounded-md
+    min-h-[48px]
+    min-w-[48px]
+
+    "
+                >
+                    <Image
+                        fill
+                        src={imageUrl || "/images/liked.png"}
+                        alt="mediaItem"
+                        className="object-cover"
+                    />
+                </div>
+                <div className="flex flex-col gap-y-1 overflow-hidden">
+                    <p className={twMerge("text-white truncate", playing && "text-green-500")}>{data.title}</p>
+                    <p className="text-neutral-400 text-sm truncate">{data.author}</p>
+                </div>
+            </div>
+        )
+    }
+
     return (
         <ContextMenu.Root modal={false}>
             <ContextMenu.Trigger>

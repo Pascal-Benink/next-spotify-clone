@@ -2,11 +2,9 @@
 
 import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
-import { FaEllipsisH } from "react-icons/fa"; import { HiOutlineTrash } from "react-icons/hi"; import { useUser } from "@/hooks/useUser";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { FaEllipsisH } from "react-icons/fa"; 
+import { HiOutlineTrash } from "react-icons/hi"; 
 import { useDeletePlaylistModal } from "@/hooks/useDeletePlaylistModal";
 
 interface PlaylistPopoverProps {

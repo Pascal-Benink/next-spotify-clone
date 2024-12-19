@@ -1,10 +1,9 @@
 "use client";
 
-import uniqid from "uniqid";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
 import Modal from "./Modal";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "./Input";
 import Button from "./Button";
 import toast from "react-hot-toast";
