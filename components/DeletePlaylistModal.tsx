@@ -1,10 +1,7 @@
 "use client";
 
-import uniqid from "uniqid";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-
 import Modal from "./Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "./Input";
 import Button from "./Button";
 import toast from "react-hot-toast";
@@ -19,12 +16,43 @@ const DeletePlaylistModal = () => {
     const deletePlaylistModal = useDeletePlaylistModal();
 
     const [isLoading, setIsLoading] = useState(false);
-    
+
     const { user } = useUser();
-    
+
     const supabaseClient = useSupabaseClient();
-    
-    const { playlistId } = deletePlaylistModal;
+
+    const playlistId = deletePlaylistModal.playlistId;
+
+    const [playListName, setPlayListName] = useState(playlistId);
+
+    const fetchPlaylistName = async () => {
+        try {
+            const { data: playlist, error } = await supabaseClient
+                .from('playlists')
+                .select('name')
+                .eq('id', playlistId)
+                .single();
+
+            if (error) {
+                console.error("Error fetching playlist name: ", error);
+                toast.error("Failed to fetch playlist name");
+                return;
+            }
+
+            setPlayListName(playlist?.name);
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong");
+        }
+    }
+
+    useEffect(() => {
+        if (!playlistId) {
+            return;
+        }
+
+        fetchPlaylistName();
+    }, [playlistId]);
 
     const onChange = (open: boolean) => {
         if (!open) {
@@ -70,20 +98,21 @@ const DeletePlaylistModal = () => {
 
     return (
         <Modal
-            title="Delete Playlist"
-            description="Delete a new playlist"
+            title={`Delete Playlist ${playListName}`}
+            description=""
             isOpen={deletePlaylistModal.isOpen}
             onChange={onChange}
         >
-            <div className="w-full flex flex-row">
-
-            <Button disabled={isLoading} onClick={DeletePlaylist}>
-                Delete Playlist
-            </Button>
-            <Button disabled={isLoading} onClick={() => deletePlaylistModal.onClose()} color="secondary">
-                Cancel
-            </Button>
-            </div>
+            <form className="w-full flex flex-row justify-evenly items-center">
+                <Button disabled={isLoading} onClick={DeletePlaylist} className="w-[170px]">
+                    Delete Playlist
+                </Button>
+                <Button disabled={isLoading} onClick={() => {
+                    deletePlaylistModal.onClose()
+                }} className="bg-neutral-500 w-[170px]">
+                    Cancel
+                </Button>
+            </form>
         </Modal >
     );
 }
