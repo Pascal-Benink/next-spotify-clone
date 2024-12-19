@@ -13,6 +13,7 @@ import { useAuthModal } from "@/hooks/useAuthModal";
 import { useSubscribeModal } from "@/hooks/useSubscribeModal";
 import toast from "react-hot-toast";
 import { CiTextAlignCenter } from "react-icons/ci";
+import { useDeleteSongModal } from "@/hooks/useDeleteSongModal";
 
 interface SongRightClickContentProps {
 	isOwner: boolean;
@@ -25,6 +26,7 @@ const SongRightClickContent: React.FC<SongRightClickContentProps> = ({ isOwner, 
 	const subscribeModal = useSubscribeModal();
 	const createPlaylistModal = useCreatePlaylistModal();
 	const addToPlaylistModal = useAddToPlaylistModal();
+	const deleteSongModal = useDeleteSongModal();
 	const { user, subscription } = useUser();
 
 	const [isInPlaylist, setIsInPlaylist] = useState(false);
@@ -114,6 +116,10 @@ const SongRightClickContent: React.FC<SongRightClickContentProps> = ({ isOwner, 
 		addToPlaylistModal.onOpen(song.id);
 	}
 
+	const handleDeleteSong = async () => {
+		deleteSongModal.onOpen(song.id);
+	}
+
 	return (
 		<ContextMenu.Portal>
 			<ContextMenu.Content
@@ -191,6 +197,7 @@ const SongRightClickContent: React.FC<SongRightClickContentProps> = ({ isOwner, 
 						<ContextMenu.Item
 							className="group relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none text-green-600 
 						outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1"
+							onClick={handleDeleteSong}
 						>
 							<div className="absolute left-0 inline-flex w-[25px] items-center justify-center">
 								<FaTrashAlt />

@@ -2,13 +2,11 @@
 
 import Modal from "./Modal";
 import { useEffect, useState } from "react";
-import Input from "./Input";
 import Button from "./Button";
 import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
-import CheckBox from "./CheckBox";
 import { useDeleteSongModal } from "@/hooks/useDeleteSongModal";
 
 const DeleteSongModal = () => {
