@@ -6,10 +6,12 @@ import { Song } from "@/types";
 
 interface PageContentProps {
     songs: Song[];
+    userId: string | undefined;
 }
 
 const PageContent: React.FC<PageContentProps> = ({
-    songs
+    songs,
+    userId
 }) => {
     const onPlay = useOnPlay(songs);
 
@@ -29,6 +31,7 @@ const PageContent: React.FC<PageContentProps> = ({
                     key={item.id}
                     onClick={(id: string) => { onPlay(id) }}
                     data={item}
+                    isOwner={item.user_id === userId}
                 />
             ))}
         </div>
