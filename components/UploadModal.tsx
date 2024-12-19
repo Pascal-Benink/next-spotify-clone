@@ -43,6 +43,10 @@ const UploadModal = () => {
         }
     }
 
+    const sanitizeFileName = (name: string) => {
+        return name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    }    
+
     const onSubmit: SubmitHandler<FieldValues> = async (values) => {
         try {
             setIsLoading(true);
@@ -54,6 +58,8 @@ const UploadModal = () => {
                 toast.error("Missing fields");
                 return;
             }
+
+            const sanitizedFileName = sanitizeFileName(values.title);
             
             const uniqueID = uniqid();
 
@@ -64,13 +70,14 @@ const UploadModal = () => {
             } = await supabaseClient
             .storage
             .from('songs')
-            .upload(`song-${values.title}-${uniqueID}`, songFile, {
+            .upload(`song-${sanitizedFileName}-${uniqueID}`, songFile, {
                 cacheControl: '3600',
                 upsert: false,
             });
 
             if (songError){
                 setIsLoading(false);
+                console.error(songError);
                 return toast.error("Failed to upload song");
             }
 
@@ -81,13 +88,14 @@ const UploadModal = () => {
             } = await supabaseClient
             .storage
             .from('images')
-            .upload(`image-${values.title}-${uniqueID}`, imageFile, {
+            .upload(`image-${sanitizedFileName}-${uniqueID}`, imageFile, {
                 cacheControl: '3600',
                 upsert: false,
             });
 
             if (imageError){
                 setIsLoading(false);
+                console.error(imageError);
                 return toast.error("Failed to upload image");
             }
 
