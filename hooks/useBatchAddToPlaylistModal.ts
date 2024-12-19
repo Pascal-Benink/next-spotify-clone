@@ -2,14 +2,16 @@ import { create } from "zustand";
 
 interface useBatchAddToPlaylistModalStore {
     isOpen: boolean;
-    songId: string[] | []; // Add songId to the store
-    onOpen: (id: string[]) => void; // Update onOpen to accept an id
+    songId: string[] | [];
+    selectedPlaylistId: string | null;
+    onOpen: (id: string[], selectedPlaylistId: string) => void;
     onClose: () => void;
 }
 
 export const useBatchAddToPlaylistModal = create<useBatchAddToPlaylistModalStore>((set) => ({
     isOpen: false,
-    songId: [], // Initialize songId as null
-    onOpen: (id: string[]) => set({ isOpen: true, songId: id }), // Set songId when opening
-    onClose: () => set({ isOpen: false, songId: [] }), // Reset songId when closing
+    songId: [],
+    selectedPlaylistId: null,
+    onOpen: (id: string[], selectedPlaylistId: string) => set({ isOpen: true, songId: id, selectedPlaylistId }),
+    onClose: () => set({ isOpen: false, songId: [] }),
 }));

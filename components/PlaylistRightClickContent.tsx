@@ -17,6 +17,7 @@ import { CiTextAlignCenter } from "react-icons/ci";
 import { useDeletePlaylistModal } from "@/hooks/useDeletePlaylistModal";
 import { useEditPlaylistModal } from "@/hooks/useEditPlaylistModal";
 import { useAddLyricsModal } from "@/hooks/useAddLyricsModal";
+import { useBatchAddToPlaylistModal } from "@/hooks/useBatchAddToPlaylistModal";
 
 interface PlaylistRightClickContentProps {
 	isOwner: boolean;
@@ -31,6 +32,7 @@ const PlaylistRightClickContent: React.FC<PlaylistRightClickContentProps> = ({ i
 	const addToPlaylistModal = useAddToPlaylistModal();
 	const editPlaylistModal = useEditPlaylistModal();
 	const deletePlaylistModal = useDeletePlaylistModal();
+	const batchAddToPlaylistModal = useBatchAddToPlaylistModal();
 	const addLyricsModal = useAddLyricsModal();
 	const { user, subscription } = useUser();
 
@@ -68,16 +70,28 @@ const PlaylistRightClickContent: React.FC<PlaylistRightClickContentProps> = ({ i
 		// TODO: Implement clone playlist
 	}
 
+	const handleBatchAddToPlaylist = async () => {
+		const { data, error } = await supabaseClient
+		.from('playlist_songs')
+		.select('song_id')
+		.eq('playlist_id', playlist.id);
+
+		if (error) {
+			console.error('Error fetching playlist songs:', error);
+			return;
+		}
+
+		const songIds = data.map((song) => song.song_id);
+
+		batchAddToPlaylistModal.onOpen(songIds, playlist.id);
+	}
+
 	const handleDeletePlaylist = async () => {
 		deletePlaylistModal.onOpen(playlist.id);
 	}
 
 	const handleEditPlaylist = async () => {
 		editPlaylistModal.onOpen(playlist.id);
-	}
-
-	const handleAddLyrics = async () => {
-		addLyricsModal.onOpen(playlist.id);
 	}
 
 	return (
@@ -107,7 +121,7 @@ const PlaylistRightClickContent: React.FC<PlaylistRightClickContentProps> = ({ i
 				</ContextMenu.Item>
 				<ContextMenu.Item className="group relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none text-green-600 
 				outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1"
-					onClick={handleClonePlaylist}
+					onClick={handleBatchAddToPlaylist}
 					disabled={!user}
 				>
 					<div className="absolute left-0 inline-flex w-[25px] items-center justify-center">

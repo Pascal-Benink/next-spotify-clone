@@ -1,7 +1,5 @@
 "use client";
 
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-
 import { useBatchAddToPlaylistModal } from "@/hooks/useBatchAddToPlaylistModal";
 import Modal from "./Modal";
 import { useEffect, useState } from "react";
@@ -19,15 +17,14 @@ const BatchAddToPlaylistModal = () => {
     const batchAddToPlaylistModal = useBatchAddToPlaylistModal();
     const createPlaylistModal = useCreatePlaylistModal();
     const { user } = useUser();
-    const { handleSubmit } = useForm();
     const supabaseClient = useSupabaseClient();
     let use = 0
     const [isLoading, setIsLoading] = useState(false);
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
-    const [selectedPlaylists, setSelectedPlaylists] = useState<string[]>([]);
 
     const { isOpen } = batchAddToPlaylistModal;
     const songId = batchAddToPlaylistModal.songId;
+    const selectedPlaylistId = batchAddToPlaylistModal.selectedPlaylistId;
 
     useEffect(() => {
         const fetchPlaylists = async () => {
@@ -54,13 +51,11 @@ const BatchAddToPlaylistModal = () => {
 
     const onChange = (open: boolean) => {
         if (!open) {
-            setSelectedPlaylists([]);
             batchAddToPlaylistModal.onClose();
         }
     };
 
     const onSubmit = async (playlistId: string) => {
-        console.log("Added songId ", songId, "to Playlist", selectedPlaylists);
         try {
             setIsLoading(true);
 
@@ -75,7 +70,6 @@ const BatchAddToPlaylistModal = () => {
             toast.error("Something went wrong");
         } finally {
             setIsLoading(false);
-            setSelectedPlaylists([]);
             use = use + 1
             router.refresh();
         }
@@ -89,15 +83,17 @@ const BatchAddToPlaylistModal = () => {
             onChange={onChange}
         >
             <form className="flex flex-col gap-y-4">
-                {playlists.map(playlist => (
-                    <Button
-                        key={playlist.id}
-                        onClick={() => onSubmit(playlist.id)}
-                        disabled={isLoading}
-                    >
-                        Add all songs to {playlist.name}
-                    </Button>
-                ))}
+                {playlists
+                    .filter(playlist => playlist.id !== selectedPlaylistId)
+                    .map(playlist => (
+                        <Button
+                            key={playlist.id}
+                            onClick={() => onSubmit(playlist.id)}
+                            disabled={isLoading}
+                        >
+                            Add all songs to {playlist.name}
+                        </Button>
+                    ))}
             </form>
         </Modal>
     );
