@@ -115,10 +115,19 @@ const SongEditModal = () => {
         }
     }
 
+    useEffect(() => {
+        reset({
+            id: song?.id || songId,
+            user_id: song?.user_id || '',
+            author: song?.author || '',
+            title: song?.title || '',
+        });
+    }, [song])
+
     return (
         <Modal
-            title="Upload Content"
-            description="Upload your content to the platform"
+            title="Edit Song"
+            description="Edit a song you uploaded to the platform"
             isOpen={editSongModal.isOpen}
             onChange={onChange}
         >
