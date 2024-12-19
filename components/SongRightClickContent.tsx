@@ -1,7 +1,7 @@
 import React from "react";
 import * as ContextMenu from "@radix-ui/react-context-menu";
 import { HiChevronRight } from "react-icons/hi";
-import { FaCheck, FaDownload } from "react-icons/fa";
+import { FaCheck, FaDownload, FaTrashAlt } from "react-icons/fa";
 import { RxDotFilled } from "react-icons/rx";
 
 interface SongRightClickContentProps {
@@ -87,7 +87,7 @@ const SongRightClickContent: React.FC<SongRightClickContentProps> = ({ isOwner }
 						outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1"
 					>
 						<div className="absolute left-0 inline-flex w-[25px] items-center justify-center">
-							<FaDownload />
+							<FaTrashAlt />
 						</div>
 						Delete Song
 					</ContextMenu.Item>
