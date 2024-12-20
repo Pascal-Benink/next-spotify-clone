@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import * as ContextMenu from "@radix-ui/react-context-menu";
 import { HiChevronRight } from "react-icons/hi";
 import { FaTrashAlt } from "react-icons/fa";
@@ -8,16 +8,12 @@ import { Playlist } from "@/types";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useUser } from "@/hooks/useUser";
 import { TbDownload, TbDownloadOff } from "react-icons/tb";
-import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
-import { useAddToPlaylistModal } from "@/hooks/useAddToPlaylistModal";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useSubscribeModal } from "@/hooks/useSubscribeModal";
-import toast from "react-hot-toast";
-import { CiTextAlignCenter } from "react-icons/ci";
 import { useDeletePlaylistModal } from "@/hooks/useDeletePlaylistModal";
 import { useEditPlaylistModal } from "@/hooks/useEditPlaylistModal";
-import { useAddLyricsModal } from "@/hooks/useAddLyricsModal";
 import { useBatchAddToPlaylistModal } from "@/hooks/useBatchAddToPlaylistModal";
+import { useClonePlaylistModal } from "@/hooks/useClonePlaylistModal";
 
 interface PlaylistRightClickContentProps {
 	isOwner: boolean;
@@ -28,12 +24,10 @@ const PlaylistRightClickContent: React.FC<PlaylistRightClickContentProps> = ({ i
 	const supabaseClient = useSupabaseClient();
 	const authModal = useAuthModal();
 	const subscribeModal = useSubscribeModal();
-	const createPlaylistModal = useCreatePlaylistModal();
-	const addToPlaylistModal = useAddToPlaylistModal();
 	const editPlaylistModal = useEditPlaylistModal();
 	const deletePlaylistModal = useDeletePlaylistModal();
 	const batchAddToPlaylistModal = useBatchAddToPlaylistModal();
-	const addLyricsModal = useAddLyricsModal();
+	const clonePlaylistModal = useClonePlaylistModal();
 	const { user, subscription } = useUser();
 
 	const handleDownload = async () => {
@@ -67,14 +61,27 @@ const PlaylistRightClickContent: React.FC<PlaylistRightClickContentProps> = ({ i
 			subscribeModal.onOpen();
 			return;
 		}
-		// TODO: Implement clone playlist
+
+		const { data, error } = await supabaseClient
+			.from('playlist_songs')
+			.select('song_id')
+			.eq('playlist_id', playlist.id);
+
+		if (error) {
+			console.error('Error fetching playlist songs:', error);
+			return;
+		}
+
+		const songIds = data.map((song) => song.song_id);
+
+		clonePlaylistModal.onOpen(songIds, playlist.id);
 	}
 
 	const handleBatchAddToPlaylist = async () => {
 		const { data, error } = await supabaseClient
-		.from('playlist_songs')
-		.select('song_id')
-		.eq('playlist_id', playlist.id);
+			.from('playlist_songs')
+			.select('song_id')
+			.eq('playlist_id', playlist.id);
 
 		if (error) {
 			console.error('Error fetching playlist songs:', error);
