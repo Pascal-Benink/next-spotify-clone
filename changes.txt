@@ -8,4 +8,7 @@ USING ((SELECT auth.uid()) = user_id)
 WITH CHECK (true);
 3. add album_id to songs - cascade, delete = set null
 
+packages:
+pnpm install @radix-ui/react-select
+
 code

@@ -5,7 +5,7 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
 import { useUploadModal } from "@/hooks/useUploadModal";
 import Modal from "../Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../Input";
 import Button from "../Button";
 import toast from "react-hot-toast";
@@ -13,6 +13,7 @@ import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import CheckBox from "../CheckBox";
+import SearchSelect from "../SearchSelect";
 
 const UploadModal = () => {
     const router = useRouter();
@@ -23,6 +24,10 @@ const UploadModal = () => {
     const { user } = useUser();
 
     const supabaseClient = useSupabaseClient();
+
+    const [albumData, setAlbumData] = useState<{ id: string; title: string }[]>([]);
+
+    const [selectedAlbum, setSelectedAlbum] = useState<string | null>(null);
 
     const {
         register,
@@ -48,6 +53,27 @@ const UploadModal = () => {
     const sanitizeFileName = (name: string) => {
         return name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
     }
+
+    useEffect(() => {
+        const fetchAlbums = async () => {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('albums')
+                    .select('id, title');
+
+                if (error) {
+                    console.error(error);
+                    return;
+                }
+
+                setAlbumData(data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchAlbums();
+    }, [supabaseClient]);
 
     const onSubmit: SubmitHandler<FieldValues> = async (values) => {
         try {
@@ -157,6 +183,12 @@ const UploadModal = () => {
                     label="Private Song"
                     disabled={isLoading}
                     {...register('is_private')}
+                />
+                <SearchSelect
+                    data={albumData.map(album => ({ id: album.id, name: album.title }))}
+                    onSelect={(selected) => setSelectedAlbum(selected)}
+                    selected={selectedAlbum}
+                    placeholder="Select an album"
                 />
                 <div>
                     <div className="pb-1">
