@@ -9,18 +9,6 @@ type PlaylistImageProps = {
 
 const PlaylistImage: React.FC<PlaylistImageProps> = ({ playlist }) => {
 
-    if (!playlist) {
-        return (
-            <div>
-                <Image
-                    src="/images/liked.png"
-                    alt="Playlist Image"
-                    width={200}
-                    height={200}
-                />
-            </div>
-        );
-    }
     const imagePath = useLoadPlaylistImage(playlist);
 
     return (
