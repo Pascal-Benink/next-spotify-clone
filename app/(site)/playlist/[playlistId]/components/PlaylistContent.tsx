@@ -15,12 +15,14 @@ interface PlaylistContentProps {
     songs: Song[];
     PlaylistId: string;
     isOwner: boolean;
+    userId: string | undefined;
 }
 
 const PlaylistContent: React.FC<PlaylistContentProps> = ({
     songs,
     PlaylistId,
-    isOwner
+    isOwner,
+    userId
 }) => {
     const router = useRouter();
     const { isLoading, user } = useUser();
@@ -63,7 +65,7 @@ const PlaylistContent: React.FC<PlaylistContentProps> = ({
                         <MediaItem
                             onClick={(id: string) => { onPlay(id) }}
                             data={song}
-                            isOwner={isOwner}
+                            isOwner={song.user_id === userId}
                         />
                     </div>
                     <PlaylistItemDropdown songId={song.id} playlistId={PlaylistId} isOwner={isOwner} />
