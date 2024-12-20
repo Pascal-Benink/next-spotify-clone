@@ -5,7 +5,7 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
 import { useUploadModal } from "@/hooks/useUploadModal";
 import Modal from "../Modal";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Input from "../Input";
 import Button from "../Button";
 import toast from "react-hot-toast";
@@ -18,6 +18,7 @@ import SearchSelect from "../SearchSelect";
 const UploadModal = () => {
     const router = useRouter();
     const uploadModal = useUploadModal();
+    const selectRef = useRef<HTMLDivElement>(null);
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -28,6 +29,8 @@ const UploadModal = () => {
     const [albumData, setAlbumData] = useState<{ id: string; title: string }[]>([]);
 
     const [selectedAlbum, setSelectedAlbum] = useState<string | null>(null);
+
+    const [selectOpen, setSelectOpen] = useState(false);
 
     const {
         register,
@@ -47,6 +50,7 @@ const UploadModal = () => {
         if (!open) {
             reset();
             uploadModal.onClose();
+            setSelectOpen(false);
         }
     }
 
@@ -185,6 +189,10 @@ const UploadModal = () => {
                     {...register('is_private')}
                 />
                 <SearchSelect
+                    ref={selectRef}
+                    disabled={isLoading}
+                    isOpen={selectOpen}
+                    onOpenChange={() => setSelectOpen(!selectOpen)}
                     data={albumData.map(album => ({ id: album.id, name: album.title }))}
                     onSelect={(selected) => setSelectedAlbum(selected)}
                     selected={selectedAlbum}

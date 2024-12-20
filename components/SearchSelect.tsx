@@ -1,8 +1,5 @@
-"use client";
-
+import React, { useState, forwardRef } from "react";
 import * as Select from "@radix-ui/react-select";
-import React from "react";
-import { useState, forwardRef } from "react";
 import { FaCheck } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
 
@@ -17,10 +14,13 @@ interface SearchSelectProps {
     selected: string | null;
     placeholder: string;
     className?: string;
+    disabled?: boolean;
+    isOpen?: boolean;
+    onOpenChange?: (open: boolean) => void;
 }
 
 const SearchSelect = forwardRef<HTMLDivElement, SearchSelectProps>(
-    ({ data, onSelect, selected, placeholder, className }, ref) => {
+    ({ data, onSelect, selected, placeholder, className, disabled, isOpen, onOpenChange }, ref) => {
         const [searchTerm, setSearchTerm] = useState("");
 
         const filteredData = data.filter(item =>
@@ -28,14 +28,26 @@ const SearchSelect = forwardRef<HTMLDivElement, SearchSelectProps>(
         );
 
         return (
-            <Select.Root onValueChange={onSelect} value={selected ?? undefined}>
-                <Select.Trigger className={twMerge("flex w-full rounded-md bg-neutral-700 border border-transparent px-3 py-3 text-sm placeholder:text-neutral-400 focus:outline-none", className)}>
-                    <Select.Value placeholder={placeholder} />
-                    <Select.Icon className="absolute right-8" />
+            <Select.Root onValueChange={onSelect} value={selected ?? undefined} disabled={disabled} open={isOpen} onOpenChange={(open) => {
+                if (!open) {
+                    setSearchTerm("");
+                }
+                if (onOpenChange) {
+                    onOpenChange(open);
+                }
+            }}>
+                <Select.Trigger className={twMerge("flex w-full rounded-md bg-neutral-700 border border-transparent px-3 py-3 text-sm placeholder:text-neutral-400 focus:outline-none", className)} asChild>
+                    <div className="flex w-full items-center">
+                        <Select.Value placeholder={placeholder} />
+                        <Select.Icon className="absolute right-8" />
+                    </div>
                 </Select.Trigger>
 
                 <Select.Portal>
-                    <Select.Content className="overflow-hidden rounded-md bg-neutral-800 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
+                    <Select.Content
+                        className="overflow-hidden rounded-md bg-neutral-800 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] w-full"
+                        position="popper"
+                    >
                         <Select.Viewport>
                             <div style={{ padding: "8px" }}>
                                 <input

@@ -46,7 +46,7 @@ const LibraryDropdown = () => {
     }
 
     return (
-        <DropdownMenu.Root>
+        <DropdownMenu.Root modal={false}>
             <DropdownMenu.Trigger asChild>
                 <button className="focus:outline-none" aria-label="Customise options">
                     <AiOutlineUp
