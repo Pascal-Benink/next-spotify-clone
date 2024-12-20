@@ -84,7 +84,7 @@ export default async function Home() {
         </div>
         <div>
           {/* <PageContent songs={songs} /> */}
-          <PlaylistContent playlists={playlists} />
+          <PlaylistContent playlists={playlists} userId={userId} />
           {/* <p className="text-red-500">This is in development</p> */}
         </div>
       </div>
@@ -102,7 +102,7 @@ export default async function Home() {
         <div>
           {/* <PageContent songs={songs} /> */}
           {/* <p className="text-red-500">This is in development</p> */}
-          <PlaylistContent playlists={publicPlaylists} />
+          <PlaylistContent playlists={publicPlaylists} userId={userId} />
         </div>
       </div>
     </div>

@@ -96,15 +96,28 @@ const DeleteSongModal = () => {
                 return;
             }
 
-            const { error: ImageStorageDeleteError } = await supabaseClient
-                .storage
-                .from('images')
-                .remove([data.image_path]);
+            const { data: playlists, error: PlaylistError } = await supabaseClient
+                .from('playlists')
+                .select('image_path')
+                .eq('image_path', data.image_path);
 
-            if (ImageStorageDeleteError) {
-                console.error("Error deleting image from storage: ", ImageStorageDeleteError);
-                toast.error("Failed to delete image from storage");
+            if (PlaylistError) {
+                console.error("Error checking playlists: ", PlaylistError);
+                toast.error("Failed to check playlists");
                 return;
+            }
+
+            if (playlists.length === 0) {
+                const { error: ImageStorageDeleteError } = await supabaseClient
+                    .storage
+                    .from('images')
+                    .remove([data.image_path]);
+    
+                if (ImageStorageDeleteError) {
+                    console.error("Error deleting image from storage: ", ImageStorageDeleteError);
+                    toast.error("Failed to delete image from storage");
+                    return;
+                }
             }
 
             toast.success("Song deleted successfully");

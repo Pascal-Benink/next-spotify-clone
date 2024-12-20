@@ -7,13 +7,17 @@ import { twMerge } from "tailwind-merge";
 import usePlayer from "@/hooks/usePlayer";
 import useLoadPlaylistImage from "@/hooks/useLoadPlaylistImage";
 import Link from "next/link";
+import * as ContextMenu from "@radix-ui/react-context-menu";
+import PlaylistRightClickContent from "./PlaylistRightClickContent";
 
 interface PlaylistItemProps {
     data: Playlist;
+    isOwner: boolean;
 }
 
 const PlaylistItem: React.FC<PlaylistItemProps> = ({
     data,
+    isOwner,
 }) => {
     const imagePath = useLoadPlaylistImage(data);
 
@@ -23,9 +27,11 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({
     const playing = playlistId === activateId;
 
     return (
-        <Link href={`/playlist/${playlistId}`}>
-            <div
-                className="relative
+        <ContextMenu.Root modal={false}>
+            <ContextMenu.Trigger>
+                <Link href={`/playlist/${playlistId}`}>
+                    <div
+                        className="relative
         group
         flex
         flex-col
@@ -40,24 +46,24 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({
         transition
         p-3
         "
-            >
-                <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
-                    <Image
-                        className="object-cover"
-                        src={imagePath || '/images/liked.png'}
-                        fill
-                        alt="Image"
-                    />
-                </div>
-                <div className="flex flex-col items-start w-full pt-4 gap-y-1">
-                    <p className={twMerge("font-semibold truncate w-full", playing && "text-green-500")}>
-                        {data.name}
-                    </p>
-                    <p className="text-neutral-400 text-sm pb-4 w-full truncate">
-                        {data.description}
-                    </p>
-                </div>
-                {/* <div
+                    >
+                        <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
+                            <Image
+                                className="object-cover"
+                                src={imagePath || '/images/liked.png'}
+                                fill
+                                alt="Image"
+                            />
+                        </div>
+                        <div className="flex flex-col items-start w-full pt-4 gap-y-1">
+                            <p className={twMerge("font-semibold truncate w-full", playing && "text-green-500")}>
+                                {data.name}
+                            </p>
+                            <p className="text-neutral-400 text-sm pb-4 w-full truncate">
+                                {data.description}
+                            </p>
+                        </div>
+                        {/* <div
                 className='
           absolute 
           bottom-24 
@@ -66,8 +72,11 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({
             >
                 <PlayButton />
             </div> */}
-            </div>
-        </Link>
+                    </div>
+                </Link>
+            </ContextMenu.Trigger>
+            <PlaylistRightClickContent isOwner={isOwner} playlist={data} />
+        </ContextMenu.Root>
     );
 }
 

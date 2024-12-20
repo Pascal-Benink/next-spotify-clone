@@ -61,7 +61,7 @@ const Search = async ({ searchParams }: SearchProps) => {
                         <h2 className="text-white text-xl font-semibold px-6">
                             Playlists
                         </h2>
-                        <PlaylistSearchContent playlists={playlists} />
+                        <PlaylistSearchContent playlists={playlists} userId={user?.id} />
                     </div>
                 </>
             )}
@@ -78,7 +78,7 @@ const Search = async ({ searchParams }: SearchProps) => {
                     <h2 className="text-white text-xl font-semibold px-6">
                         Playlists
                     </h2>
-                    <PlaylistSearchContent playlists={playlists} />
+                    <PlaylistSearchContent playlists={playlists} userId={user?.id} />
                 </div>
             )}
         </div>

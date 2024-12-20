@@ -13,6 +13,9 @@ import DeletePlaylistModal from "@/components/DeletePlaylistModal";
 import DeleteSongModal from "@/components/DeleteSongModal";
 import SongEditModal from "@/components/EditSongModal";
 import AddLyricsModal from "@/components/AddLyricsModal";
+import PlaylistEditModal from "@/components/EditPlaylistModal";
+import BatchAddToPlaylistModal from "@/components/BatchAddToPlaylistModal";
+import ClonePlaylistModal from "@/components/ClonePlaylistModal";
 
 interface ModalProviderProps {
     products: ProductWithPrice[];
@@ -43,6 +46,9 @@ const ModalProvider: React.FC<ModalProviderProps> = ({
             <DeleteSongModal />
             <SongEditModal />
             <AddLyricsModal />
+            <PlaylistEditModal />
+            <BatchAddToPlaylistModal />
+            <ClonePlaylistModal />
         </>
     );
 }
