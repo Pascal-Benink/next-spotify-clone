@@ -4,7 +4,6 @@ import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 import { FaEllipsisH } from "react-icons/fa";
-import { HiOutlineTrash } from "react-icons/hi";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useBatchAddToPlaylistModal } from "@/hooks/useBatchAddToPlaylistModal";
 import { useClonePlaylistModal } from "@/hooks/useClonePlaylistModal";
@@ -15,7 +14,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useUser } from "@/hooks/useUser";
 import { TbDownload, TbDownloadOff } from "react-icons/tb";
 import { RiPlayListFill } from "react-icons/ri";
-import { MdOutlineModeEditOutline, MdPlaylistAdd } from "react-icons/md";
+import { MdPlaylistAdd } from "react-icons/md";
 
 const LikedPopover = () => {
     const supabaseClient = useSupabaseClient();
