@@ -161,6 +161,32 @@ const ClonePlaylistModal = () => {
                 return toast.error(supabaseError.message);
             }
 
+            const { data: newPlaylist, error: NewPlaylistError } = await supabaseClient
+                .from('playlists')
+                .select('*')
+                .eq('user_id', user.id)
+                .eq('name', values.name)
+                .single();
+
+            if (NewPlaylistError) {
+                setIsLoading(false);
+                return toast.error(NewPlaylistError.message);
+            }
+
+            const { error: songAddError } = await supabaseClient
+                .from('playlist_songs')
+                .insert(songId.map(song_id => ({
+                    playlist_id: newPlaylist.id,
+                    song_id,
+                    user_id: user.id
+                })));
+
+            if (songAddError) {
+                setIsLoading(false);
+                console.error(songAddError);
+                return toast.error("cloed not add songs to playlist");
+            }
+
             router.refresh();
             setIsLoading(false);
             toast.success("Playlist Cloned successfully");

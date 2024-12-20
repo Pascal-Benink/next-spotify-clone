@@ -33,8 +33,6 @@ const PlaylistRightClickContent: React.FC<PlaylistRightClickContentProps> = ({ i
 	const { user, subscription } = useUser();
 
 	const handleDownload = async () => {
-		// TODO: Implement download playlist as a zip with mp3s
-
 		const { data: PsData, error: PsError } = await supabaseClient
 			.from('playlist_songs')
 			.select('song_id')
@@ -109,24 +107,6 @@ const PlaylistRightClickContent: React.FC<PlaylistRightClickContentProps> = ({ i
 		a.click();
 		a.remove();
 		toast.success('Playlist downloaded successfully');
-
-		// const { data, error } = await supabaseClient
-		// 	.storage
-		// 	.from('songs')
-		// 	.download(song.song_path);
-
-		// if (error) {
-		// 	console.error('Error downloading file:', error);
-		// 	return;
-		// }
-
-		// const url = URL.createObjectURL(data);
-		// const a = document.createElement('a');
-		// a.href = url;
-		// a.download = `${song.title}.mp3`;
-		// document.body.appendChild(a);
-		// a.click();
-		// a.remove();
 	}
 
 	const handleClonePlaylist = async () => {
