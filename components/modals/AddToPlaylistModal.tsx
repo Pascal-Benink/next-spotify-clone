@@ -3,14 +3,14 @@
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
 import { useAddToPlaylistModal } from "@/hooks/useAddToPlaylistModal";
-import Modal from "./Modal";
+import Modal from "../Modal";
 import { useEffect, useState } from "react";
-import Button from "./Button";
+import Button from "../Button";
 import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
-import CheckBox from "./CheckBox";
+import CheckBox from "../CheckBox";
 import { Playlist } from "@/types";
 import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
 

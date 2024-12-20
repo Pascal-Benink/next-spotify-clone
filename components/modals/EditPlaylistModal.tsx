@@ -2,16 +2,16 @@
 
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
-import Modal from "./Modal";
+import Modal from "../Modal";
 import { useEffect, useState } from "react";
-import Input from "./Input";
-import Button from "./Button";
+import Input from "../Input";
+import Button from "../Button";
 import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useEditPlaylistModal } from "@/hooks/useEditPlaylistModal";
-import CheckBox from "./CheckBox";
+import CheckBox from "../CheckBox";
 
 const PlaylistEditModal = () => {
     const router = useRouter();

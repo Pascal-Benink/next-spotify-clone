@@ -1,8 +1,8 @@
 "use client";
 
-import Modal from "./Modal";
+import Modal from "../Modal";
 import { useEffect, useState } from "react";
-import Button from "./Button";
+import Button from "../Button";
 import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -112,7 +112,7 @@ const DeleteSongModal = () => {
                     .storage
                     .from('images')
                     .remove([data.image_path]);
-    
+
                 if (ImageStorageDeleteError) {
                     console.error("Error deleting image from storage: ", ImageStorageDeleteError);
                     toast.error("Failed to delete image from storage");

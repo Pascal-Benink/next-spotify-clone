@@ -2,20 +2,20 @@
 
 import { useEffect, useState } from "react";
 
-import AuthModal from "@/components/AuthModal";
-import UploadModal from "@/components/UploadModal";
-import SubscribeModal from "@/components/SubscribeModal";
+import AuthModal from "@/components/modals/AuthModal";
+import UploadModal from "@/components/modals/UploadModal";
+import SubscribeModal from "@/components/modals/SubscribeModal";
 import { ProductWithPrice } from "@/types";
-import AlbumUploadModal from "@/components/AlbumUploadModal";
-import CreatePlaylistModal from "@/components/CreatePlaylistModal";
-import AddToPlaylistModal from "@/components/AddToPlaylistModal";
-import DeletePlaylistModal from "@/components/DeletePlaylistModal";
-import DeleteSongModal from "@/components/DeleteSongModal";
-import SongEditModal from "@/components/EditSongModal";
-import AddLyricsModal from "@/components/AddLyricsModal";
-import PlaylistEditModal from "@/components/EditPlaylistModal";
-import BatchAddToPlaylistModal from "@/components/BatchAddToPlaylistModal";
-import ClonePlaylistModal from "@/components/ClonePlaylistModal";
+import AlbumUploadModal from "@/components/modals/AlbumUploadModal";
+import CreatePlaylistModal from "@/components/modals/CreatePlaylistModal";
+import AddToPlaylistModal from "@/components/modals/AddToPlaylistModal";
+import DeletePlaylistModal from "@/components/modals/DeletePlaylistModal";
+import DeleteSongModal from "@/components/modals/DeleteSongModal";
+import SongEditModal from "@/components/modals/EditSongModal";
+import AddLyricsModal from "@/components/modals/AddLyricsModal";
+import PlaylistEditModal from "@/components/modals/EditPlaylistModal";
+import BatchAddToPlaylistModal from "@/components/modals/BatchAddToPlaylistModal";
+import ClonePlaylistModal from "@/components/modals/ClonePlaylistModal";
 
 interface ModalProviderProps {
     products: ProductWithPrice[];

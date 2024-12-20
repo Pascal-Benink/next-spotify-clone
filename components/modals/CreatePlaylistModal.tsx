@@ -4,15 +4,15 @@ import uniqid from "uniqid";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
 import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
-import Modal from "./Modal";
+import Modal from "../Modal";
 import { useState } from "react";
-import Input from "./Input";
-import Button from "./Button";
+import Input from "../Input";
+import Button from "../Button";
 import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
-import CheckBox from "./CheckBox";
+import CheckBox from "../CheckBox";
 
 const CreatePlaylistModal = () => {
     const router = useRouter();
@@ -46,7 +46,7 @@ const CreatePlaylistModal = () => {
 
     const sanitizeFileName = (name: string) => {
         return name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    }    
+    }
 
     const onSubmit: SubmitHandler<FieldValues> = async (values) => {
         try {

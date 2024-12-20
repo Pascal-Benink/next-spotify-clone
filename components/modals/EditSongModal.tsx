@@ -2,10 +2,10 @@
 
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
-import Modal from "./Modal";
+import Modal from "../Modal";
 import { useEffect, useState } from "react";
-import Input from "./Input";
-import Button from "./Button";
+import Input from "../Input";
+import Button from "../Button";
 import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -14,7 +14,7 @@ import { useEditSongModal } from "@/hooks/useEditSongModal";
 
 const SongEditModal = () => {
     const router = useRouter();
-    const editSongModal = useEditSongModal(); 
+    const editSongModal = useEditSongModal();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -59,7 +59,7 @@ const SongEditModal = () => {
         if (!songId) {
             return;
         }
-        
+
         fetchSong();
     }, [songId]);
 
@@ -90,14 +90,14 @@ const SongEditModal = () => {
             const {
                 error: supabaseError
             } = await supabaseClient
-            .from(`songs`)
-            .update({
-                title: values.title,
-                author: values.author,
-            })
-            .eq('id', songId)
+                .from(`songs`)
+                .update({
+                    title: values.title,
+                    author: values.author,
+                })
+                .eq('id', songId)
 
-            if (supabaseError){
+            if (supabaseError) {
                 setIsLoading(false);
                 return toast.error(supabaseError.message);
             }

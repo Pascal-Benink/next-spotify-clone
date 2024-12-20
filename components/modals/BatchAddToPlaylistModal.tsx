@@ -1,9 +1,9 @@
 "use client";
 
 import { useBatchAddToPlaylistModal } from "@/hooks/useBatchAddToPlaylistModal";
-import Modal from "./Modal";
+import Modal from "../Modal";
 import { useEffect, useState } from "react";
-import Button from "./Button";
+import Button from "../Button";
 import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -77,11 +77,11 @@ const BatchAddToPlaylistModal = () => {
             const existingSongIds = existingPlaylistSongs.map(playlistSong => playlistSong.song_id);
 
             const filteredSongId = songId.filter(songId => !existingSongIds.includes(songId));
-            
+
             const { error } = await supabaseClient
                 .from('playlist_songs')
-                .insert(filteredSongId.map(song_id => ({ 
-                    playlist_id: playlistId, 
+                .insert(filteredSongId.map(song_id => ({
+                    playlist_id: playlistId,
                     song_id,
                     user_id: user.id
                 })));
