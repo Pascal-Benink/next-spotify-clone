@@ -14,8 +14,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import CheckBox from "./CheckBox";
 import { Playlist } from "@/types";
-import Image from "next/image";
-import useLoadPlaylistImage from "@/hooks/useLoadPlaylistImage";
+import PlaylistImage from "./PlaylistImage";
 
 const ClonePlaylistModal = () => {
     const router = useRouter();
@@ -47,6 +46,7 @@ const ClonePlaylistModal = () => {
                 toast.error("Failed to fetch playlist");
                 return;
             }
+
             setPlaylist(playlist);
         } catch (error) {
             console.error(error);
@@ -91,44 +91,70 @@ const ClonePlaylistModal = () => {
         try {
             setIsLoading(true);
 
-            const imageFile = values.image?.[0];
-
-            if (!imageFile || !user) {
-                toast.error("Missing fields");
-                return;
-            }
-
-            const uniqueID = uniqid();
-            const sanitizedFileName = sanitizeFileName(values.name);
-
-            // upload image
-            const {
-                data: imageData,
-                error: imageError
-            } = await supabaseClient
-                .storage
-                .from('images')
-                .upload(`image-${sanitizedFileName}-${uniqueID}`, imageFile, {
-                    cacheControl: '3600',
-                    upsert: false,
-                });
-
-            if (imageError) {
+            if (!user) {
                 setIsLoading(false);
-                return toast.error("Failed to upload image");
+                return toast.error("User not found");
             }
 
-            const {
-                error: supabaseError
-            } = await supabaseClient
-                .from(`playlists`)
-                .insert({
-                    user_id: user.id,
-                    name: values.name,
-                    description: values.description,
-                    is_public: values.isPublic,
-                    image_path: imageData.path,
-                });
+            let supabaseError;
+
+            if (!useOriginalImage) {
+                const imageFile = values.image?.[0];
+
+                if (!imageFile) {
+                    toast.error("Missing fields");
+                    return;
+                }
+
+                const uniqueID = uniqid();
+                const sanitizedFileName = sanitizeFileName(values.name);
+
+                // upload image
+                const {
+                    data: imageData,
+                    error: imageError
+                } = await supabaseClient
+                    .storage
+                    .from('images')
+                    .upload(`image-${sanitizedFileName}-${uniqueID}`, imageFile, {
+                        cacheControl: '3600',
+                        upsert: false,
+                    });
+
+                if (imageError) {
+                    setIsLoading(false);
+                    return toast.error("Failed to upload image");
+                }
+
+                const {
+                    error: supaError
+                } = await supabaseClient
+                    .from(`playlists`)
+                    .insert({
+                        user_id: user.id,
+                        name: values.name,
+                        description: values.description,
+                        is_public: values.isPublic,
+                        image_path: imageData.path,
+                    });
+
+                supabaseError = supaError;
+            } else {
+                const {
+                    error: supaError
+                } = await supabaseClient
+                    .from(`playlists`)
+                    .insert({
+                        user_id: user.id,
+                        name: values.name,
+                        description: values.description,
+                        is_public: values.isPublic,
+                        image_path: playlist?.image_path,
+                    });
+
+                supabaseError = supaError;
+            }
+
 
             if (supabaseError) {
                 setIsLoading(false);
@@ -191,7 +217,7 @@ const ClonePlaylistModal = () => {
                     checked={useOriginalImage}
                     onChange={() => setUseOriginalImage(!useOriginalImage)}
                 />
-                {!useOriginalImage && (
+                {!useOriginalImage ? (
                     <div>
                         <div className="pb-1">
                             Select an image
@@ -204,6 +230,8 @@ const ClonePlaylistModal = () => {
                             {...register('image', { required: true })}
                         />
                     </div>
+                ) : (
+                    <PlaylistImage playlist={playlist} />
                 )}
                 <Button disabled={isLoading} type="submit">
                     Clone Playlist
