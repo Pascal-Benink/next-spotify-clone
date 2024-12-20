@@ -11,6 +11,7 @@ import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useEditSongModal } from "@/hooks/useEditSongModal";
+import CheckBox from "../CheckBox";
 
 const SongEditModal = () => {
     const router = useRouter();
@@ -29,6 +30,7 @@ const SongEditModal = () => {
         user_id: string;
         title: string;
         author: string;
+        is_private: boolean;
     }
 
     const [song, setSong] = useState<Song | null>(null);
@@ -73,6 +75,7 @@ const SongEditModal = () => {
             user_id: song?.user_id || '',
             author: song?.author || '',
             title: song?.title || '',
+            is_private: song?.is_private || false,
         }
     })
 
@@ -94,6 +97,7 @@ const SongEditModal = () => {
                 .update({
                     title: values.title,
                     author: values.author,
+                    is_private: values.is_private
                 })
                 .eq('id', songId)
 
@@ -121,6 +125,7 @@ const SongEditModal = () => {
             user_id: song?.user_id || '',
             author: song?.author || '',
             title: song?.title || '',
+            is_private: song?.is_private || false,
         });
     }, [song])
 
@@ -143,6 +148,12 @@ const SongEditModal = () => {
                     disabled={isLoading}
                     {...register('author', { required: true })}
                     placeholder="Song Author"
+                />
+                <CheckBox
+                    id="is_private"
+                    label="private Song"
+                    disabled={isLoading}
+                    {...register('is_private')}
                 />
                 <Button disabled={isLoading} type="submit">
                     Edit Song

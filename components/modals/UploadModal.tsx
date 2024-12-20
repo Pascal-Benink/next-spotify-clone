@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
+import CheckBox from "../CheckBox";
 
 const UploadModal = () => {
     const router = useRouter();
@@ -31,6 +32,7 @@ const UploadModal = () => {
         defaultValues: {
             author: '',
             title: '',
+            is_private: false,
             song: null,
             image: null,
         }
@@ -107,6 +109,7 @@ const UploadModal = () => {
                     user_id: user.id,
                     title: values.title,
                     author: values.author,
+                    is_private: values.is_private,
                     image_path: imageData.path,
                     song_path: songData.path,
                 });
@@ -149,18 +152,12 @@ const UploadModal = () => {
                     {...register('author', { required: true })}
                     placeholder="Song Author"
                 />
-                <div>
-                    <div className="pb-1">
-                        Select a song file
-                    </div>
-                    <Input
-                        id="song"
-                        type="file"
-                        disabled={isLoading}
-                        accept=".mp3" // change to audio/* if want to
-                        {...register('song', { required: true })}
-                    />
-                </div>
+                <CheckBox
+                    id="is_private"
+                    label="Private Song"
+                    disabled={isLoading}
+                    {...register('is_private')}
+                />
                 <div>
                     <div className="pb-1">
                         Select an image
