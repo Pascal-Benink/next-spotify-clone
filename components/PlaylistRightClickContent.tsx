@@ -14,6 +14,8 @@ import { useDeletePlaylistModal } from "@/hooks/useDeletePlaylistModal";
 import { useEditPlaylistModal } from "@/hooks/useEditPlaylistModal";
 import { useBatchAddToPlaylistModal } from "@/hooks/useBatchAddToPlaylistModal";
 import { useClonePlaylistModal } from "@/hooks/useClonePlaylistModal";
+import toast from "react-hot-toast";
+import JSZip from "jszip";
 
 interface PlaylistRightClickContentProps {
 	isOwner: boolean;
@@ -32,6 +34,82 @@ const PlaylistRightClickContent: React.FC<PlaylistRightClickContentProps> = ({ i
 
 	const handleDownload = async () => {
 		// TODO: Implement download playlist as a zip with mp3s
+
+		const { data: PsData, error: PsError } = await supabaseClient
+			.from('playlist_songs')
+			.select('song_id')
+			.eq('playlist_id', playlist.id);
+
+		if (PsError) {
+			console.error('Error fetching playlist songs:', PsError);
+			toast.error('Error fetching playlist songs');
+			return;
+		}
+
+		const songIds = PsData.map((song) => song.song_id);
+
+		const { data: SData, error: SError } = await supabaseClient
+			.from('songs')
+			.select('*')
+			.in('id', songIds);
+
+		if (SError) {
+			console.error('Error fetching songs:', SError);
+			toast.error('Error fetching songs');
+			return;
+		}
+
+		const songs = SData.map((song) => song);
+
+		const zip = new JSZip();
+		const folder = zip.folder(playlist.name);
+
+		if (playlist.image_path) {
+			const { data: imageData, error: imageError } = await supabaseClient.storage.from('images').download(playlist.image_path);
+
+			if (imageError) {
+				console.error('Error downloading playlist image:', imageError);
+				toast.error('Error downloading playlist image');
+				return;
+			}
+
+			if (folder) {
+				folder.file(`${playlist.name}.png`, imageData);
+			} else {
+				console.error('Folder is null');
+				toast.error('Folder is not available');
+				return;
+			}
+		}
+
+		for (const song of songs) {
+			const { data, error } = await supabaseClient.storage.from('songs').download(song.song_path);
+
+			if (error) {
+				console.error('Error downloading file:', error);
+				toast.error('Error downloading file');
+				return;
+			}
+
+			if (folder) {
+				folder.file(`${song.title}.mp3`, data);
+			} else {
+				console.error('Folder is null');
+				toast.error('Folder is not available');
+				return;
+			}
+		}
+
+		const content = await zip.generateAsync({ type: "blob" });
+		const url = URL.createObjectURL(content);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = `${playlist.name}.zip`;
+		document.body.appendChild(a);
+		a.click();
+		a.remove();
+		toast.success('Playlist downloaded successfully');
+
 		// const { data, error } = await supabaseClient
 		// 	.storage
 		// 	.from('songs')
