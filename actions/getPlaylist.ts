@@ -26,10 +26,14 @@ const getPlaylist = async (id: string): Promise<Playlist> => {
         console.error(error);
     }
 
-    if (!data || (data.user_id !== session?.user.id && !data.is_public)) {
+    if (!data) {
+        throw new Error("Playlist not found.");
         // throw new Error("You do not have access to this playlist.");
         // toast.error("You do not have access to this playlist.");
-        return redirect('/');
+    }
+
+    if (data.user_id !== session?.user.id && !data.is_public) {
+        throw new Error("You do not have access to this playlist.");
     }
 
     return (data as any) || [];
