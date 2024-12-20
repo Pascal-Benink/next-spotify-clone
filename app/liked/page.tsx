@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Image from "next/image";
 import LikedContent from "./components/LikedContent";
 import getUser from "@/actions/getUser";
+import ShuffleControl from "./components/Controls";
 
 export const revalidate = 0;
 
@@ -65,6 +66,8 @@ const Liked = async () => {
                     </div>
                 </div>
             </Header>
+            <ShuffleControl songs={songs} />
+            <div className="h-4"/>
             <LikedContent songs={songs} userId={user?.id}/>
         </div>
     );
