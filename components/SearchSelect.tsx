@@ -2,6 +2,7 @@ import React, { useState, forwardRef } from "react";
 import * as Select from "@radix-ui/react-select";
 import { FaCheck } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
+import Input from "./Input";
 
 export type SelectType = {
     id: string;
@@ -36,7 +37,7 @@ const SearchSelect = forwardRef<HTMLDivElement, SearchSelectProps>(
                     onOpenChange(open);
                 }
             }}>
-                <Select.Trigger className={twMerge("flex w-full rounded-md bg-neutral-700 border border-transparent px-3 py-3 text-sm placeholder:text-neutral-400 focus:outline-none", className)} asChild>
+                <Select.Trigger className={twMerge("flex w-full rounded-md bg-neutral-700 border border-transparent px-3 py-3 text-sm placeholder:text-neutral-400 focus:outline-none", className)}>
                     <div className="flex w-full items-center">
                         <Select.Value placeholder={placeholder} />
                         <Select.Icon className="absolute right-8" />
@@ -56,6 +57,7 @@ const SearchSelect = forwardRef<HTMLDivElement, SearchSelectProps>(
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     placeholder="Search..."
                                     className={twMerge("flex w-full rounded-md bg-neutral-700 border border-transparent px-3 py-3 text-sm placeholder:text-neutral-400 focus:outline-none")}
+                                    autoFocus
                                 />
                             </div>
                             <Select.Group>
