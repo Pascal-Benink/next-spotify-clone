@@ -32,7 +32,9 @@ const ClonePlaylistModal = () => {
     const originalIsLiked = originalPlaylistId === "liked";
 
     const [playlist, setPlaylist] = useState<Playlist | null>(null);
-    const [useOriginalImage, setUseOriginalImage] = useState(!originalIsLiked);
+    const [useOriginalImage, setUseOriginalImage] = useState(
+        originalIsLiked ? true : false
+    );
 
     const fetchPlaylist = async () => {
         try {
@@ -239,7 +241,7 @@ const ClonePlaylistModal = () => {
                     disabled={isLoading}
                     {...register('isPublic')}
                 />
-                {originalIsLiked && (
+                {!originalIsLiked && (
                     <CheckBox
                         id="useOriginalImage"
                         label="Use image of original playlist"
