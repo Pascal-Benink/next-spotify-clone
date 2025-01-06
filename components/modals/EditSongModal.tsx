@@ -1,6 +1,6 @@
 "use client";
 
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, set, SubmitHandler, useForm } from "react-hook-form";
 
 import Modal from "../Modal";
 import { useEffect, useRef, useState } from "react";
@@ -60,6 +60,7 @@ const SongEditModal = () => {
             }
 
             setSong(song);
+            setSelectedAlbum(song?.album_id || null);
         } catch (error) {
             console.error(error);
             toast.error("Something went wrong");
