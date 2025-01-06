@@ -12,7 +12,6 @@ import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
-import CheckBox from "../CheckBox";
 
 const CreateAlbumModal = () => {
     const router = useRouter();
@@ -30,10 +29,9 @@ const CreateAlbumModal = () => {
         reset
     } = useForm<FieldValues>({
         defaultValues: {
-            description: '',
+            author: '',
             name: '',
             image: null,
-            isPublic: false,
         }
     })
 
@@ -86,8 +84,7 @@ const CreateAlbumModal = () => {
                 .insert({
                     user_id: user.id,
                     name: values.name,
-                    description: values.description,
-                    is_public: values.isPublic,
+                    author: values.author,
                     image_path: imageData.path,
                 });
 
@@ -124,16 +121,10 @@ const CreateAlbumModal = () => {
                     placeholder="Album Name"
                 />
                 <Input
-                    id="description"
+                    id="author"
                     disabled={isLoading}
-                    {...register('description', { required: true })}
-                    placeholder="Album Description"
-                />
-                <CheckBox
-                    id="isPublic"
-                    label="Public Album"
-                    disabled={isLoading}
-                    {...register('isPublic')}
+                    {...register('author', { required: true })}
+                    placeholder="Album Author"
                 />
                 <div>
                     <div className="pb-1">
