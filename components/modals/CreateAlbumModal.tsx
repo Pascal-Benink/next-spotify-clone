@@ -85,7 +85,7 @@ const CreateAlbumModal = () => {
                     user_id: user.id,
                     name: values.name,
                     author: values.author,
-                    image_path: imageData.path,
+                    image_patch: imageData.path,
                 });
 
             if (supabaseError) {
