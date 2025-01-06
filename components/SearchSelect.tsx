@@ -29,6 +29,8 @@ const SearchSelect = forwardRef<HTMLDivElement, SearchSelectProps>(
 
         let realSelected = selected === null ? undefined : selected;
 
+        const selectedItem = data.find(item => item.id === selected);
+
         return (
             <Select.Root onValueChange={onSelect} value={realSelected} disabled={disabled} open={isOpen} onOpenChange={(open) => {
                 if (!open) {
@@ -71,7 +73,7 @@ const SearchSelect = forwardRef<HTMLDivElement, SearchSelectProps>(
                                     </SelectItem>
                                 )}
                                 {filteredData.map((item, index) => (
-                                    <SelectItem key={index} value={item.id} isSelected={item.id === selected}>
+                                    <SelectItem key={index} value={item.id} isSelected={item.id === realSelected}>
                                         {item.name}
                                     </SelectItem>
                                 ))}
@@ -100,7 +102,7 @@ const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
             <Select.Item
                 className={twMerge(
                     "relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-green-500 data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1 data-[highlighted]:outline-none",
-                    isSelected ? "bg-green-500 text-violet1" : "",
+                    isSelected && "bg-green-500 text-violet1",
                     className,
                 )}
                 {...props}
