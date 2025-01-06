@@ -14,12 +14,15 @@ interface SearchSelectProps {
     selected: string | null;
     placeholder: string;
     className?: string;
+    disabled?: boolean;
 }
 
-const SelectDemo = ({ data, onSelect, selected, placeholder, className }: SearchSelectProps) => {
+const SelectDemo = ({ data, onSelect, selected, placeholder, className, disabled }: SearchSelectProps) => {
 
     return (
-        <Select.Root>
+        <Select.Root
+            disabled={disabled}
+        >
             <Select.Trigger className={twMerge("flex w-full rounded-md bg-neutral-700 border border-transparent px-3 py-3 text-sm placeholder:text-neutral-400 focus:outline-none", className)}>
                 <Select.Value placeholder={placeholder} />
                 <Select.Icon className="absolute right-8" />
@@ -28,7 +31,8 @@ const SelectDemo = ({ data, onSelect, selected, placeholder, className }: Search
                 <Select.Content
                     className="overflow-hidden rounded-md bg-neutral-800 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] w-full"
                     position="popper"
-                >                    <Select.Viewport className="p-[5px]">
+                >
+                    <Select.Viewport className="p-[5px]">
                         <SelectItem value="leek" className="hidden">there is none in listofThings</SelectItem>
                         {data.length === 0 && (
                             <SelectItem value="leek" disabled>there is none in listofThings</SelectItem>

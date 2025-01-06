@@ -1,9 +1,9 @@
 "use client";
 
-import { FieldValues, set, SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
 import Modal from "../Modal";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../Input";
 import Button from "../Button";
 import toast from "react-hot-toast";
@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useEditSongModal } from "@/hooks/useEditSongModal";
 import CheckBox from "../CheckBox";
 import SearchSelect from "../SearchSelect";
+import SelectDemo from "@/app/(site)/debug/slectdemo";
 
 const SongEditModal = () => {
     const router = useRouter();
@@ -35,8 +36,6 @@ const SongEditModal = () => {
     }
 
     const [song, setSong] = useState<Song | null>(null);
-
-    const selectRef = useRef<HTMLDivElement>(null);
 
     const [albumData, setAlbumData] = useState<{ id: string; name: string }[]>([]);
 
@@ -185,15 +184,12 @@ const SongEditModal = () => {
                     {...register('author', { required: true })}
                     placeholder="Song Author"
                 />
-                <SearchSelect
-                    ref={selectRef}
+                <SelectDemo
                     disabled={isLoading}
-                    isOpen={selectOpen}
-                    onOpenChange={() => setSelectOpen(!selectOpen)}
                     data={albumData.map(album => ({ id: album.id, name: album.name }))}
                     onSelect={(selected) => setSelectedAlbum(selected)}
                     selected={selectedAlbum}
-                    placeholder="Select an album"
+                    placeholder="Select a Album"
                 />
                 <CheckBox
                     id="is_private"

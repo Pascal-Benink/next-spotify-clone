@@ -15,48 +15,41 @@ interface SearchSelectProps {
     placeholder: string;
     className?: string;
     disabled?: boolean;
-    isOpen?: boolean;
-    onOpenChange?: (open: boolean) => void;
 }
 
-const SearchSelect = forwardRef<HTMLDivElement, SearchSelectProps>(
-    ({ data, onSelect, selected, placeholder, className, disabled, isOpen, onOpenChange }) => {
+const SearchSelect = ({ data, onSelect, selected, placeholder, className, disabled, }: SearchSelectProps) => {
 
-        return (
-            <Select.Root
-                disabled={disabled}
-                open={isOpen}
-            >
-                <Select.Trigger className={twMerge("flex w-full rounded-md bg-neutral-700 border border-transparent px-3 py-3 text-sm placeholder:text-neutral-400 focus:outline-none", className)}>
-                    <Select.Value placeholder={placeholder} />
-                    <Select.Icon className="absolute right-8" />
-                </Select.Trigger>
+    return (
+        <Select.Root
+            disabled={disabled}
+        >
+            <Select.Trigger className={twMerge("flex w-full rounded-md bg-neutral-700 border border-transparent px-3 py-3 text-sm placeholder:text-neutral-400 focus:outline-none", className)}>
+                <Select.Value placeholder={placeholder} />
+                <Select.Icon className="absolute right-8" />
+            </Select.Trigger>
 
-                <Select.Portal>
-                    <Select.Content
-                        className="overflow-hidden rounded-md bg-neutral-800 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] w-full"
-                        position="popper"
-                    >
-                        <Select.Viewport>
-                            <Select.Group>
-                                {data.length === 0 && (
-                                    <SelectItem disabled value="none">
-                                        <Select.ItemText>No results found</Select.ItemText>
-                                    </SelectItem>
-                                )}
-                                {data.map((item, index) => (
-                                    <SelectItem key={index} value={item.id}>
-                                        {item.name}
-                                    </SelectItem>
-                                ))}
-                            </Select.Group>
-                        </Select.Viewport>
-                    </Select.Content>
-                </Select.Portal>
-            </Select.Root>
-        );
-    }
-);
+            <Select.Portal>
+                <Select.Content
+                    className="overflow-hidden rounded-md bg-neutral-800 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] w-full"
+                    position="popper"
+                >
+                    <Select.Viewport>
+                        {data.length === 0 && (
+                            <SelectItem disabled value="none">
+                                <Select.ItemText>No results found</Select.ItemText>
+                            </SelectItem>
+                        )}
+                        {data.map((item, index) => (
+                            <SelectItem key={index} value={item.id}>
+                                {item.name}
+                            </SelectItem>
+                        ))}
+                    </Select.Viewport>
+                </Select.Content>
+            </Select.Portal>
+        </Select.Root>
+    );
+}
 
 SearchSelect.displayName = 'SearchSelect';
 
