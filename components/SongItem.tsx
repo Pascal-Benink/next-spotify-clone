@@ -7,7 +7,7 @@ import PlayButton from "./PlayButton";
 import { twMerge } from "tailwind-merge";
 import usePlayer from "@/hooks/usePlayer";
 import * as ContextMenu from "@radix-ui/react-context-menu";
-import SongRightClickContent from "./SongRightClickContent";
+import SongRightClickContent from "./right_click/SongRightClickContent";
 
 interface SongItemProps {
     data: Song;
@@ -78,7 +78,7 @@ const SongItem: React.FC<SongItemProps> = ({
                     </div>
                 </div>
             </ContextMenu.Trigger>
-            <SongRightClickContent isOwner={isOwner} song={data}/>
+            <SongRightClickContent isOwner={isOwner} song={data} />
         </ContextMenu.Root>
     );
 }
