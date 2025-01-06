@@ -27,22 +27,26 @@ const SearchSelect = forwardRef<HTMLDivElement, SearchSelectProps>(
             item.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
-        let realSelected = selected === null ? undefined : selected;
-
-        const selectedItem = data.find(item => item.id === selected);
-
         return (
-            <Select.Root onValueChange={onSelect} value={realSelected} disabled={disabled} open={isOpen} onOpenChange={(open) => {
-                if (!open) {
-                    setSearchTerm("");
-                }
-                if (onOpenChange) {
-                    onOpenChange(open);
-                }
-            }}>
+            <Select.Root
+                onValueChange={onSelect}
+                value={selected || ""}
+                disabled={disabled}
+                open={isOpen}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        setSearchTerm("");
+                    }
+                    if (onOpenChange) {
+                        onOpenChange(open);
+                    }
+                }}
+            >
                 <Select.Trigger className={twMerge("flex w-full rounded-md bg-neutral-700 border border-transparent px-3 py-3 text-sm placeholder:text-neutral-400 focus:outline-none", className)}>
                     <div className="flex w-full items-center">
-                        <Select.Value placeholder={placeholder} />
+                        <Select.Value placeholder={placeholder}>
+                            {selected ? data.find(item => item.id === selected)?.name : placeholder}
+                        </Select.Value>
                         <Select.Icon className="absolute right-8" />
                     </div>
                 </Select.Trigger>
@@ -53,27 +57,14 @@ const SearchSelect = forwardRef<HTMLDivElement, SearchSelectProps>(
                         position="popper"
                     >
                         <Select.Viewport>
-                            {/* <div style={{ padding: "8px" }}>
-                                <input
-                                    type="text"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    placeholder="Search..."
-                                    className={twMerge("flex w-full rounded-md bg-neutral-700 border border-transparent px-3 py-3 text-sm placeholder:text-neutral-400 focus:outline-none")}
-                                    autoFocus
-                                />
-                            </div> */}
                             <Select.Group>
-                                <SelectItem value="leek" className="hidden">
-                                    leek
-                                </SelectItem>
                                 {filteredData.length === 0 && (
                                     <SelectItem disabled value="none">
                                         <Select.ItemText>No results found</Select.ItemText>
                                     </SelectItem>
                                 )}
                                 {filteredData.map((item, index) => (
-                                    <SelectItem key={index} value={item.id} isSelected={item.id === realSelected}>
+                                    <SelectItem key={index} value={item.id} isSelected={item.id === selected}>
                                         {item.name}
                                     </SelectItem>
                                 ))}
