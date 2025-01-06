@@ -20,35 +20,16 @@ interface SearchSelectProps {
 }
 
 const SearchSelect = forwardRef<HTMLDivElement, SearchSelectProps>(
-    ({ data, onSelect, selected, placeholder, className, disabled, isOpen, onOpenChange }, ref) => {
-        const [searchTerm, setSearchTerm] = useState("");
-
-        const filteredData = data.filter(item =>
-            item.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+    ({ data, onSelect, selected, placeholder, className, disabled, isOpen, onOpenChange }) => {
 
         return (
             <Select.Root
-                onValueChange={onSelect}
-                value={selected || ""}
                 disabled={disabled}
                 open={isOpen}
-                onOpenChange={(open) => {
-                    if (!open) {
-                        setSearchTerm("");
-                    }
-                    if (onOpenChange) {
-                        onOpenChange(open);
-                    }
-                }}
             >
                 <Select.Trigger className={twMerge("flex w-full rounded-md bg-neutral-700 border border-transparent px-3 py-3 text-sm placeholder:text-neutral-400 focus:outline-none", className)}>
-                    <div className="flex w-full items-center">
-                        <Select.Value placeholder={placeholder}>
-                            {selected ? data.find(item => item.id === selected)?.name : placeholder}
-                        </Select.Value>
-                        <Select.Icon className="absolute right-8" />
-                    </div>
+                    <Select.Value placeholder={placeholder} />
+                    <Select.Icon className="absolute right-8" />
                 </Select.Trigger>
 
                 <Select.Portal>
@@ -58,13 +39,13 @@ const SearchSelect = forwardRef<HTMLDivElement, SearchSelectProps>(
                     >
                         <Select.Viewport>
                             <Select.Group>
-                                {filteredData.length === 0 && (
+                                {data.length === 0 && (
                                     <SelectItem disabled value="none">
                                         <Select.ItemText>No results found</Select.ItemText>
                                     </SelectItem>
                                 )}
-                                {filteredData.map((item, index) => (
-                                    <SelectItem key={index} value={item.id} isSelected={item.id === selected}>
+                                {data.map((item, index) => (
+                                    <SelectItem key={index} value={item.id}>
                                         {item.name}
                                     </SelectItem>
                                 ))}
@@ -84,16 +65,14 @@ interface SelectItemProps {
     className?: string;
     value: string;
     disabled?: boolean;
-    isSelected?: boolean;
 }
 
 const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
-    ({ children, className, isSelected, ...props }, forwardedRef) => {
+    ({ children, className, ...props }, forwardedRef) => {
         return (
             <Select.Item
                 className={twMerge(
                     "relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-green-500 data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1 data-[highlighted]:outline-none",
-                    isSelected && "bg-green-500 text-violet1",
                     className,
                 )}
                 {...props}
