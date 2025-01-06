@@ -50,7 +50,7 @@ const SearchSelect = forwardRef<HTMLDivElement, SearchSelectProps>(
                         position="popper"
                     >
                         <Select.Viewport>
-                            <div style={{ padding: "8px" }}>
+                            {/* <div style={{ padding: "8px" }}>
                                 <input
                                     type="text"
                                     value={searchTerm}
@@ -59,7 +59,7 @@ const SearchSelect = forwardRef<HTMLDivElement, SearchSelectProps>(
                                     className={twMerge("flex w-full rounded-md bg-neutral-700 border border-transparent px-3 py-3 text-sm placeholder:text-neutral-400 focus:outline-none")}
                                     autoFocus
                                 />
-                            </div>
+                            </div> */}
                             <Select.Group>
                                 <SelectItem value="leek" className="hidden">
                                     leek
