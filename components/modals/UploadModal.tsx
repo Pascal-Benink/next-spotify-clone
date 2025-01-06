@@ -26,7 +26,7 @@ const UploadModal = () => {
 
     const supabaseClient = useSupabaseClient();
 
-    const [albumData, setAlbumData] = useState<{ id: string; title: string }[]>([]);
+    const [albumData, setAlbumData] = useState<{ id: string; name: string }[]>([]);
 
     const [selectedAlbum, setSelectedAlbum] = useState<string | null>(null);
 
@@ -63,7 +63,7 @@ const UploadModal = () => {
             try {
                 const { data, error } = await supabaseClient
                     .from('albums')
-                    .select('id, title');
+                    .select('id, name');
 
                 if (error) {
                     console.error(error);
@@ -142,6 +142,7 @@ const UploadModal = () => {
                     is_private: values.is_private,
                     image_path: imageData.path,
                     song_path: songData.path,
+                    album_id: selectedAlbum || ''
                 });
 
             if (supabaseError) {
@@ -193,7 +194,7 @@ const UploadModal = () => {
                     disabled={isLoading}
                     isOpen={selectOpen}
                     onOpenChange={() => setSelectOpen(!selectOpen)}
-                    data={albumData.map(album => ({ id: album.id, name: album.title }))}
+                    data={albumData.map(album => ({ id: album.id, name: album.name }))}
                     onSelect={(selected) => setSelectedAlbum(selected)}
                     selected={selectedAlbum}
                     placeholder="Select an album"

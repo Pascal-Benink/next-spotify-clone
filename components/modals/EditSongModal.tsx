@@ -3,7 +3,7 @@
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
 import Modal from "../Modal";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Input from "../Input";
 import Button from "../Button";
 import toast from "react-hot-toast";
@@ -12,6 +12,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useEditSongModal } from "@/hooks/useEditSongModal";
 import CheckBox from "../CheckBox";
+import SearchSelect from "../SearchSelect";
 
 const SongEditModal = () => {
     const router = useRouter();
@@ -34,6 +35,14 @@ const SongEditModal = () => {
     }
 
     const [song, setSong] = useState<Song | null>(null);
+
+    const selectRef = useRef<HTMLDivElement>(null);
+
+    const [albumData, setAlbumData] = useState<{ id: string; name: string }[]>([]);
+
+    const [selectedAlbum, setSelectedAlbum] = useState<string | null>(null);
+
+    const [selectOpen, setSelectOpen] = useState(false);
 
     const fetchSong = async () => {
         try {
@@ -76,6 +85,7 @@ const SongEditModal = () => {
             author: song?.author || '',
             title: song?.title || '',
             is_private: song?.is_private || false,
+            album_id: selectedAlbum || ''
         }
     })
 
@@ -85,6 +95,27 @@ const SongEditModal = () => {
             editSongModal.onClose();
         }
     }
+
+    useEffect(() => {
+        const fetchAlbums = async () => {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('albums')
+                    .select('id, name');
+
+                if (error) {
+                    console.error(error);
+                    return;
+                }
+
+                setAlbumData(data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchAlbums();
+    }, [supabaseClient]);
 
     const onSubmit: SubmitHandler<FieldValues> = async (values) => {
         try {
@@ -97,7 +128,8 @@ const SongEditModal = () => {
                 .update({
                     title: values.title,
                     author: values.author,
-                    is_private: values.is_private
+                    is_private: values.is_private,
+                    album_id: selectedAlbum || ''
                 })
                 .eq('id', songId)
 
@@ -126,6 +158,7 @@ const SongEditModal = () => {
             author: song?.author || '',
             title: song?.title || '',
             is_private: song?.is_private || false,
+            album_id: selectedAlbum || ''
         });
     }, [song])
 
@@ -148,6 +181,16 @@ const SongEditModal = () => {
                     disabled={isLoading}
                     {...register('author', { required: true })}
                     placeholder="Song Author"
+                />
+                <SearchSelect
+                    ref={selectRef}
+                    disabled={isLoading}
+                    isOpen={selectOpen}
+                    onOpenChange={() => setSelectOpen(!selectOpen)}
+                    data={albumData.map(album => ({ id: album.id, name: album.name }))}
+                    onSelect={(selected) => setSelectedAlbum(selected)}
+                    selected={selectedAlbum}
+                    placeholder="Select an album"
                 />
                 <CheckBox
                     id="is_private"
