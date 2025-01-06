@@ -142,7 +142,7 @@ const SongEditModal = () => {
 
             router.refresh();
             setIsLoading(false);
-            toast.success("Song uploaded successfully");
+            toast.success("Song editted successfully");
             reset();
             editSongModal.onClose();
         } catch (error) {

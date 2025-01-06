@@ -28,8 +28,10 @@ const SearchSelect = forwardRef<HTMLDivElement, SearchSelectProps>(
             item.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
+        let realSelected = selected === null ? undefined : selected;
+
         return (
-            <Select.Root onValueChange={onSelect} value={selected ?? undefined} disabled={disabled} open={isOpen} onOpenChange={(open) => {
+            <Select.Root onValueChange={onSelect} value={realSelected} disabled={disabled} open={isOpen} onOpenChange={(open) => {
                 if (!open) {
                     setSearchTerm("");
                 }

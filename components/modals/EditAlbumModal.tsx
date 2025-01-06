@@ -106,7 +106,7 @@ const AlbumEditModal = () => {
 
             router.refresh();
             setIsLoading(false);
-            toast.success("Album uploaded successfully");
+            toast.success("Album editted successfully");
             reset();
             editAlbumModal.onClose();
         } catch (error) {
