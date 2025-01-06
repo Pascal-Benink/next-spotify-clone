@@ -24,23 +24,10 @@ const AlbumRightClickContent: React.FC<AlbumRightClickContentProps> = ({ isOwner
 	const { subscription } = useUser();
 
 	const handleDownload = async () => {
-		const { data: PsData, error: PsError } = await supabaseClient
-			.from('album_songs')
-			.select('song_id')
-			.eq('album_id', album.id);
-
-		if (PsError) {
-			console.error('Error fetching album songs:', PsError);
-			toast.error('Error fetching album songs');
-			return;
-		}
-
-		const songIds = PsData.map((song) => song.song_id);
-
 		const { data: SData, error: SError } = await supabaseClient
 			.from('songs')
 			.select('*')
-			.in('id', songIds);
+			.eq('album_id', album.id);
 
 		if (SError) {
 			console.error('Error fetching songs:', SError);
