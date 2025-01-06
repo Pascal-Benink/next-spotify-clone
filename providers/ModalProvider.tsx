@@ -16,6 +16,7 @@ import AddLyricsModal from "@/components/modals/AddLyricsModal";
 import PlaylistEditModal from "@/components/modals/EditPlaylistModal";
 import BatchAddToPlaylistModal from "@/components/modals/BatchAddToPlaylistModal";
 import ClonePlaylistModal from "@/components/modals/ClonePlaylistModal";
+import CreateAlbumModal from "@/components/modals/CreateAlbumModal";
 
 interface ModalProviderProps {
     products: ProductWithPrice[];
@@ -49,6 +50,7 @@ const ModalProvider: React.FC<ModalProviderProps> = ({
             <PlaylistEditModal />
             <BatchAddToPlaylistModal />
             <ClonePlaylistModal />
+            <CreateAlbumModal />
         </>
     );
 }
