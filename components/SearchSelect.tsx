@@ -2,7 +2,6 @@ import React, { useState, forwardRef } from "react";
 import * as Select from "@radix-ui/react-select";
 import { FaCheck } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
-import Input from "./Input";
 
 export type SelectType = {
     id: string;
