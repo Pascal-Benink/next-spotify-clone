@@ -70,7 +70,7 @@ const SearchSelect = forwardRef<HTMLDivElement, SearchSelectProps>(
                                     </SelectItem>
                                 )}
                                 {filteredData.map((item, index) => (
-                                    <SelectItem key={index} value={item.id}>
+                                    <SelectItem key={index} value={item.id} isSelected={item.id === selected}>
                                         {item.name}
                                     </SelectItem>
                                 ))}
@@ -90,14 +90,16 @@ interface SelectItemProps {
     className?: string;
     value: string;
     disabled?: boolean;
+    isSelected?: boolean;
 }
 
 const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
-    ({ children, className, ...props }, forwardedRef) => {
+    ({ children, className, isSelected, ...props }, forwardedRef) => {
         return (
             <Select.Item
                 className={twMerge(
                     "relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-green-500 data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1 data-[highlighted]:outline-none",
+                    isSelected ? "bg-green-500 text-violet1" : "",
                     className,
                 )}
                 {...props}

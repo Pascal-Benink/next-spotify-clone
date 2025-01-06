@@ -108,6 +108,8 @@ const SongEditModal = () => {
                     return;
                 }
 
+                console.log(data);
+
                 setAlbumData(data);
             } catch (error) {
                 console.error(error);
