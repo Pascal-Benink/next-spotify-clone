@@ -8,12 +8,14 @@ import { useAuthModal } from "@/hooks/useAuthModal";
 import { useUploadModal } from "@/hooks/useUploadModal";
 import { useUser } from "@/hooks/useUser";
 import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
+import { useCreateAlbumModal } from "@/hooks/useCreateAlbumModal";
 
 const LibraryDropdown = () => {
     const subscribeModal = useSubscribeModal();
     const authModal = useAuthModal();
     const uploadModal = useUploadModal();
     const createPlaylistModal = useCreatePlaylistModal();
+    const createAlbumModal = useCreateAlbumModal();
 
     const { user, subscription } = useUser();
 
@@ -45,6 +47,17 @@ const LibraryDropdown = () => {
         return createPlaylistModal.onOpen();
     }
 
+    const ClickNewAlbum = () => {
+        if (!user) {
+            return authModal.onOpen();
+        }
+        if (!subscription) {
+            return subscribeModal.onOpen();
+        }
+
+        return createAlbumModal.onOpen();
+    }
+
     return (
         <DropdownMenu.Root modal={false}>
             <DropdownMenu.Trigger asChild>
@@ -67,6 +80,9 @@ const LibraryDropdown = () => {
                     </DropdownMenu.Item>
                     <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none text-neutral-400 hover:text-neutral-300 px-3 mt-1.5 transition" onClick={ClickNewPlaylist}>
                         Create New Playlist <AiOutlinePlus size={20} className="text-neutral-400" />
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none text-neutral-400 hover:text-neutral-300 px-3 mt-1.5 transition" onClick={ClickNewAlbum}>
+                        Create New Album <AiOutlinePlus size={20} className="text-neutral-400" />
                     </DropdownMenu.Item>
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>
