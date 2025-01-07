@@ -51,12 +51,12 @@ const CP = () => {
     return (
         <div>
             <h1>Client Page</h1>
-            {/* <Modal
+            <Modal
                 title="Edit Album"
                 description="Edit an album you uploaded to the platform"
                 isOpen={true}
                 onChange={onChange}
-            > */}
+            >
                 <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
                     <SearchSelect
                         disabled={isLoading}
@@ -67,7 +67,7 @@ const CP = () => {
                     />
                     <button type="submit" className="btn btn-primary">Submit</button>
                 </form>
-            {/* </Modal> */}
+            </Modal>
         </div>
     );
 }
