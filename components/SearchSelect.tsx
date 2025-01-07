@@ -11,7 +11,7 @@ export type SelectType = {
 interface SearchSelectProps {
     data: SelectType[];
     onSelect: (value: string) => void;
-    selected: string | null;
+    selected: string | undefined;
     placeholder: string;
     className?: string;
     disabled?: boolean;

@@ -1,41 +1,75 @@
 "use client";
-import SelectDemo, { SelectType } from "./slectdemo";
-import SearchSelect from "@/components/SearchSelect";
-import { useState } from "react";
-const Clientpage = () => {
+import React, { useState, useEffect } from 'react';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import Modal from '@/components/Modal';
+import SearchSelect from '@/components/SearchSelect';
+import { SelectType } from './slectdemo';
 
-    const listofThings: SelectType[] = [
-        {
-            id: "1",
-            name: "leek",
-        },
-        {
-            id: "2",
-            name: "onion",
-        },
-        {
-            id: "3",
-            name: "potato",
+const CP = () => {
+    const [listofThings, setListofThings] = useState<SelectType[]>([]);
+    const [selectedAlbum, setSelectedAlbum] = useState<string | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    const supabaseClient = useSupabaseClient();
+
+    useEffect(() => {
+        const fetchAlbums = async () => {
+            setIsLoading(true);
+            try {
+                const { data, error } = await supabaseClient
+                    .from('albums')
+                    .select('id, name');
+
+                if (error) {
+                    console.error(error);
+                    return;
+                }
+
+                setListofThings(data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
         }
-    ];
 
-    const [selectOpen, setSelectOpen] = useState(false);
+        fetchAlbums();
+    }, [supabaseClient]);
 
-    const [selectedAlbum, setSelectedAlbum] = useState<string | null>(null);
+    const onChange = (open: boolean) => {
+        if (!open) {
+            // Handle modal close
+        }
+    }
 
-    const [isLoading, setIsLoading] = useState(false);
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        // Handle form submission
+        console.log('Selected Album:', selectedAlbum);
+    }
+
     return (
         <div>
             <h1>Client Page</h1>
-            <SearchSelect
-                disabled={isLoading}
-                data={listofThings.map(album => ({ id: album.id, name: album.name }))}
-                onSelect={(selected) => setSelectedAlbum(selected)}
-                selected={selectedAlbum}
-                placeholder="Select a Album"
-            />
+            <Modal
+                title="Edit Album"
+                description="Edit an album you uploaded to the platform"
+                isOpen={true}
+                onChange={onChange}
+            >
+                <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
+                    <SearchSelect
+                        disabled={isLoading}
+                        data={listofThings.map(album => ({ id: album.id, name: album.name }))}
+                        onSelect={(selected: string) => setSelectedAlbum(selected)}
+                        selected={selectedAlbum}
+                        placeholder="Select an Album"
+                    />
+                    <button type="submit" className="btn btn-primary">Submit</button>
+                </form>
+            </Modal>
         </div>
     );
 }
 
-export default Clientpage;
+export default CP;

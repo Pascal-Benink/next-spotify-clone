@@ -39,7 +39,7 @@ const SongEditModal = () => {
 
     const [albumData, setAlbumData] = useState<{ id: string; name: string }[]>([]);
 
-    const [selectedAlbum, setSelectedAlbum] = useState<string | null>(null);
+    const [selectedAlbum, setSelectedAlbum] = useState<string | undefined>(undefined);
 
     const [selectOpen, setSelectOpen] = useState(false);
 
