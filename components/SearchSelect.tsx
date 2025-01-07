@@ -15,13 +15,20 @@ interface SearchSelectProps {
     placeholder: string;
     className?: string;
     disabled?: boolean;
+    isOpen?: boolean;
+    onOpenChange?: (open: boolean) => void;
 }
 
-const SearchSelect = ({ data, onSelect, selected, placeholder, className, disabled, }: SearchSelectProps) => {
+const SearchSelect = ({ data, onSelect, selected, placeholder, className, disabled, isOpen, onOpenChange }: SearchSelectProps) => {
 
     return (
         <Select.Root
             disabled={disabled}
+            open={isOpen} onOpenChange={(open) => {
+                if (onOpenChange) {
+                    onOpenChange(open);
+                }
+            }}
         >
             <Select.Trigger className={twMerge("flex w-full rounded-md bg-neutral-700 border border-transparent px-3 py-3 text-sm placeholder:text-neutral-400 focus:outline-none", className)}>
                 <Select.Value placeholder={placeholder} />
@@ -47,7 +54,7 @@ const SearchSelect = ({ data, onSelect, selected, placeholder, className, disabl
                     </Select.Viewport>
                 </Select.Content>
             </Select.Portal>
-        </Select.Root>
+        </Select.Root >
     );
 }
 

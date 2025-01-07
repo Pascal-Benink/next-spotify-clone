@@ -13,7 +13,6 @@ import { useRouter } from "next/navigation";
 import { useEditSongModal } from "@/hooks/useEditSongModal";
 import CheckBox from "../CheckBox";
 import SearchSelect from "../SearchSelect";
-import SelectDemo from "@/app/(site)/debug/slectdemo";
 
 const SongEditModal = () => {
     const router = useRouter();
@@ -171,6 +170,14 @@ const SongEditModal = () => {
             isOpen={editSongModal.isOpen}
             onChange={onChange}
         >
+            <SearchSelect
+                disabled={isLoading}
+                data={albumData.map(album => ({ id: album.id, name: album.name }))}
+                onSelect={(selected) => setSelectedAlbum(selected)}
+                selected={selectedAlbum}
+                placeholder="Select an Album"
+                className="mb-4"
+            />
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
                 <Input
                     id="title"
@@ -184,19 +191,13 @@ const SongEditModal = () => {
                     {...register('author', { required: true })}
                     placeholder="Song Author"
                 />
-                <SelectDemo
-                    disabled={isLoading}
-                    data={albumData.map(album => ({ id: album.id, name: album.name }))}
-                    onSelect={(selected) => setSelectedAlbum(selected)}
-                    selected={selectedAlbum}
-                    placeholder="Select a Album"
-                />
                 <CheckBox
                     id="is_private"
-                    label="private Song"
+                    label="Private Song"
                     disabled={isLoading}
                     {...register('is_private')}
                 />
+
                 <Button disabled={isLoading} type="submit">
                     Edit Song
                 </Button>

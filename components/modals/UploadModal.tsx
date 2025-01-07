@@ -170,6 +170,16 @@ const UploadModal = () => {
             isOpen={uploadModal.isOpen}
             onChange={onChange}
         >
+            <SearchSelect
+                disabled={isLoading}
+                isOpen={selectOpen}
+                onOpenChange={() => setSelectOpen(!selectOpen)}
+                data={albumData.map(album => ({ id: album.id, name: album.name }))}
+                onSelect={(selected) => setSelectedAlbum(selected)}
+                selected={selectedAlbum}
+                placeholder="Select an album"
+                className="mb-4"
+            />
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
                 <Input
                     id="title"
@@ -188,16 +198,6 @@ const UploadModal = () => {
                     label="Private Song"
                     disabled={isLoading}
                     {...register('is_private')}
-                />
-                <SearchSelect
-                    ref={selectRef}
-                    disabled={isLoading}
-                    isOpen={selectOpen}
-                    onOpenChange={() => setSelectOpen(!selectOpen)}
-                    data={albumData.map(album => ({ id: album.id, name: album.name }))}
-                    onSelect={(selected) => setSelectedAlbum(selected)}
-                    selected={selectedAlbum}
-                    placeholder="Select an album"
                 />
                 <div>
                     <div className="pb-1">
