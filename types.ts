@@ -59,6 +59,7 @@ export interface Song {
     user_id: string;
     author: string;
     title: string;
+    album_id: string;
     song_path: string;
     image_path: string;
 };

@@ -1,7 +1,6 @@
 "use client";
 
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-
 import Modal from "../Modal";
 import { useEffect, useState } from "react";
 import Input from "../Input";
@@ -19,11 +18,8 @@ const SongEditModal = () => {
     const editSongModal = useEditSongModal();
 
     const [isLoading, setIsLoading] = useState(false);
-
     const { user } = useUser();
-
     const supabaseClient = useSupabaseClient();
-
     const songId = editSongModal.songId;
 
     interface Song {
@@ -35,11 +31,8 @@ const SongEditModal = () => {
     }
 
     const [song, setSong] = useState<Song | null>(null);
-
     const [albumData, setAlbumData] = useState<{ id: string; name: string }[]>([]);
-
     const [selectedAlbum, setSelectedAlbum] = useState<string | undefined>(undefined);
-
     const [selectOpen, setSelectOpen] = useState(false);
 
     const fetchSong = async () => {
@@ -58,7 +51,7 @@ const SongEditModal = () => {
             }
 
             setSong(song);
-            setSelectedAlbum(song?.album_id || null);
+            setSelectedAlbum(song.album_id || undefined);
         } catch (error) {
             console.error(error);
             toast.error("Something went wrong");
@@ -90,6 +83,7 @@ const SongEditModal = () => {
 
     const onChange = (open: boolean) => {
         if (!open) {
+            setSelectOpen(false);
             reset();
             editSongModal.onClose();
         }
@@ -130,7 +124,7 @@ const SongEditModal = () => {
                     title: values.title,
                     author: values.author,
                     is_private: values.is_private,
-                    album_id: selectedAlbum || ''
+                    album_id: selectedAlbum ? parseInt(selectedAlbum) : null
                 })
                 .eq('id', songId)
 
@@ -141,7 +135,7 @@ const SongEditModal = () => {
 
             router.refresh();
             setIsLoading(false);
-            toast.success("Song editted successfully");
+            toast.success("Song edited successfully");
             reset();
             editSongModal.onClose();
         } catch (error) {
@@ -161,7 +155,7 @@ const SongEditModal = () => {
             is_private: song?.is_private || false,
             album_id: selectedAlbum || ''
         });
-    }, [song])
+    }, [song, selectedAlbum, reset])
 
     return (
         <Modal

@@ -142,7 +142,7 @@ const UploadModal = () => {
                     is_private: values.is_private,
                     image_path: imageData.path,
                     song_path: songData.path,
-                    album_id: selectedAlbum || ''
+                    album_id: selectedAlbum ? parseInt(selectedAlbum) : null
                 });
 
             if (supabaseError) {

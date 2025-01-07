@@ -29,6 +29,8 @@ const SearchSelect = ({ data, onSelect, selected, placeholder, className, disabl
                     onOpenChange(open);
                 }
             }}
+            value={selected}
+            onValueChange={(value) => onSelect(value)}
         >
             <Select.Trigger className={twMerge("flex w-full rounded-md bg-neutral-700 border border-transparent px-3 py-3 text-sm placeholder:text-neutral-400 focus:outline-none", className)}>
                 <Select.Value placeholder={placeholder} />
