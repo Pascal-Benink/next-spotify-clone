@@ -8,6 +8,7 @@ import { SelectType } from './slectdemo';
 const CP = () => {
     const [listofThings, setListofThings] = useState<SelectType[]>([]);
     const [selectedAlbum, setSelectedAlbum] = useState<string | undefined>(undefined);
+    const [selectedAlbumName, setSelectedAlbumName] = useState<string | undefined>(undefined);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const supabaseClient = useSupabaseClient();
@@ -36,6 +37,16 @@ const CP = () => {
         fetchAlbums();
     }, [supabaseClient]);
 
+    useEffect(() => {
+        const album = listofThings.find(album => album.id === selectedAlbum);
+        console.log('Selected Album Name:', album);
+        setSelectedAlbumName(album ? album.name : undefined);
+    }, [selectedAlbum, listofThings]);
+
+    useEffect(() => {
+        console.log('Selected Album:', selectedAlbum);
+    }, [selectedAlbum]);
+
     const onChange = (open: boolean) => {
         if (!open) {
             // Handle modal close
@@ -51,12 +62,12 @@ const CP = () => {
     return (
         <div>
             <h1>Client Page</h1>
-            <Modal
+            {/* <Modal
                 title="Edit Album"
                 description="Edit an album you uploaded to the platform"
                 isOpen={true}
                 onChange={onChange}
-            >
+            > */}
                 <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
                     <SearchSelect
                         disabled={isLoading}
@@ -65,9 +76,10 @@ const CP = () => {
                         selected={selectedAlbum}
                         placeholder="Select an Album"
                     />
+                    Selected album: {selectedAlbumName}
                     <button type="submit" className="btn btn-primary">Submit</button>
                 </form>
-            </Modal>
+            {/* </Modal> */}
         </div>
     );
 }
