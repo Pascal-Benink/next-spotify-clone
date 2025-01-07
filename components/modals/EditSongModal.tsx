@@ -172,6 +172,8 @@ const SongEditModal = () => {
         >
             <SearchSelect
                 disabled={isLoading}
+                isOpen={selectOpen}
+                onOpenChange={() => setSelectOpen(!selectOpen)}
                 data={albumData.map(album => ({ id: album.id, name: album.name }))}
                 onSelect={(selected) => setSelectedAlbum(selected)}
                 selected={selectedAlbum}
