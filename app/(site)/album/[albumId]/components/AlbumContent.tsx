@@ -18,8 +18,8 @@ interface AlbumContentProps {
 
 const AlbumContent: React.FC<AlbumContentProps> = ({
     songs,
-    AlbumId,
-    isOwner,
+    // AlbumId,
+    // isOwner,
     userId
 }) => {
     const router = useRouter();
