@@ -9,11 +9,13 @@ import { useUploadModal } from "@/hooks/useUploadModal";
 import { useUser } from "@/hooks/useUser";
 import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
 import { useCreateAlbumModal } from "@/hooks/useCreateAlbumModal";
+import { useUploadAlbumModal } from "@/hooks/useUploadAlbumModal";
 
 const LibraryDropdown = () => {
     const subscribeModal = useSubscribeModal();
     const authModal = useAuthModal();
     const uploadModal = useUploadModal();
+    const uploadAlbumModal = useUploadAlbumModal();
     const createPlaylistModal = useCreatePlaylistModal();
     const createAlbumModal = useCreateAlbumModal();
 
@@ -34,6 +36,17 @@ const LibraryDropdown = () => {
         }
 
         return uploadModal.onOpen();
+    }
+
+    const ClickUploadAlbum = () => {
+        if (!user) {
+            return authModal.onOpen();
+        }
+        if (!subscription) {
+            return subscribeModal.onOpen();
+        }
+
+        return uploadAlbumModal.onOpen();
     }
 
     const ClickNewPlaylist = () => {
@@ -77,6 +90,9 @@ const LibraryDropdown = () => {
                 >
                     <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none text-neutral-400 hover:text-neutral-300 px-3 mb-1.5 transition" onClick={ClickNewSong}>
                         Upload New Song <AiOutlinePlus size={20} className="text-neutral-400" />
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none text-neutral-400 hover:text-neutral-300 px-3 mb-1.5 transition" onClick={ClickUploadAlbum}>
+                        Upload New Album <AiOutlinePlus size={20} className="text-neutral-400" />
                     </DropdownMenu.Item>
                     <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none text-neutral-400 hover:text-neutral-300 px-3 mt-1.5 transition" onClick={ClickNewPlaylist}>
                         Create New Playlist <AiOutlinePlus size={20} className="text-neutral-400" />
