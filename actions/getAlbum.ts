@@ -35,7 +35,13 @@ const getAlbum = async (id: string): Promise<Album> => {
         redirect('/');
     }
 
-    return (data as any) || [];
+    const remappedData = {
+        ...data,
+        image_path: data.image_patch,
+    };
+    delete remappedData.image_patch;
+
+    return remappedData;
 }
 
 export default getAlbum;

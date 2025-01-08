@@ -16,7 +16,17 @@ const getAlbums = async (): Promise<Album[]> => {
         console.error(error);
     }
 
-    return (data as any) || [];
+    if (!data) {
+        return [];
+    }
+
+    const remappedData = data.map((album: any) => ({
+        ...album,
+        image_path: album.image_patch,
+        image_patch: undefined, // Remove the original image_patch property
+    }));
+
+    return remappedData;
 }
 
 export default getAlbums;
