@@ -29,6 +29,7 @@ const AlbumEditModal = () => {
         id: string;
         user_id: string;
         title: string;
+        is_public: boolean;
         author: string;
     }
 
@@ -73,6 +74,7 @@ const AlbumEditModal = () => {
             id: album?.id || albumId,
             user_id: album?.user_id || '',
             author: album?.author || '',
+            is_public: album?.is_public || true,
             title: album?.title || '',
         }
     })
@@ -93,9 +95,9 @@ const AlbumEditModal = () => {
             } = await supabaseClient
                 .from(`albums`)
                 .update({
-                    title: values.title,
+                    name: values.title,
                     author: values.author,
-                    is_private: values.is_private
+                    is_public: values.is_public
                 })
                 .eq('id', albumId)
 
@@ -122,6 +124,7 @@ const AlbumEditModal = () => {
             id: album?.id || albumId,
             user_id: album?.user_id || '',
             author: album?.author || '',
+            is_public: album?.is_public || true,
             title: album?.title || '',
         });
     }, [album])
@@ -145,6 +148,12 @@ const AlbumEditModal = () => {
                     disabled={isLoading}
                     {...register('author', { required: true })}
                     placeholder="Album Author"
+                />
+                <CheckBox
+                    id="is_public"
+                    label="Public Album"
+                    disabled={isLoading}
+                    {...register('is_public')}
                 />
                 <Button disabled={isLoading} type="submit">
                     Edit Album
