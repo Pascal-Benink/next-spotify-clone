@@ -13,6 +13,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import CheckBox from "../CheckBox";
 import { useUploadAlbumModal } from "@/hooks/useUploadAlbumModal";
+import JSZip from "jszip";
 
 const UploadAlbumModal = () => {
     const router = useRouter();
@@ -31,9 +32,9 @@ const UploadAlbumModal = () => {
     } = useForm<FieldValues>({
         defaultValues: {
             author: '',
-            title: '',
+            name: '',
             is_public: true,
-            song: null,
+            albumZip: null,
             image: null,
         }
     })
@@ -54,34 +55,33 @@ const UploadAlbumModal = () => {
             setIsLoading(true);
 
             const imageFile = values.image?.[0];
-            const songFile = values.song?.[0];
+            const albumZipFile = values.albumZip?.[0];
 
-            if (!imageFile || !songFile || !user) {
+            if (!imageFile || !albumZipFile || !user) {
                 toast.error("Missing fields");
                 return;
             }
 
-            const sanitizedFileName = sanitizeFileName(values.title);
+
+            const zip = new JSZip();
+            const albumZipContent = await zip.loadAsync(albumZipFile);
+            // @ts-expect-error : its valid as a file
+            const songFiles = [];
+
+            albumZipContent.forEach((relativePath, file) => {
+                if (file.name.endsWith(".mp3")) {
+                    songFiles.push(file);
+                }
+            });
+
+            if (songFiles.length === 0) {
+                setIsLoading(false);
+                return toast.error("No mp3 files found in the zip");
+            }
 
             const uniqueID = uniqid();
 
-            // upload song
-            const {
-                data: songData,
-                error: songError
-            } = await supabaseClient
-                .storage
-                .from('songs')
-                .upload(`song-${sanitizedFileName}-${uniqueID}`, songFile, {
-                    cacheControl: '3600',
-                    upsert: false,
-                });
-
-            if (songError) {
-                setIsLoading(false);
-                console.error(songError);
-                return toast.error("Failed to upload song");
-            }
+            const sanitizedFileName = sanitizeFileName(values.name);
 
             // upload image
             const {
@@ -101,22 +101,83 @@ const UploadAlbumModal = () => {
                 return toast.error("Failed to upload image");
             }
 
+            console.log(imageData);
+
             const {
                 error: supabaseError
             } = await supabaseClient
-                .from(`songs`)
+                .from(`albums`)
                 .insert({
                     user_id: user.id,
-                    title: values.title,
+                    name: values.name,
                     author: values.author,
-                    is_private: values.is_public,
-                    image_path: imageData.path,
-                    song_path: songData.path,
+                    is_public: values.is_public,
+                    image_patch: imageData.path,
                 });
 
             if (supabaseError) {
                 setIsLoading(false);
                 return toast.error(supabaseError.message);
+            }
+
+            const {
+                data: albumData,
+                error: albumError
+            } = await supabaseClient
+                .from(`albums`)
+                .select('*')
+                .eq('image_patch', imageData.path)
+                .single();
+
+            if (albumError) {
+                setIsLoading(false);
+                return toast.error(albumError.message);
+            }
+
+            const albumId = albumData.id;
+
+            // @ts-expect-error: its valid as a file
+            for (const songFile of songFiles) {
+                const songName = sanitizeFileName(songFile.name.replace('.mp3', ''));
+                const sanitizedSongFileName = sanitizeFileName(songName);
+
+                const isPrivate = !values.is_public;
+                // upload song
+                const {
+                    data: songData,
+                    error: songError
+                } = await supabaseClient
+                    .storage
+                    .from('songs')
+                    .upload(`song-${sanitizedSongFileName}-${uniqueID}-${songName}`, songFile, {
+                        cacheControl: '3600',
+                        upsert: false,
+                    });
+
+                if (songError) {
+                    setIsLoading(false);
+                    console.error(songError);
+                    return toast.error("Failed to upload song");
+                }
+
+                const {
+                    error: supabaseSongError
+                } = await supabaseClient
+                    .from(`songs`)
+                    .insert({
+                        user_id: user.id,
+                        title: songName,
+                        author: values.author,
+                        is_private: isPrivate,
+                        image_path: imageData.path,
+                        song_path: songData.path,
+                        album_id: albumId
+                    });
+
+                if (supabaseSongError) {
+                    setIsLoading(false);
+                    return toast.error(supabaseSongError.message);
+                }
             }
 
             router.refresh();
@@ -150,7 +211,7 @@ const UploadAlbumModal = () => {
                     id="author"
                     disabled={isLoading}
                     {...register('author', { required: true })}
-                    placeholder="Song Author"
+                    placeholder="Album Author"
                 />
                 <CheckBox
                     id="is_public"
@@ -167,7 +228,7 @@ const UploadAlbumModal = () => {
                         type="file"
                         disabled={isLoading}
                         accept=".zip"
-                        {...register('album', { required: true })}
+                        {...register('albumZip', { required: true })}
                     />
                 </div>
                 <div>
