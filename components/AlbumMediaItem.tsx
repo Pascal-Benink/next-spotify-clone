@@ -29,7 +29,7 @@ const PlaylistMediaItem: React.FC<MediaItemProps> = ({
             onClick(data.id);
         }
 
-        router.push(`/playlist/${playlistId}`);
+        router.push(`/album/${playlistId}`);
     }
 
     return (
