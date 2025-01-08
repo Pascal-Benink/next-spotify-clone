@@ -27,7 +27,7 @@ const DeleteAlbumModal = () => {
         try {
             const { data: album, error } = await supabaseClient
                 .from('albums')
-                .select('title')
+                .select('name')
                 .eq('id', albumId)
                 .single();
 
@@ -37,7 +37,7 @@ const DeleteAlbumModal = () => {
                 return;
             }
 
-            setAlbumtName(album?.title);
+            setAlbumtName(album?.name);
         } catch (error) {
             console.error(error);
             toast.error("Something went wrong");
