@@ -97,13 +97,13 @@ const DeleteAlbumModal = () => {
             }
 
             const { data: playlists, error: PlaylistError } = await supabaseClient
-                .from('playlists')
-                .select('image_path')
-                .eq('image_path', data.image_path);
+                .from('albums')
+                .select('image_patch')
+                .eq('image_patch', data.image_patch);
 
             if (PlaylistError) {
-                console.error("Error checking playlists: ", PlaylistError);
-                toast.error("Failed to check playlists");
+                console.error("Error checking albums: ", PlaylistError);
+                toast.error("Failed to check albums");
                 return;
             }
 
