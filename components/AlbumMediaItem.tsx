@@ -14,7 +14,7 @@ interface MediaItemProps {
     isOwner: boolean;
 }
 
-const PlaylistMediaItem: React.FC<MediaItemProps> = ({
+const AlbumMediaItem: React.FC<MediaItemProps> = ({
     data,
     onClick,
     isOwner,
@@ -75,4 +75,4 @@ const PlaylistMediaItem: React.FC<MediaItemProps> = ({
     );
 }
 
-export default PlaylistMediaItem;
+export default AlbumMediaItem;

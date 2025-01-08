@@ -30,6 +30,7 @@ const Search = async ({ searchParams }: SearchProps) => {
         console.log("No search params");
         songs = songs.slice(0, 7);
         playlists = playlists.slice(0, 7);
+        albums = albums.slice(0, 7);
     }
 
     return (
@@ -60,7 +61,7 @@ const Search = async ({ searchParams }: SearchProps) => {
                         </h2>
                         <SongSearchContent songs={songs} userId={user?.id} />
                     </div>
-                    <div>
+                    <div className="mb-3">
                         <h2 className="text-white text-xl font-semibold px-6">
                             Playlists
                         </h2>
