@@ -8,8 +8,6 @@ import { useEffect } from "react";
 import MediaItem from "@/components/MediaItem";
 import LikeButton from "@/components/LikeButton";
 import useOnPlay from "@/hooks/useOnPlay";
-import Link from "next/link";
-import AlbumItemDropdown from "@/components/AlbumitemDropdown";
 
 interface AlbumContentProps {
     songs: Song[];
@@ -46,9 +44,7 @@ const AlbumContent: React.FC<AlbumContentProps> = ({
             text-neutral-400
             ">
                 <p className="flex flex-row">
-                    No Songs In this Playist. You can add them<Link href={"/search"} className="hover:underline ml-[0.3rem]">
-                        here
-                    </Link>
+                    No Songs In this Album.
                 </p>
             </div>
         )
@@ -68,7 +64,7 @@ const AlbumContent: React.FC<AlbumContentProps> = ({
                             isOwner={song.user_id === userId}
                         />
                     </div>
-                    <AlbumItemDropdown songId={song.id} albumId={AlbumId} isOwner={isOwner} />
+                    {/* <AlbumItemDropdown songId={song.id} albumId={AlbumId} isOwner={isOwner} /> */}
                     {/* <AlbumButton songId={song.id} /> */}
                     <LikeButton songId={song.id} />
                 </div>
