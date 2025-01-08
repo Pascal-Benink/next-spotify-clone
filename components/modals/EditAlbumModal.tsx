@@ -28,7 +28,7 @@ const AlbumEditModal = () => {
     interface Album {
         id: string;
         user_id: string;
-        title: string;
+        name: string;
         is_public: boolean;
         author: string;
     }
@@ -75,7 +75,7 @@ const AlbumEditModal = () => {
             user_id: album?.user_id || '',
             author: album?.author || '',
             is_public: album?.is_public || true,
-            title: album?.title || '',
+            name: album?.name || '',
         }
     })
 
@@ -95,7 +95,7 @@ const AlbumEditModal = () => {
             } = await supabaseClient
                 .from(`albums`)
                 .update({
-                    name: values.title,
+                    name: values.name,
                     author: values.author,
                     is_public: values.is_public
                 })
@@ -125,7 +125,7 @@ const AlbumEditModal = () => {
             user_id: album?.user_id || '',
             author: album?.author || '',
             is_public: album?.is_public || true,
-            title: album?.title || '',
+            name: album?.name || '',
         });
     }, [album])
 
@@ -138,9 +138,9 @@ const AlbumEditModal = () => {
         >
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
                 <Input
-                    id="title"
+                    id="name"
                     disabled={isLoading}
-                    {...register('title', { required: true })}
+                    {...register('name', { required: true })}
                     placeholder="Album Title"
                 />
                 <Input
