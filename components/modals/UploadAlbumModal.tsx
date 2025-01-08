@@ -139,7 +139,7 @@ const UploadAlbumModal = () => {
             // @ts-expect-error: its valid as a file
             for (const songFile of songFiles) {
                 const songName = songFile.name.replace('.mp3', '');
-                const sanitizedSongFileName = sanitizeFileName(songName);
+                const sanitizedSongFileName = sanitizeFileName(songFile.name);
 
                 console.log(`song-${sanitizedSongFileName}-${uniqueID}`)
 
