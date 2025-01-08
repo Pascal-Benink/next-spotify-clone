@@ -1,12 +1,12 @@
 import { create } from "zustand";
 
-interface AlbumUploadModalStore {
+interface UploadAlbumModalStore {
     isOpen: boolean;
     onOpen: () => void;
     onClose: () => void;
 }
 
-export const useaAbumUploadModal = create<AlbumUploadModalStore>((set) => ({
+export const useaUploadAlbumModal = create<UploadAlbumModalStore>((set) => ({
     isOpen: false,
     onOpen: () => set({ isOpen: true }),
     onClose: () => set({ isOpen: false }),

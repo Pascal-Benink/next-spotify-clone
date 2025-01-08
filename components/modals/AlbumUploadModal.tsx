@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
-import { useaAbumUploadModal } from "@/hooks/useAlbumUploadModal";
+import { useaAbumUploadModal } from "@/hooks/useUploadAlbumModal";
 
 const AlbumUploadModal = () => {
     const router = useRouter();
