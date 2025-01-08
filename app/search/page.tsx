@@ -83,7 +83,7 @@ const Search = async ({ searchParams }: SearchProps) => {
                 </div>
             )}
             {type === 'playlists' && (
-                <div>
+                <div className="mb-3">
                     <h2 className="text-white text-xl font-semibold px-6">
                         Playlists
                     </h2>
