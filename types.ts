@@ -44,7 +44,7 @@ export interface Subscription {
     quantity?: number;
     cancel_at_period_end?: boolean;
     created: string;
-    current_period_start: string; 
+    current_period_start: string;
     current_period_end: string;
     ended_at?: string;
     cancel_at?: string;
@@ -59,6 +59,7 @@ export interface Song {
     user_id: string;
     author: string;
     title: string;
+    album_id: string;
     song_path: string;
     image_path: string;
 };
@@ -70,6 +71,15 @@ export interface Playlist {
     description: string;
     image_path: string;
     is_public: boolean;
+}
+
+export interface Album {
+    id: string;
+    user_id: string;
+    name: string;
+    author: string;
+    is_public: boolean;
+    image_path: string;
 }
 
 export interface ProductWithPrice extends Product {

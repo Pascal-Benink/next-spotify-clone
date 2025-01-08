@@ -8,12 +8,16 @@ import { useAuthModal } from "@/hooks/useAuthModal";
 import { useUploadModal } from "@/hooks/useUploadModal";
 import { useUser } from "@/hooks/useUser";
 import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
+import { useCreateAlbumModal } from "@/hooks/useCreateAlbumModal";
+import { useUploadAlbumModal } from "@/hooks/useUploadAlbumModal";
 
 const LibraryDropdown = () => {
     const subscribeModal = useSubscribeModal();
     const authModal = useAuthModal();
     const uploadModal = useUploadModal();
+    const uploadAlbumModal = useUploadAlbumModal();
     const createPlaylistModal = useCreatePlaylistModal();
+    const createAlbumModal = useCreateAlbumModal();
 
     const { user, subscription } = useUser();
 
@@ -34,6 +38,17 @@ const LibraryDropdown = () => {
         return uploadModal.onOpen();
     }
 
+    const ClickUploadAlbum = () => {
+        if (!user) {
+            return authModal.onOpen();
+        }
+        if (!subscription) {
+            return subscribeModal.onOpen();
+        }
+
+        return uploadAlbumModal.onOpen();
+    }
+
     const ClickNewPlaylist = () => {
         if (!user) {
             return authModal.onOpen();
@@ -45,8 +60,19 @@ const LibraryDropdown = () => {
         return createPlaylistModal.onOpen();
     }
 
+    const ClickNewAlbum = () => {
+        if (!user) {
+            return authModal.onOpen();
+        }
+        if (!subscription) {
+            return subscribeModal.onOpen();
+        }
+
+        return createAlbumModal.onOpen();
+    }
+
     return (
-        <DropdownMenu.Root>
+        <DropdownMenu.Root modal={false}>
             <DropdownMenu.Trigger asChild>
                 <button className="focus:outline-none" aria-label="Customise options">
                     <AiOutlineUp
@@ -65,8 +91,14 @@ const LibraryDropdown = () => {
                     <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none text-neutral-400 hover:text-neutral-300 px-3 mb-1.5 transition" onClick={ClickNewSong}>
                         Upload New Song <AiOutlinePlus size={20} className="text-neutral-400" />
                     </DropdownMenu.Item>
+                    <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none text-neutral-400 hover:text-neutral-300 px-3 mb-1.5 transition" onClick={ClickUploadAlbum}>
+                        Upload New Album-werkt niet <AiOutlinePlus size={20} className="text-neutral-400" />
+                    </DropdownMenu.Item>
                     <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none text-neutral-400 hover:text-neutral-300 px-3 mt-1.5 transition" onClick={ClickNewPlaylist}>
                         Create New Playlist <AiOutlinePlus size={20} className="text-neutral-400" />
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none text-neutral-400 hover:text-neutral-300 px-3 mt-1.5 transition" onClick={ClickNewAlbum}>
+                        Create New Album <AiOutlinePlus size={20} className="text-neutral-400" />
                     </DropdownMenu.Item>
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>

@@ -6,6 +6,8 @@ import SongSearchContent from "./components/SongSearchContent";
 import PlaylistSearchContent from "./components/PlaylistSearchContent";
 import SearchControls from "./components/SearchControls";
 import getUser from "@/actions/getUser";
+import AlbumSearchContent from "./components/AlbumSearchContent";
+import getAlbumsByTitle from "@/actions/getAlbumsByTitle";
 
 interface SearchProps {
     searchParams: {
@@ -21,12 +23,14 @@ const Search = async ({ searchParams }: SearchProps) => {
 
     let songs = await getSongsByTitle(title);
     let playlists = await getPlaylistsByTitle(title);
+    let albums = await getAlbumsByTitle(title);
     const user = await getUser();
 
     if (!type) {
         console.log("No search params");
         songs = songs.slice(0, 7);
         playlists = playlists.slice(0, 7);
+        albums = albums.slice(0, 7);
     }
 
     return (
@@ -55,13 +59,19 @@ const Search = async ({ searchParams }: SearchProps) => {
                         <h2 className="text-white text-xl font-semibold px-6">
                             Songs
                         </h2>
-                        <SongSearchContent songs={songs} userId={user?.id}/>
+                        <SongSearchContent songs={songs} userId={user?.id} />
                     </div>
-                    <div>
+                    <div className="mb-3">
                         <h2 className="text-white text-xl font-semibold px-6">
                             Playlists
                         </h2>
                         <PlaylistSearchContent playlists={playlists} userId={user?.id} />
+                    </div>
+                    <div>
+                        <h2 className="text-white text-xl font-semibold px-6">
+                            Albums
+                        </h2>
+                        <AlbumSearchContent albums={albums} userId={user?.id} />
                     </div>
                 </>
             )}
@@ -70,15 +80,23 @@ const Search = async ({ searchParams }: SearchProps) => {
                     <h2 className="text-white text-xl font-semibold px-6">
                         Songs
                     </h2>
-                    <SongSearchContent songs={songs} userId={user?.id}/>
+                    <SongSearchContent songs={songs} userId={user?.id} />
                 </div>
             )}
             {type === 'playlists' && (
-                <div>
+                <div className="mb-3">
                     <h2 className="text-white text-xl font-semibold px-6">
                         Playlists
                     </h2>
                     <PlaylistSearchContent playlists={playlists} userId={user?.id} />
+                </div>
+            )}
+            {type === 'albums' && (
+                <div>
+                    <h2 className="text-white text-xl font-semibold px-6">
+                        Albums
+                    </h2>
+                    <AlbumSearchContent albums={albums} userId={user?.id} />
                 </div>
             )}
         </div>

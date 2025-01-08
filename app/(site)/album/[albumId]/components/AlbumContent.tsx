@@ -8,20 +8,18 @@ import { useEffect } from "react";
 import MediaItem from "@/components/MediaItem";
 import LikeButton from "@/components/LikeButton";
 import useOnPlay from "@/hooks/useOnPlay";
-import Link from "next/link";
-import PlaylistItemDropdown from "@/components/PlaylistitemDropdown";
 
-interface PlaylistContentProps {
+interface AlbumContentProps {
     songs: Song[];
-    PlaylistId: string;
+    AlbumId: string;
     isOwner: boolean;
     userId: string | undefined;
 }
 
-const PlaylistContent: React.FC<PlaylistContentProps> = ({
+const AlbumContent: React.FC<AlbumContentProps> = ({
     songs,
-    PlaylistId,
-    isOwner,
+    // AlbumId,
+    // isOwner,
     userId
 }) => {
     const router = useRouter();
@@ -46,9 +44,7 @@ const PlaylistContent: React.FC<PlaylistContentProps> = ({
             text-neutral-400
             ">
                 <p className="flex flex-row">
-                    No Songs In this Playist. You can add them<Link href={"/search"} className="hover:underline ml-[0.3rem]">
-                        here
-                    </Link>
+                    No Songs In this Album.
                 </p>
             </div>
         )
@@ -66,11 +62,10 @@ const PlaylistContent: React.FC<PlaylistContentProps> = ({
                             onClick={(id: string) => { onPlay(id) }}
                             data={song}
                             isOwner={song.user_id === userId}
-                            hasAlbumName={true}
                         />
                     </div>
-                    <PlaylistItemDropdown songId={song.id} playlistId={PlaylistId} isOwner={isOwner} />
-                    {/* <PlaylistButton songId={song.id} /> */}
+                    {/* <AlbumItemDropdown songId={song.id} albumId={AlbumId} isOwner={isOwner} /> */}
+                    {/* <AlbumButton songId={song.id} /> */}
                     <LikeButton songId={song.id} />
                 </div>
             ))}
@@ -78,4 +73,4 @@ const PlaylistContent: React.FC<PlaylistContentProps> = ({
     );
 }
 
-export default PlaylistContent;
+export default AlbumContent;

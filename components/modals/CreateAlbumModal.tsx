@@ -3,6 +3,7 @@
 import uniqid from "uniqid";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
+import { useCreateAlbumModal } from "@/hooks/useCreateAlbumModal";
 import Modal from "../Modal";
 import { useState } from "react";
 import Input from "../Input";
@@ -11,11 +12,11 @@ import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
-import { useaAbumUploadModal } from "@/hooks/useAlbumUploadModal";
+import CheckBox from "../CheckBox";
 
-const AlbumUploadModal = () => {
+const CreateAlbumModal = () => {
     const router = useRouter();
-    const albumUploadModal = useaAbumUploadModal();
+    const createAlbumModal = useCreateAlbumModal();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -30,8 +31,8 @@ const AlbumUploadModal = () => {
     } = useForm<FieldValues>({
         defaultValues: {
             author: '',
-            title: '',
-            song: null,
+            name: '',
+            is_public: true,
             image: null,
         }
     })
@@ -39,8 +40,12 @@ const AlbumUploadModal = () => {
     const onChange = (open: boolean) => {
         if (!open) {
             reset();
-            albumUploadModal.onClose();
+            createAlbumModal.onClose();
         }
+    }
+
+    const sanitizeFileName = (name: string) => {
+        return name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
     }
 
     const onSubmit: SubmitHandler<FieldValues> = async (values) => {
@@ -48,31 +53,14 @@ const AlbumUploadModal = () => {
             setIsLoading(true);
 
             const imageFile = values.image?.[0];
-            const songFile = values.song?.[0];
 
-            if (!imageFile || !songFile || !user) {
+            if (!imageFile || !user) {
                 toast.error("Missing fields");
                 return;
             }
 
             const uniqueID = uniqid();
-
-            // upload song
-            const {
-                data: songData,
-                error: songError
-            } = await supabaseClient
-                .storage
-                .from('songs')
-                .upload(`song-${values.title}-${uniqueID}`, songFile, {
-                    cacheControl: '3600',
-                    upsert: false,
-                });
-
-            if (songError) {
-                setIsLoading(false);
-                return toast.error("Failed to upload song");
-            }
+            const sanitizedFileName = sanitizeFileName(values.name);
 
             // upload image
             const {
@@ -81,7 +69,7 @@ const AlbumUploadModal = () => {
             } = await supabaseClient
                 .storage
                 .from('images')
-                .upload(`image-${values.title}-${uniqueID}`, imageFile, {
+                .upload(`image-${sanitizedFileName}-${uniqueID}`, imageFile, {
                     cacheControl: '3600',
                     upsert: false,
                 });
@@ -94,13 +82,13 @@ const AlbumUploadModal = () => {
             const {
                 error: supabaseError
             } = await supabaseClient
-                .from(`songs`)
+                .from(`albums`)
                 .insert({
                     user_id: user.id,
-                    title: values.title,
+                    name: values.name,
                     author: values.author,
-                    image_path: imageData.path,
-                    song_path: songData.path,
+                    is_public: values.is_public,
+                    image_patch: imageData.path,
                 });
 
             if (supabaseError) {
@@ -110,9 +98,9 @@ const AlbumUploadModal = () => {
 
             router.refresh();
             setIsLoading(false);
-            toast.success("Song uploaded successfully");
+            toast.success("Album Created successfully");
             reset();
-            albumUploadModal.onClose();
+            createAlbumModal.onClose();
         } catch (error) {
             console.error(error);
             toast.error("Something went wrong");
@@ -123,36 +111,30 @@ const AlbumUploadModal = () => {
 
     return (
         <Modal
-            title="Upload Content"
-            description="Upload your content to the platform"
-            isOpen={albumUploadModal.isOpen}
+            title="Create Album"
+            description="Create a new album"
+            isOpen={createAlbumModal.isOpen}
             onChange={onChange}
         >
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
                 <Input
-                    id="title"
+                    id="name"
                     disabled={isLoading}
-                    {...register('title', { required: true })}
-                    placeholder="Song Title"
+                    {...register('name', { required: true })}
+                    placeholder="Album Name"
                 />
                 <Input
                     id="author"
                     disabled={isLoading}
                     {...register('author', { required: true })}
-                    placeholder="Song Author"
+                    placeholder="Album Author"
                 />
-                <div>
-                    <div className="pb-1">
-                        Select a song file
-                    </div>
-                    <Input
-                        id="song"
-                        type="file"
-                        disabled={isLoading}
-                        accept=".mp3" // change to audio/* if want to
-                        {...register('song', { required: true })}
-                    />
-                </div>
+                <CheckBox
+                    id="is_public"
+                    label="Public Album"
+                    disabled={isLoading}
+                    {...register('is_public')}
+                />
                 <div>
                     <div className="pb-1">
                         Select an image
@@ -166,11 +148,11 @@ const AlbumUploadModal = () => {
                     />
                 </div>
                 <Button disabled={isLoading} type="submit">
-                    Create Song
+                    Create Album
                 </Button>
             </form>
         </Modal>
     );
 }
 
-export default AlbumUploadModal;
+export default CreateAlbumModal;

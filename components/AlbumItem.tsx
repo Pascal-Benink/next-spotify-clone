@@ -1,35 +1,35 @@
 "use client"
 
-import { Playlist } from "@/types";
+import { Album } from "@/types";
 import Image from "next/image";
 // import PlayButton from "./PlayButton";
 import { twMerge } from "tailwind-merge";
 import usePlayer from "@/hooks/usePlayer";
-import useLoadPlaylistImage from "@/hooks/useLoadPlaylistImage";
+import useLoadAlbumImage from "@/hooks/useLoadAlbumImage";
 import Link from "next/link";
 import * as ContextMenu from "@radix-ui/react-context-menu";
-import PlaylistRightClickContent from "./right_click/PlaylistRightClickContent";
+import AlbumRightClickContent from "./right_click/AlbumRightClickContent";
 
-interface PlaylistItemProps {
-    data: Playlist;
+interface AlbumItemProps {
+    data: Album;
     isOwner: boolean;
 }
 
-const PlaylistItem: React.FC<PlaylistItemProps> = ({
+const AlbumItem: React.FC<AlbumItemProps> = ({
     data,
     isOwner,
 }) => {
-    const imagePath = useLoadPlaylistImage(data);
+    const imagePath = useLoadAlbumImage(data);
 
-    const playlistId = data.id;
+    const albumId = data.id;
     const { activateId } = usePlayer();
 
-    const playing = playlistId === activateId;
+    const playing = albumId === activateId;
 
     return (
         <ContextMenu.Root modal={false}>
             <ContextMenu.Trigger>
-                <Link href={`/playlist/${playlistId}`}>
+                <Link href={`/album/${albumId}`}>
                     <div
                         className="relative
         group
@@ -60,7 +60,7 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({
                                 {data.name}
                             </p>
                             <p className="text-neutral-400 text-sm pb-4 w-full truncate">
-                                {data.description}
+                                By {data.author}
                             </p>
                         </div>
                         {/* <div
@@ -75,9 +75,9 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({
                     </div>
                 </Link>
             </ContextMenu.Trigger>
-            <PlaylistRightClickContent isOwner={isOwner} playlist={data} />
+            <AlbumRightClickContent isOwner={isOwner} album={data} />
         </ContextMenu.Root>
     );
 }
 
-export default PlaylistItem;
+export default AlbumItem;
