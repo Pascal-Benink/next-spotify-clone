@@ -8,7 +8,7 @@ const getAlbums = async (): Promise<Album[]> => {
     });
 
     const { data, error } = await supabase
-        .from('playlists')
+        .from('albums')
         .select('*')
         .order('created_at', { ascending: false });
 
