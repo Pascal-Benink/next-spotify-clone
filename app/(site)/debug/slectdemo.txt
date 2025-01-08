@@ -1,6 +1,6 @@
 import React from "react";
 import * as Select from "@radix-ui/react-select";
-import { FaCheck, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
 
 export type SelectType = {

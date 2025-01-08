@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from "react";
+import React, {  } from "react";
 import * as Select from "@radix-ui/react-select";
 import { FaCheck } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
@@ -88,5 +88,7 @@ const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
         );
     },
 );
+
+SelectItem.displayName = 'SelectItem';
 
 export default SearchSelect;

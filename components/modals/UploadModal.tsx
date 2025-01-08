@@ -5,7 +5,7 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
 import { useUploadModal } from "@/hooks/useUploadModal";
 import Modal from "../Modal";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../Input";
 import Button from "../Button";
 import toast from "react-hot-toast";
@@ -18,7 +18,6 @@ import SearchSelect from "../SearchSelect";
 const UploadModal = () => {
     const router = useRouter();
     const uploadModal = useUploadModal();
-    const selectRef = useRef<HTMLDivElement>(null);
 
     const [isLoading, setIsLoading] = useState(false);
 

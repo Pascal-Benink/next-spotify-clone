@@ -1,5 +1,5 @@
 import getData from "@/actions/getData";
-import Clientpage from "./cp";
+// import Clientpage from "./cp";
 
 
 const DebugPage = async () => {
@@ -11,8 +11,8 @@ const DebugPage = async () => {
     return (
         <div>
             <h1>Debug Page</h1>
-            {/* {JSON.stringify(data)} */}
-            <Clientpage />
+            {JSON.stringify(data)}
+            {/* <Clientpage /> */}
         </div>
     );
 }

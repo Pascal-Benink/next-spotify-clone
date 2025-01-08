@@ -6,15 +6,12 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { FaEllipsisH } from "react-icons/fa";
 import { HiOutlineTrash } from "react-icons/hi";
 import { useDeleteAlbumModal } from "@/hooks/useDeleteAlbumModal";
-import { useAuthModal } from "@/hooks/useAuthModal";
 import { useEditAlbumModal } from "@/hooks/useEditAlbumModal";
-import { useSubscribeModal } from "@/hooks/useSubscribeModal";
 import JSZip from "jszip";
 import toast from "react-hot-toast";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useUser } from "@/hooks/useUser";
 import { TbDownload, TbDownloadOff } from "react-icons/tb";
-import { RiPlayListFill } from "react-icons/ri";
 import { MdOutlineModeEditOutline } from "react-icons/md";
 
 interface AlbumPopoverProps {
@@ -24,11 +21,9 @@ interface AlbumPopoverProps {
 
 const AlbumPopover: React.FC<AlbumPopoverProps> = ({ albumId, isOwner }) => {
     const supabaseClient = useSupabaseClient();
-    const authModal = useAuthModal();
-    const subscribeModal = useSubscribeModal();
     const editAlbumModal = useEditAlbumModal();
     const deleteAlbumModal = useDeleteAlbumModal();
-    const { user, subscription } = useUser();
+    const { subscription } = useUser();
 
     const handleDeleteAlbum = async () => {
         console.log("Delete Album");

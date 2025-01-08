@@ -2,15 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { useAuthModal } from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
-import { BiTrash } from "react-icons/bi";
 import { FaEllipsisH } from "react-icons/fa";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { useSubscribeModal } from "@/hooks/useSubscribeModal";
-import { useCreateAlbumModal } from "@/hooks/useCreateAlbumModal";
 
 interface AlbumItemDropdownProps {
     songId: string;
@@ -18,14 +12,10 @@ interface AlbumItemDropdownProps {
     isOwner: boolean;
 }
 
-const AlbumItemDropdown = ({ songId, albumId, isOwner }: AlbumItemDropdownProps) => {
-    const authModal = useAuthModal();
-    const subscribeModal = useSubscribeModal();
+const AlbumItemDropdown = ({  }: AlbumItemDropdownProps) => {
     const supabaseClient = useSupabaseClient();
-    const createAlbumModal = useCreateAlbumModal();
-    const router = useRouter();
 
-    const { user, subscription } = useUser();
+    const { user } = useUser();
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -58,6 +48,8 @@ const AlbumItemDropdown = ({ songId, albumId, isOwner }: AlbumItemDropdownProps)
     const handleToggle = () => {
         setIsOpen(!isOpen);
     };
+
+    console.log("isOpen: ", userHasPLaylist);
 
     return (
         <DropdownMenu.Root>
