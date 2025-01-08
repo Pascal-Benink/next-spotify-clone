@@ -1,15 +1,15 @@
 "use client";
 
-import useLoadPlaylistImage from "@/hooks/useLoadPlaylistImage";
-import { Playlist } from "@/types";
+import { Album } from "@/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import * as ContextMenu from "@radix-ui/react-context-menu";
-import PlaylistRightClickContent from "./right_click/PlaylistRightClickContent";
+import useLoadAlbumImage from "@/hooks/useLoadAlbumImage";
+import AlbumRightClickContent from "./right_click/AlbumRightClickContent";
 
 interface MediaItemProps {
-    data: Playlist;
+    data: Album;
     onClick?: (id: string) => void;
     isOwner: boolean;
 }
@@ -20,7 +20,7 @@ const PlaylistMediaItem: React.FC<MediaItemProps> = ({
     isOwner,
 }) => {
     const router = useRouter();
-    const imageUrl = useLoadPlaylistImage(data);
+    const imageUrl = useLoadAlbumImage(data);
 
     const playlistId = data.id;
 
@@ -66,11 +66,11 @@ const PlaylistMediaItem: React.FC<MediaItemProps> = ({
                     </div>
                     <div className="flex flex-col gap-y-1 overflow-hidden">
                         <p className={twMerge("text-white truncate")}>{data.name}</p>
-                        <p className="text-neutral-400 text-sm truncate">{data.description}</p>
+                        <p className="text-neutral-400 text-sm truncate">By {data.author}</p>
                     </div>
                 </div>
             </ContextMenu.Trigger>
-            <PlaylistRightClickContent isOwner={isOwner} playlist={data} />
+            <AlbumRightClickContent isOwner={isOwner} album={data} />
         </ContextMenu.Root>
     );
 }
