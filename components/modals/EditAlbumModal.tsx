@@ -152,6 +152,7 @@ const AlbumEditModal = () => {
                 <CheckBox
                     id="is_public"
                     label="Public Album"
+                    checked
                     disabled={isLoading}
                     {...register('is_public')}
                 />
