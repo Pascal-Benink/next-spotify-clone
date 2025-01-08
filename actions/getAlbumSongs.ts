@@ -23,9 +23,7 @@ const getAlbumSongs = async (albumId: string): Promise<Song[]> => {
             return [];
         }
 
-        return data.map((item) => ({
-            ...item.songs,
-        }));
+        return data;
     } catch (err) {
         console.error('Fetch failed:', err);
         return [];

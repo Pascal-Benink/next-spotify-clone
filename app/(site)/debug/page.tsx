@@ -1,3 +1,4 @@
+import getAlbumSongs from "@/actions/getAlbumSongs";
 import getData from "@/actions/getData";
 // import Clientpage from "./cp";
 
@@ -5,6 +6,7 @@ import getData from "@/actions/getData";
 const DebugPage = async () => {
     console.log("DebugPage component is rendering");
     const data = await getData('playlists');
+    // const data = await getAlbumSongs('1');
     // console.log("Fetched data:", data);
 
 
