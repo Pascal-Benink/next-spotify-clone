@@ -8,7 +8,7 @@ interface PageContentProps {
     userId: string | undefined;
 }
 
-const PageContent: React.FC<PageContentProps> = ({
+const AlbumContent: React.FC<PageContentProps> = ({
     albums,
     userId
 }) => {
@@ -35,4 +35,4 @@ const PageContent: React.FC<PageContentProps> = ({
     );
 }
 
-export default PageContent;
+export default AlbumContent;
