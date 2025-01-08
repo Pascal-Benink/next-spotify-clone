@@ -113,7 +113,7 @@ export default async function Home() {
           <h1 className="text-white text-2xl font-semibold mb-2">
             Newest Albums
           </h1>
-          <Link href="/songs">
+          <Link href="/album/list">
             <p className="text-white text-sm font-semibold mr-3 hover:underline">
               View All
             </p>
