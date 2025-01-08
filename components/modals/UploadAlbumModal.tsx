@@ -138,8 +138,10 @@ const UploadAlbumModal = () => {
 
             // @ts-expect-error: its valid as a file
             for (const songFile of songFiles) {
-                const songName = sanitizeFileName(songFile.name.replace('.mp3', ''));
+                const songName = songFile.name.replace('.mp3', '');
                 const sanitizedSongFileName = sanitizeFileName(songName);
+
+                console.log(`song-${sanitizedSongFileName}-${uniqueID}`)
 
                 const isPrivate = !values.is_public;
                 // upload song
@@ -149,9 +151,10 @@ const UploadAlbumModal = () => {
                 } = await supabaseClient
                     .storage
                     .from('songs')
-                    .upload(`song-${sanitizedSongFileName}-${uniqueID}-${songName}`, songFile, {
+                    .upload(`song-${sanitizedSongFileName}-${uniqueID}`, songFile, {
                         cacheControl: '3600',
                         upsert: false,
+                        contentType: 'audio/mpeg'
                     });
 
                 if (songError) {
