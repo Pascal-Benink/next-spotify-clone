@@ -160,6 +160,18 @@ const UploadAlbumModal = () => {
                 />
                 <div>
                     <div className="pb-1">
+                        Select a zip file
+                    </div>
+                    <Input
+                        id="album"
+                        type="file"
+                        disabled={isLoading}
+                        accept=".zip"
+                        {...register('album', { required: true })}
+                    />
+                </div>
+                <div>
+                    <div className="pb-1">
                         Select an image
                     </div>
                     <Input
