@@ -1,11 +1,13 @@
 create album in supabase:
 1. the table
 2. rls policys update: 
+
 CREATE POLICY "Enable users to update their own albums" ON albums
 FOR UPDATE
 TO authenticated
 USING ((SELECT auth.uid()) = user_id)
 WITH CHECK (true);
+
 3. add album_id to songs - cascade, delete = set null
 
 packages:
