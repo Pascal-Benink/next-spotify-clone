@@ -3,7 +3,6 @@
 import uniqid from "uniqid";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
-import { useUploadModal } from "@/hooks/useUploadModal";
 import Modal from "../Modal";
 import { useState } from "react";
 import Input from "../Input";
@@ -13,10 +12,11 @@ import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import CheckBox from "../CheckBox";
+import { useUploadAlbumModal } from "@/hooks/useUploadAlbumModal";
 
-const UploadModal = () => {
+const UploadAlbumModal = () => {
     const router = useRouter();
-    const uploadModal = useUploadModal();
+    const uploadAlbumModal = useUploadAlbumModal();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -32,7 +32,7 @@ const UploadModal = () => {
         defaultValues: {
             author: '',
             title: '',
-            is_private: false,
+            is_public: true,
             song: null,
             image: null,
         }
@@ -41,7 +41,7 @@ const UploadModal = () => {
     const onChange = (open: boolean) => {
         if (!open) {
             reset();
-            uploadModal.onClose();
+            uploadAlbumModal.onClose();
         }
     }
 
@@ -109,7 +109,7 @@ const UploadModal = () => {
                     user_id: user.id,
                     title: values.title,
                     author: values.author,
-                    is_private: values.is_private,
+                    is_private: values.is_public,
                     image_path: imageData.path,
                     song_path: songData.path,
                 });
@@ -123,7 +123,7 @@ const UploadModal = () => {
             setIsLoading(false);
             toast.success("Song uploaded successfully");
             reset();
-            uploadModal.onClose();
+            uploadAlbumModal.onClose();
         } catch (error) {
             console.error(error);
             toast.error("Something went wrong");
@@ -136,15 +136,15 @@ const UploadModal = () => {
         <Modal
             title="Upload Content"
             description="Upload your content to the platform"
-            isOpen={uploadModal.isOpen}
+            isOpen={uploadAlbumModal.isOpen}
             onChange={onChange}
         >
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
                 <Input
-                    id="title"
+                    id="name"
                     disabled={isLoading}
-                    {...register('title', { required: true })}
-                    placeholder="Song Title"
+                    {...register('name', { required: true })}
+                    placeholder="Album Name"
                 />
                 <Input
                     id="author"
@@ -153,10 +153,10 @@ const UploadModal = () => {
                     placeholder="Song Author"
                 />
                 <CheckBox
-                    id="is_private"
-                    label="Private Song"
+                    id="is_public"
+                    label="Public Album"
                     disabled={isLoading}
-                    {...register('is_private')}
+                    {...register('is_public')}
                 />
                 <div>
                     <div className="pb-1">
@@ -178,4 +178,4 @@ const UploadModal = () => {
     );
 }
 
-export default UploadModal;
+export default UploadAlbumModal;

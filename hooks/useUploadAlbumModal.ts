@@ -6,7 +6,7 @@ interface UploadAlbumModalStore {
     onClose: () => void;
 }
 
-export const useaUploadAlbumModal = create<UploadAlbumModalStore>((set) => ({
+export const useUploadAlbumModal = create<UploadAlbumModalStore>((set) => ({
     isOpen: false,
     onOpen: () => set({ isOpen: true }),
     onClose: () => set({ isOpen: false }),

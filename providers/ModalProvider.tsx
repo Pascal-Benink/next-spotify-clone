@@ -6,7 +6,6 @@ import AuthModal from "@/components/modals/AuthModal";
 import UploadModal from "@/components/modals/UploadModal";
 import SubscribeModal from "@/components/modals/SubscribeModal";
 import { ProductWithPrice } from "@/types";
-import AlbumUploadModal from "@/components/modals/AlbumUploadModal";
 import CreatePlaylistModal from "@/components/modals/CreatePlaylistModal";
 import AddToPlaylistModal from "@/components/modals/AddToPlaylistModal";
 import DeletePlaylistModal from "@/components/modals/DeletePlaylistModal";
@@ -17,6 +16,7 @@ import PlaylistEditModal from "@/components/modals/EditPlaylistModal";
 import BatchAddToPlaylistModal from "@/components/modals/BatchAddToPlaylistModal";
 import ClonePlaylistModal from "@/components/modals/ClonePlaylistModal";
 import CreateAlbumModal from "@/components/modals/CreateAlbumModal";
+import UploadAlbumModal from "@/components/modals/UploadAlbumModal";
 
 interface ModalProviderProps {
     products: ProductWithPrice[];
@@ -40,7 +40,7 @@ const ModalProvider: React.FC<ModalProviderProps> = ({
             <AuthModal />
             <UploadModal />
             <SubscribeModal products={products} />
-            <AlbumUploadModal />
+            <UploadAlbumModal />
             <CreatePlaylistModal />
             <AddToPlaylistModal />
             <DeletePlaylistModal />
