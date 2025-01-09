@@ -1,7 +1,7 @@
 "use client";
 
 import uniqid from "uniqid";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, set, SubmitHandler, useForm } from "react-hook-form";
 
 import Modal from "../Modal";
 import { useState } from "react";
@@ -180,6 +180,10 @@ const UploadAlbumModal = () => {
                     return toast.error("Failed to upload song: " + songName);
                 }
 
+                setProgress((prevProgress) => prevProgress + 1);
+
+                console.log(songData);
+
                 const { error: supabaseSongError } = await supabaseClient
                     .from(`songs`)
                     .insert({
@@ -197,7 +201,6 @@ const UploadAlbumModal = () => {
                     return toast.error(supabaseSongError.message);
                 }
 
-                setProgress(progress + 1);
             }
 
             setIsUploading(false);
@@ -206,6 +209,9 @@ const UploadAlbumModal = () => {
             setIsLoading(false);
             toast.success("Song uploaded successfully");
             reset();
+            setProgress(0);
+            setTotalSongs(0);
+            setIsUploading(false);
             uploadAlbumModal.onClose();
         } catch (error) {
             console.error(error);
@@ -269,7 +275,10 @@ const UploadAlbumModal = () => {
                     Create Album
                 </Button>
                 {isuploading && (
-                    <ProgressBar progress={(progress / totalSongs) * 100} />
+                    <div className="flex flex-row items-center gap-x-4">
+                        Uploading {progress} of {totalSongs} songs
+                        <ProgressBar progress={(progress / totalSongs) * 100} />
+                    </div>
                 )}
             </form>
         </Modal>

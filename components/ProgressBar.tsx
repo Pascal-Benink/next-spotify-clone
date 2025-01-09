@@ -6,7 +6,7 @@ interface ProgressBarProps {
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ progress }) => {
-
+	console.log(progress);
 	return (
 		<Progress.Root
 			className="relative h-[25px] w-[300px] overflow-hidden rounded-full bg-black"
@@ -18,7 +18,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progress }) => {
 			value={progress}
 		>
 			<Progress.Indicator
-				className="ease-[cubic-bezier(0.65, 0, 0.35, 1)] size-full bg-white transition-transform duration-[660ms]"
+				className="ease-[cubic-bezier(0.65, 0, 0.35, 1)] size-full bg-green-500 transition-transform duration-[660ms]"
 				style={{ transform: `translateX(-${100 - progress}%)` }}
 			/>
 		</Progress.Root>
