@@ -251,7 +251,7 @@ const UploadAlbumModal = () => {
                     />
                 </div>
                 <Button disabled={isLoading} type="submit">
-                    Create Song
+                    Create Album
                 </Button>
             </form>
         </Modal>
