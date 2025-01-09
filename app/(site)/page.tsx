@@ -79,11 +79,11 @@ export default async function Home() {
           <h1 className="text-white text-2xl font-semibold mb-2">
             My Playlists
           </h1>
-          {/* <Link href="/songs">
+          <Link href="/playlist/list/all">
             <p className="text-white text-sm font-semibold mr-3 hover:underline">
               View All
             </p>
-          </Link> */}
+          </Link>
         </div>
         <div>
           {/* <PageContent songs={songs} /> */}
@@ -96,11 +96,11 @@ export default async function Home() {
           <h1 className="text-white text-2xl font-semibold mb-2">
             Public Playlists
           </h1>
-          {/* <Link href="/songs">
+          <Link href="/playlist/list/all">
             <p className="text-white text-sm font-semibold mr-3 hover:underline">
               View All
             </p>
-          </Link> */}
+          </Link>
         </div>
         <div>
           {/* <PageContent songs={songs} /> */}
