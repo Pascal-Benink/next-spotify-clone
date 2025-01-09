@@ -8,6 +8,7 @@ import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useDeleteAlbumModal } from "@/hooks/useDeleteAlbumModal";
+import CheckBox from "../CheckBox";
 
 const DeleteAlbumModal = () => {
     const router = useRouter();
@@ -22,6 +23,8 @@ const DeleteAlbumModal = () => {
     const albumId = deleteAlbumModal.albumId;
 
     const [albumName, setAlbumtName] = useState(albumId);
+
+    const [deleteSongs, setDeleteSongs] = useState(false);
 
     const fetchAlbumName = async () => {
         try {
@@ -85,6 +88,45 @@ const DeleteAlbumModal = () => {
                 return;
             }
 
+            if (deleteSongs) {
+                const { data: songs, error: GetSongsError } = await supabaseClient
+                    .from('songs')
+                    .select('id')
+                    .eq('album_id', albumId);
+
+                if (GetSongsError) {
+                    console.error("Error fetching songs: ", GetSongsError);
+                    toast.error("Failed to fetch songs");
+                    return;
+                }
+
+                console.log(songs);
+
+                for (const song of songs) {
+                    const { error: SongDeleteError } = await supabaseClient
+                        .from('songs')
+                        .delete()
+                        .eq('id', song.id);
+
+                    if (SongDeleteError) {
+                        console.error("Error deleting song: ", SongDeleteError);
+                        toast.error("Failed to delete song");
+                        return;
+                    }
+
+                    const { error: StorageDeleteError } = await supabaseClient
+                        .storage
+                        .from('songs')
+                        .remove([data.song_path]);
+
+                    if (StorageDeleteError) {
+                        console.error("Error deleting song from storage: ", StorageDeleteError);
+                        toast.error("Failed to delete song from storage");
+                        return;
+                    }
+                }
+            }
+
             const { data: songImageDatas, error: SongImageError } = await supabaseClient
                 .from('songs')
                 .select('*')
@@ -127,6 +169,13 @@ const DeleteAlbumModal = () => {
             isOpen={deleteAlbumModal.isOpen}
             onChange={onChange}
         >
+            <CheckBox
+                id="deleteSongs"
+                label="Delete Songs with the album"
+                checked={deleteSongs}
+                onChange={() => setDeleteSongs(!deleteSongs)}
+                disabled={isLoading}
+            />
             <form className="w-full flex flex-row justify-evenly items-center">
                 <Button disabled={isLoading} onClick={DeleteAlbum} className="w-[170px]">
                     Delete Album
