@@ -84,7 +84,7 @@ const PlaylistPage = async ({ params }: Props) => {
             </Header>
             <ShuffleControl songs={songs} isOwner={isOwner} playlistId={playlistId} />
             <div className="h-4"/>
-            <PlaylistContent songs={songs} PlaylistId={playlistId} isOwner={isOwner} userId={user?.id} />
+            <PlaylistContent songs={songs} PlaylistId={playlistId} isPublic={playlist.is_public} isOwner={isOwner} userId={user?.id} />
         </div>
     );
 }
