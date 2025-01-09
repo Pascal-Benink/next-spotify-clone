@@ -16,13 +16,15 @@ interface PlaylistContentProps {
     PlaylistId: string;
     isOwner: boolean;
     userId: string | undefined;
+    isPublic: boolean;
 }
 
 const PlaylistContent: React.FC<PlaylistContentProps> = ({
     songs,
     PlaylistId,
     isOwner,
-    userId
+    userId,
+    isPublic
 }) => {
     const router = useRouter();
     const { isLoading, user } = useUser();
@@ -30,7 +32,7 @@ const PlaylistContent: React.FC<PlaylistContentProps> = ({
     const onPlay = useOnPlay(songs);
 
     useEffect(() => {
-        if (!isLoading && !user) {
+        if (!isLoading && !user && !isPublic) {
             router.replace('/');
         }
     }, [isLoading, user, router]);

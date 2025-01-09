@@ -31,8 +31,10 @@ const getPlaylist = async (id: string): Promise<Playlist> => {
         // toast.error("You do not have access to this playlist.");
     }
 
-    if (data.user_id !== session?.user.id && !data.is_public) {
-        redirect('/');
+    if (!data.is_public) {
+        if (data.user_id !== session?.user.id) {
+            redirect('/');
+        }
     }
 
     return (data as any) || [];
