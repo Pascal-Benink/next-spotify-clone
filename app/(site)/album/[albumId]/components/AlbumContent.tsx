@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import MediaItem from "@/components/MediaItem";
 import LikeButton from "@/components/LikeButton";
 import useOnPlay from "@/hooks/useOnPlay";
+import PlaylistButton from "@/components/PlaylistButton";
 
 interface AlbumContentProps {
     songs: Song[];
@@ -66,6 +67,7 @@ const AlbumContent: React.FC<AlbumContentProps> = ({
                     </div>
                     {/* <AlbumItemDropdown songId={song.id} albumId={AlbumId} isOwner={isOwner} /> */}
                     {/* <AlbumButton songId={song.id} /> */}
+                    <PlaylistButton songId={song.id}/>
                     <LikeButton songId={song.id} />
                 </div>
             ))}
