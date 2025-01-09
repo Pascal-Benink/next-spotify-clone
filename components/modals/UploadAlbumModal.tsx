@@ -15,6 +15,7 @@ import CheckBox from "../CheckBox";
 import { useUploadAlbumModal } from "@/hooks/useUploadAlbumModal";
 import JSZip from "jszip";
 import { getMimeType } from "@/lib/getMimeType";
+import ProgressBar from "../ProgressBar";
 
 const UploadAlbumModal = () => {
     const router = useRouter();
@@ -25,6 +26,12 @@ const UploadAlbumModal = () => {
     const { user } = useUser();
 
     const supabaseClient = useSupabaseClient();
+
+    const [progress, setProgress] = useState(0);
+
+    const [totalSongs, setTotalSongs] = useState(0);
+
+    const [isuploading, setIsUploading] = useState(false);
 
     const {
         register,
@@ -142,6 +149,10 @@ const UploadAlbumModal = () => {
 
             const albumId = albumData.id;
 
+            setTotalSongs(songFiles.length);
+
+            setIsUploading(true);
+
             // Upload each song
             for (const songFile of songFiles) {
                 const songName = songFile.name.replace('.mp3', '');
@@ -185,7 +196,11 @@ const UploadAlbumModal = () => {
                     setIsLoading(false);
                     return toast.error(supabaseSongError.message);
                 }
+
+                setProgress(progress + 1);
             }
+
+            setIsUploading(false);
 
             router.refresh();
             setIsLoading(false);
@@ -253,6 +268,9 @@ const UploadAlbumModal = () => {
                 <Button disabled={isLoading} type="submit">
                     Create Album
                 </Button>
+                {isuploading && (
+                    <ProgressBar progress={(progress / totalSongs) * 100} />
+                )}
             </form>
         </Modal>
     );

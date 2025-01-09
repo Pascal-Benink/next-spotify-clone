@@ -63,35 +63,10 @@ const DeleteAlbumModal = () => {
 
     const DeleteAlbum = async () => {
         try {
-            const { data, error: GetAlbumError } = await supabaseClient
-                .from('albums')
-                .select('*')
-                .eq('id', albumId)
-                .eq('user_id', user?.id)
-                .single();
-
-            if (GetAlbumError || !data) {
-                console.error("Error fetching album: ", GetAlbumError);
-                toast.error("Failed to fetch album");
-                return;
-            }
-
-            const { error: AlbumDeleteError } = await supabaseClient
-                .from('albums')
-                .delete()
-                .eq('id', albumId)
-                .eq('user_id', user?.id)
-
-            if (AlbumDeleteError) {
-                console.error("Error deleting album: ", AlbumDeleteError);
-                toast.error("Failed to delete album");
-                return;
-            }
-
             if (deleteSongs) {
                 const { data: songs, error: GetSongsError } = await supabaseClient
                     .from('songs')
-                    .select('id')
+                    .select('*')
                     .eq('album_id', albumId);
 
                 if (GetSongsError) {
@@ -117,7 +92,7 @@ const DeleteAlbumModal = () => {
                     const { error: StorageDeleteError } = await supabaseClient
                         .storage
                         .from('songs')
-                        .remove([data.song_path]);
+                        .remove([song.song_path]);
 
                     if (StorageDeleteError) {
                         console.error("Error deleting song from storage: ", StorageDeleteError);
@@ -125,6 +100,31 @@ const DeleteAlbumModal = () => {
                         return;
                     }
                 }
+            }
+
+            const { data, error: GetAlbumError } = await supabaseClient
+                .from('albums')
+                .select('*')
+                .eq('id', albumId)
+                .eq('user_id', user?.id)
+                .single();
+
+            if (GetAlbumError || !data) {
+                console.error("Error fetching album: ", GetAlbumError);
+                toast.error("Failed to fetch album");
+                return;
+            }
+
+            const { error: AlbumDeleteError } = await supabaseClient
+                .from('albums')
+                .delete()
+                .eq('id', albumId)
+                .eq('user_id', user?.id)
+
+            if (AlbumDeleteError) {
+                console.error("Error deleting album: ", AlbumDeleteError);
+                toast.error("Failed to delete album");
+                return;
             }
 
             const { data: songImageDatas, error: SongImageError } = await supabaseClient
