@@ -79,6 +79,8 @@ const CreateAlbumModal = () => {
                 return toast.error("Failed to upload image");
             }
 
+            console.log(imageData.path);
+
             const {
                 error: supabaseError
             } = await supabaseClient
@@ -96,7 +98,7 @@ const CreateAlbumModal = () => {
                 return toast.error(supabaseError.message);
             }
 
-            // image-test-m5p2aabr
+            // image-test-m5p2enc8
 
             router.refresh();
             setIsLoading(false);
