@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import CheckBox from "../CheckBox";
 import { useUploadAlbumModal } from "@/hooks/useUploadAlbumModal";
 import JSZip from "jszip";
+import { getMimeType } from "@/lib/getMimeType";
 
 const UploadAlbumModal = () => {
     const router = useRouter();
@@ -72,7 +73,9 @@ const UploadAlbumModal = () => {
                 const file = albumZipContent.files[relativePath];
                 if (file.name.endsWith(".mp3")) {
                     const fileBlob = await file.async("blob"); // Get the file as a Blob
-                    songFiles.push({ name: file.name, blob: fileBlob });
+                    // Create a new Blob with the correct MIME type
+                    const correctBlob = new Blob([fileBlob], { type: 'audio/mpeg' });
+                    songFiles.push({ name: file.name, blob: correctBlob });
                 }
             }
 
@@ -144,19 +147,26 @@ const UploadAlbumModal = () => {
                 const songName = songFile.name.replace('.mp3', '');
                 const sanitizedSongFileName = sanitizeFileName(songName) + ".mp3";
 
+                const mimeType = getMimeType(songFile.name);
+
+                console.log(`Uploading song: ${sanitizedSongFileName}, MIME Type: ${mimeType}`);
+
+                // Log the Blob properties
+                console.log(`Blob size: ${songFile.blob.size}, Blob type: ${songFile.blob.type}`);
+
                 const { data: songData, error: songError } = await supabaseClient
                     .storage
                     .from('songs')
                     .upload(`song-${sanitizedSongFileName}-${uniqueID}`, songFile.blob, {
                         cacheControl: '3600',
                         upsert: false,
-                        contentType: 'audio/mpeg'
+                        contentType: mimeType
                     });
 
                 if (songError) {
                     setIsLoading(false);
-                    console.error(songError);
-                    return toast.error("Failed to upload song");
+                    console.error("Failed to upload song: ", songName, " :", songError);
+                    return toast.error("Failed to upload song: " + songName);
                 }
 
                 const { error: supabaseSongError } = await supabaseClient
