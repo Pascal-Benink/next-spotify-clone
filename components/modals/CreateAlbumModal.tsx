@@ -96,6 +96,8 @@ const CreateAlbumModal = () => {
                 return toast.error(supabaseError.message);
             }
 
+            // image-test-m5p2aabr
+
             router.refresh();
             setIsLoading(false);
             toast.success("Album Created successfully");
