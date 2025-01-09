@@ -42,7 +42,6 @@ const Search = async ({ searchParams }: SearchProps) => {
         w-hull
         overflow-hidden
         overflow-y-auto
-        mb-[10vw]
         "
         >
             <Header className="from-bg-neutral-900">

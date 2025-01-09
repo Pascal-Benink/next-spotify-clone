@@ -33,7 +33,7 @@ const AlbumPage = async ({ params }: Props) => {
         w-full
         overflow-hidden
         overflow-y-auto
-        mb-[10vw]
+    
         "
         >
             <Header>
