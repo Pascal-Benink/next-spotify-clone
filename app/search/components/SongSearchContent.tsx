@@ -46,6 +46,7 @@ const SongSearchContent: React.FC<SongSearchContentProps> = ({
                         onClick={(id: string) => {onPlay(id)}}
                         data={song}
                         isOwner={song.user_id === userId}
+                        hasAlbumName={true}
                         />
                     </div>
                     <PlaylistButton songId={song.id}/>
