@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import CheckBox from "../CheckBox";
 import { useUploadAlbumModal } from "@/hooks/useUploadAlbumModal";
 import JSZip from "jszip";
+import { getMimeType } from "@/lib/getMimeType";
 
 const UploadAlbumModal = () => {
     const router = useRouter();
@@ -65,14 +66,19 @@ const UploadAlbumModal = () => {
 
             const zip = new JSZip();
             const albumZipContent = await zip.loadAsync(albumZipFile);
-            // @ts-expect-error : its valid as a file
+
             const songFiles = [];
 
-            albumZipContent.forEach((relativePath, file) => {
+            for (const relativePath in albumZipContent.files) {
+                const file = albumZipContent.files[relativePath];
                 if (file.name.endsWith(".mp3")) {
-                    songFiles.push(file);
+                    const fileBlob = await file.async("blob"); // Get the file as a Blob
+                    // Create a new Blob with the correct MIME type
+                    const correctBlob = new Blob([fileBlob], { type: 'audio/mpeg' });
+                    songFiles.push({ name: file.name, blob: correctBlob });
                 }
-            });
+            }
+
 
             if (songFiles.length === 0) {
                 setIsLoading(false);
@@ -136,42 +142,40 @@ const UploadAlbumModal = () => {
 
             const albumId = albumData.id;
 
-            // @ts-expect-error: its valid as a file
+            // Upload each song
             for (const songFile of songFiles) {
                 const songName = songFile.name.replace('.mp3', '');
-                const sanitizedSongFileName = sanitizeFileName(songFile.name);
+                const sanitizedSongFileName = sanitizeFileName(songName) + ".mp3";
 
-                console.log(`song-${sanitizedSongFileName}-${uniqueID}`)
+                const mimeType = getMimeType(songFile.name);
 
-                const isPrivate = !values.is_public;
-                // upload song
-                const {
-                    data: songData,
-                    error: songError
-                } = await supabaseClient
+                console.log(`Uploading song: ${sanitizedSongFileName}, MIME Type: ${mimeType}`);
+
+                // Log the Blob properties
+                console.log(`Blob size: ${songFile.blob.size}, Blob type: ${songFile.blob.type}`);
+
+                const { data: songData, error: songError } = await supabaseClient
                     .storage
                     .from('songs')
-                    .upload(`song-${sanitizedSongFileName}-${uniqueID}`, songFile, {
+                    .upload(`song-${sanitizedSongFileName}-${uniqueID}`, songFile.blob, {
                         cacheControl: '3600',
                         upsert: false,
-                        contentType: 'audio/mpeg'
+                        contentType: mimeType
                     });
 
                 if (songError) {
                     setIsLoading(false);
-                    console.error(songError);
-                    return toast.error("Failed to upload song");
+                    console.error("Failed to upload song: ", songName, " :", songError);
+                    return toast.error("Failed to upload song: " + songName);
                 }
 
-                const {
-                    error: supabaseSongError
-                } = await supabaseClient
+                const { error: supabaseSongError } = await supabaseClient
                     .from(`songs`)
                     .insert({
                         user_id: user.id,
                         title: songName,
                         author: values.author,
-                        is_private: isPrivate,
+                        is_private: !values.is_public,
                         image_path: imageData.path,
                         song_path: songData.path,
                         album_id: albumId
