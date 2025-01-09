@@ -65,14 +65,17 @@ const UploadAlbumModal = () => {
 
             const zip = new JSZip();
             const albumZipContent = await zip.loadAsync(albumZipFile);
-            // @ts-expect-error : its valid as a file
+
             const songFiles = [];
 
-            albumZipContent.forEach((relativePath, file) => {
+            for (const relativePath in albumZipContent.files) {
+                const file = albumZipContent.files[relativePath];
                 if (file.name.endsWith(".mp3")) {
-                    songFiles.push(file);
+                    const fileBlob = await file.async("blob"); // Get the file as a Blob
+                    songFiles.push({ name: file.name, blob: fileBlob });
                 }
-            });
+            }
+
 
             if (songFiles.length === 0) {
                 setIsLoading(false);
@@ -136,22 +139,15 @@ const UploadAlbumModal = () => {
 
             const albumId = albumData.id;
 
-            // @ts-expect-error: its valid as a file
+            // Upload each song
             for (const songFile of songFiles) {
                 const songName = songFile.name.replace('.mp3', '');
                 const sanitizedSongFileName = sanitizeFileName(songName) + ".mp3";
 
-                console.log(`song-${sanitizedSongFileName}-${uniqueID}`)
-
-                const isPrivate = !values.is_public;
-                // upload song
-                const {
-                    data: songData,
-                    error: songError
-                } = await supabaseClient
+                const { data: songData, error: songError } = await supabaseClient
                     .storage
                     .from('songs')
-                    .upload(`song-${sanitizedSongFileName}-${uniqueID}`, songFile, {
+                    .upload(`song-${sanitizedSongFileName}-${uniqueID}`, songFile.blob, {
                         cacheControl: '3600',
                         upsert: false,
                         contentType: 'audio/mpeg'
@@ -163,15 +159,13 @@ const UploadAlbumModal = () => {
                     return toast.error("Failed to upload song");
                 }
 
-                const {
-                    error: supabaseSongError
-                } = await supabaseClient
+                const { error: supabaseSongError } = await supabaseClient
                     .from(`songs`)
                     .insert({
                         user_id: user.id,
                         title: songName,
                         author: values.author,
-                        is_private: isPrivate,
+                        is_private: !values.is_public,
                         image_path: imageData.path,
                         song_path: songData.path,
                         album_id: albumId
