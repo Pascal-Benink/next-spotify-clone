@@ -81,6 +81,9 @@ const AlbumPage = async ({ params }: Props) => {
 
                         </div>
                     </div>
+                    <p className="mt-2">
+                        {songs.length} songs
+                    </p>
                 </div>
             </Header>
             <ShuffleControl songs={songs} isOwner={isOwner} albumId={albumId} />
