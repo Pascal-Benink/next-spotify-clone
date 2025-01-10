@@ -99,6 +99,16 @@ export interface PodcastTag {
     listId: string;
 }
 
+export interface PodcastEpisode {
+    id: string;
+    user_id: string;
+    episode_number: string;
+    name: string;
+    episode_description: string;
+    episode_path: string;
+    podcast_id: string;
+}
+
 export interface ProductWithPrice extends Product {
     prices?: Price[];
 }

@@ -1,30 +1,30 @@
-import { Song } from "@/types";
+import { PodcastEpisode } from "@/types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
-const getPodcastSongs = async (podcastId: string): Promise<Song[]> => {
+const getPodcastEpisodes = async (podcastId: string): Promise<PodcastEpisode[]> => {
     const supabase = createServerComponentClient({
         cookies: cookies
     });
 
     try {
         const { data, error } = await supabase
-            .from('podcast_songs')
-            .select('*, songs(*)')
+            .from('podcast_episodes')
+            .select('*')
             .eq('podcast_id', podcastId);
 
         if (error) {
-            console.error('Error fetching podcast songs:', error);
+            console.error('Error fetching podcast episodes:', error);
             return [];
         }
 
         if (!data) {
-            console.warn('No data returned for podcast songs');
+            console.warn('No data returned for podcast episodes');
             return [];
         }
 
         return data.map((item) => ({
-            ...item.songs,
+            ...item,
         }));
     } catch (err) {
         console.error('Fetch failed:', err);
@@ -32,4 +32,4 @@ const getPodcastSongs = async (podcastId: string): Promise<Song[]> => {
     }
 }
 
-export default getPodcastSongs;
+export default getPodcastEpisodes;

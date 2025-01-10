@@ -16,7 +16,6 @@ const getPodcasts = async (): Promise<Podcast[]> => {
     const { data, error } = await supabase
         .from('podcasts')
         .select('*')
-        .eq('user_id', session?.user.id)
         .order('created_at', { ascending: false });
 
     if (error) {

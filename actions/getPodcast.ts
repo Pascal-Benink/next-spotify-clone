@@ -29,12 +29,6 @@ const getPodcast = async (id: string): Promise<Podcast> => {
         throw new Error("Podcast not found.");
     }
 
-    if (!data.is_public) {
-        if (data.user_id !== session?.user.id) {
-            redirect('/');
-        }
-    }
-
     const { data: FollowData, error: FollowError } = await supabase
         .from('podcast_follows')
         .select('*')
