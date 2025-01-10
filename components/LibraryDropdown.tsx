@@ -10,6 +10,7 @@ import { useUser } from "@/hooks/useUser";
 import { useCreatePlaylistModal } from "@/hooks/useCreatePlaylistModal";
 import { useCreateAlbumModal } from "@/hooks/useCreateAlbumModal";
 import { useUploadAlbumModal } from "@/hooks/useUploadAlbumModal";
+import { useCreatePodcastModal } from "@/hooks/useCreatePodcastModal";
 
 const LibraryDropdown = () => {
     const subscribeModal = useSubscribeModal();
@@ -18,6 +19,7 @@ const LibraryDropdown = () => {
     const uploadAlbumModal = useUploadAlbumModal();
     const createPlaylistModal = useCreatePlaylistModal();
     const createAlbumModal = useCreateAlbumModal();
+    const createPodcastModal = useCreatePodcastModal();
 
     const { user, subscription } = useUser();
 
@@ -71,6 +73,17 @@ const LibraryDropdown = () => {
         return createAlbumModal.onOpen();
     }
 
+    const ClickNewPodcast = () => {
+        if (!user) {
+            return authModal.onOpen();
+        }
+        if (!subscription) {
+            return subscribeModal.onOpen();
+        }
+
+        return createPodcastModal.onOpen();
+    }
+
     return (
         <DropdownMenu.Root modal={false}>
             <DropdownMenu.Trigger asChild>
@@ -99,6 +112,9 @@ const LibraryDropdown = () => {
                     </DropdownMenu.Item>
                     <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none text-neutral-400 hover:text-neutral-300 px-3 mt-1.5 transition" onClick={ClickNewAlbum}>
                         Create New Album <AiOutlinePlus size={20} className="text-neutral-400" />
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item className="flex flex-row justify-between cursor-pointer focus:outline-none text-neutral-400 hover:text-neutral-300 px-3 mt-1.5 transition" onClick={ClickNewPodcast}>
+                        Create New Podcast <AiOutlinePlus size={20} className="text-neutral-400" />
                     </DropdownMenu.Item>
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>

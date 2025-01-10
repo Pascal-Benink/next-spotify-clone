@@ -19,6 +19,7 @@ import CreateAlbumModal from "@/components/modals/CreateAlbumModal";
 import UploadAlbumModal from "@/components/modals/UploadAlbumModal";
 import DeleteAlbumModal from "@/components/modals/DeleteAlbumModal";
 import AlbumEditModal from "@/components/modals/EditAlbumModal";
+import CreatePodcastModal from "@/components/modals/CreatePodcastModal";
 
 interface ModalProviderProps {
     products: ProductWithPrice[];
@@ -55,6 +56,7 @@ const ModalProvider: React.FC<ModalProviderProps> = ({
             <ClonePlaylistModal />
             <CreateAlbumModal />
             <AlbumEditModal />
+            <CreatePodcastModal />
         </>
     );
 }
