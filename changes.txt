@@ -1,7 +1,6 @@
 1. code
 
 packages:
-npm install @radix-ui/react-progress
 
 code:
 see guthib
