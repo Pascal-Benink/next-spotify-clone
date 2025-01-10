@@ -2,7 +2,7 @@ import { Podcast } from "@/types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
-const getPodcasts = async (): Promise<Podcast[]> => {
+const getFollowingPodcasts = async (): Promise<Podcast[]> => {
     const supabase = createServerComponentClient({
         cookies: cookies
     });
@@ -13,10 +13,20 @@ const getPodcasts = async (): Promise<Podcast[]> => {
         }
     } = await supabase.auth.getSession();
 
+    const { data: followData, error: followError } = await supabase
+        .from('podcast_follows')
+        .select('podcast_id')
+        .eq('user_id', session?.user.id);
+
+    if (followError) {
+        console.error(followError);
+        return [];
+    }
+
     const { data, error } = await supabase
         .from('podcasts')
         .select('*')
-        .eq('user_id', session?.user.id)
+        .in('id', followData.map((follow: any) => follow.podcast_id))
         .order('created_at', { ascending: false });
 
     if (error) {
@@ -26,4 +36,4 @@ const getPodcasts = async (): Promise<Podcast[]> => {
     return (data as any) || [];
 }
 
-export default getPodcasts;
+export default getFollowingPodcasts;

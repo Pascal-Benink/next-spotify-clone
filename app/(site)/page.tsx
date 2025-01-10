@@ -10,6 +10,9 @@ import getUser from "@/actions/getUser";
 import AlbumContent from "./components/AlbumContent";
 import getAlbums from "@/actions/getAlbums";
 import PodcastContent from "./components/PodcastContent";
+import getPodcasts from "@/actions/getPodcasts";
+import getFollowingPlaylists from "@/actions/getFollowingPodcasts";
+import getMyPodcasts from "@/actions/getMyPodcasts";
 
 export const revalidate = 0;
 
@@ -19,6 +22,9 @@ export default async function Home() {
   const publicPlaylists = await getPublicPlaylists();
   const user = await getUser();
   const albums = await getAlbums();
+  const MyPodcasts = await getMyPodcasts();
+  const FollowPodcasts = await getFollowingPlaylists();
+  const Podcasts = await getPodcasts();
 
   const userId = user?.id;
 

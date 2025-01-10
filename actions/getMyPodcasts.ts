@@ -2,7 +2,7 @@ import { Podcast } from "@/types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
-const getPodcasts = async (): Promise<Podcast[]> => {
+const getMyPodcasts = async (): Promise<Podcast[]> => {
     const supabase = createServerComponentClient({
         cookies: cookies
     });
@@ -26,4 +26,4 @@ const getPodcasts = async (): Promise<Podcast[]> => {
     return (data as any) || [];
 }
 
-export default getPodcasts;
+export default getMyPodcasts;
