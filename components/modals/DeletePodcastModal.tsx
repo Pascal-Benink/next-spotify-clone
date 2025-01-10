@@ -98,6 +98,8 @@ const DeletePodcastModal = () => {
 
             }
 
+            // const {  }
+
             const { data, error: GetPodcastError } = await supabaseClient
                 .from('podcasts')
                 .select('*')
