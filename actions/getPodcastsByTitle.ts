@@ -14,6 +14,12 @@ const getPodcastsByTitle = async (title: string): Promise<Podcast[]> => {
         return allPodcasts;
     }
 
+    const {
+        data: {
+            session
+        }
+    } = await supabase.auth.getSession();
+
     const { data, error } = await supabase
     .from('podcasts')
     .select('*')
@@ -24,7 +30,29 @@ const getPodcastsByTitle = async (title: string): Promise<Podcast[]> => {
         console.error(error);
     }
 
-    return (data as any) || [];
+    const podcastData = await Promise.all(data?.map(async (podcast: Podcast) => {
+        const { data: FollowData, error: FollowError } = await supabase
+            .from('podcast_followers')
+            .select('*')
+            .eq('podcast_id', podcast.id)
+            .eq('user_id', session?.user.id);
+
+        if (FollowError) {
+            console.error(FollowError);
+            return podcast;
+        }
+
+        if (FollowData && FollowData.length > 0) {
+            return {
+                ...podcast,
+                isFollowed: true
+            }
+        }
+
+        return podcast;
+    }) || []);
+
+    return podcastData;
 }
 
 export default getPodcastsByTitle;

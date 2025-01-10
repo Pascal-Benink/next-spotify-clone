@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import * as ContextMenu from "@radix-ui/react-context-menu";
 import { HiChevronRight } from "react-icons/hi";
 import { FaTrashAlt } from "react-icons/fa";
+import { SlUserFollow, SlUserFollowing, SlUserUnfollow } from "react-icons/sl";
 import { MdOutlineModeEditOutline } from "react-icons/md";
 import { Podcast } from "@/types";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -26,6 +27,8 @@ const PodcastRightClickContent: React.FC<PodcastRightClickContentProps> = ({ isO
 	const editPodcastModal = useEditPodcastModal();
 	const deletePodcastModal = useDeletePodcastModal();
 	const { user, subscription } = useUser();
+
+	const [isHovered, setIsHovered] = useState(false);
 
 	const handleDownload = async () => {
 		const { data: PsData, error: PsError } = await supabaseClient
@@ -97,6 +100,46 @@ const PodcastRightClickContent: React.FC<PodcastRightClickContentProps> = ({ isO
 		editPodcastModal.onOpen(podcast.id);
 	}
 
+	const handleFollowPodcast = async () => {
+		if (!user) {
+			authModal.onOpen();
+			return;
+		}
+
+		if (!podcast.isFollowed) {
+			const { error } = await supabaseClient.from('podcast_followers').insert({
+				podcast_id: podcast.id,
+				user_id: user.id
+			});
+
+			if (error) {
+				console.error('Error following podcast:', error);
+				toast.error('Error following podcast');
+				return;
+			}
+
+			toast.success('Podcast followed successfully');
+		}
+
+		if (podcast.isFollowed) {
+			const { error: unfollowError } = await supabaseClient.from('podcast_followers')
+				.delete()
+				.eq('podcast_id', podcast.id)
+				.eq('user_id', user.id);
+
+			if (unfollowError) {
+				console.error('Error unfollowing podcast:', unfollowError);
+				toast.error('Error unfollowing podcast');
+				return;
+			}
+
+			toast.success('Podcast unfollowed successfully');
+		}
+	}
+
+	const FollowIcon = podcast.isFollowed ? <SlUserFollowing /> : <SlUserFollow />;
+	const FollowHoverIcon = podcast.isFollowed ? <SlUserUnfollow /> : <SlUserFollow />;
+
 	return (
 		<ContextMenu.Portal>
 			<ContextMenu.Content
@@ -119,6 +162,24 @@ const PodcastRightClickContent: React.FC<PodcastRightClickContentProps> = ({ isO
 					) : (
 						<p>
 							Download Podcast
+						</p>
+					)}
+				</ContextMenu.Item>
+				<ContextMenu.Item className="group relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[5px] text-[13px] leading-none text-green-600 
+				outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-green-500 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1"
+					onClick={handleFollowPodcast}
+					disabled={!user}
+					onMouseEnter={() => setIsHovered(true)}
+					onMouseLeave={() => setIsHovered(false)}
+				>
+					<div className="absolute left-0 inline-flex w-[25px] items-center justify-center">
+						{isHovered ? FollowHoverIcon : FollowIcon}
+					</div>
+					{!user ? (
+						<p>Log in to Follow</p>
+					) : (
+						<p>
+							{podcast.isFollowed ? 'Unfollow Podcast' : 'Follow Podcast'}
 						</p>
 					)}
 				</ContextMenu.Item>

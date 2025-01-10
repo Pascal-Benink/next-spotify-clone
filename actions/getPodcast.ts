@@ -18,17 +18,15 @@ const getPodcast = async (id: string): Promise<Podcast> => {
         .from('podcasts')
         .select('*')
         .eq('id', id)
-        .order('created_at', { ascending: false })
         .single();
 
     if (error) {
         console.error(error);
+        throw new Error("Error fetching podcast.");
     }
 
     if (!data) {
         throw new Error("Podcast not found.");
-        // throw new Error("You do not have access to this podcast.");
-        // toast.error("You do not have access to this podcast.");
     }
 
     if (!data.is_public) {
@@ -37,7 +35,24 @@ const getPodcast = async (id: string): Promise<Podcast> => {
         }
     }
 
-    return (data as any) || [];
+    const { data: FollowData, error: FollowError } = await supabase
+        .from('podcast_followers')
+        .select('*')
+        .eq('podcast_id', data.id)
+        .eq('user_id', session?.user.id);
+
+    if (FollowError) {
+        console.error(FollowError);
+    }
+
+    if (FollowData && FollowData.length > 0) {
+        return {
+            ...data,
+            isFollowed: true
+        };
+    }
+
+    return data;
 }
 
 export default getPodcast;
