@@ -107,7 +107,7 @@ const PodcastRightClickContent: React.FC<PodcastRightClickContentProps> = ({ isO
 		}
 
 		if (!podcast.isFollowed) {
-			const { error } = await supabaseClient.from('podcast_followers').insert({
+			const { error } = await supabaseClient.from('podcast_follows').insert({
 				podcast_id: podcast.id,
 				user_id: user.id
 			});
@@ -122,7 +122,7 @@ const PodcastRightClickContent: React.FC<PodcastRightClickContentProps> = ({ isO
 		}
 
 		if (podcast.isFollowed) {
-			const { error: unfollowError } = await supabaseClient.from('podcast_followers')
+			const { error: unfollowError } = await supabaseClient.from('podcast_follows')
 				.delete()
 				.eq('podcast_id', podcast.id)
 				.eq('user_id', user.id);

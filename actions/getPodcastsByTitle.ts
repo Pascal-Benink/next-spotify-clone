@@ -32,7 +32,7 @@ const getPodcastsByTitle = async (title: string): Promise<Podcast[]> => {
 
     const podcastData = await Promise.all(data?.map(async (podcast: Podcast) => {
         const { data: FollowData, error: FollowError } = await supabase
-            .from('podcast_followers')
+            .from('podcast_follows')
             .select('*')
             .eq('podcast_id', podcast.id)
             .eq('user_id', session?.user.id);

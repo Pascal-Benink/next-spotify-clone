@@ -36,7 +36,7 @@ const getPodcast = async (id: string): Promise<Podcast> => {
     }
 
     const { data: FollowData, error: FollowError } = await supabase
-        .from('podcast_followers')
+        .from('podcast_follows')
         .select('*')
         .eq('podcast_id', data.id)
         .eq('user_id', session?.user.id);
