@@ -101,8 +101,8 @@ const PodcastPage = async ({ params }: Props) => {
                         <p className="mt-2">
                             {podcast.description}
                         </p>
-                        <div className="w-full h-[10px]" />
-                        <div>
+                        <div className="w-full h-[20px]" />
+                        <div className="flex flex-wrap gap-2">
                             {tags.map((tag) => (
                                 <div key={tag.id}>
                                     <TagButton tag={tag} />

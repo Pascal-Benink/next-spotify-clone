@@ -13,7 +13,7 @@ const TagButton = ({ tag }: TagButtonProps) => {
 
     return (
         <Link href={`/tag/${tag.id}`}>
-            <Button className="bg-neutral-400/40 text-white text-sm font-normal">
+            <Button className="bg-neutral-400/40 text-white text-sm font-normal h-[15px] w-[100px] flex items-center justify-center">
                 {tag.name}
             </Button>
         </Link>
