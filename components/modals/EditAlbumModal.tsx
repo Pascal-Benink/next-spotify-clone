@@ -72,11 +72,11 @@ const AlbumEditModal = () => {
         watch,
     } = useForm<FieldValues>({
         defaultValues: {
-            id: '',
-            user_id: '',
-            author: '',
-            is_public: true,
-            name: '',
+            id: album?.id || albumId,
+            user_id: album?.user_id || '',
+            author: album?.author || '',
+            is_public: album?.is_public || true,
+            name: album?.name || '',
         }
     });
 
