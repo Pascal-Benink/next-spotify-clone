@@ -6,11 +6,13 @@ import Modal from "../Modal";
 import Input from "../Input";
 import Button from "../Button";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useUser } from "@/hooks/useUser";
-import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
+import { useForm, FieldValues, SubmitHandler, Controller } from "react-hook-form";
 import toast from "react-hot-toast";
+import { PodcastTag } from "@/types";
+import SearchSelect from "../SearchSelect";
 const CreatePodcastModal = () => {
     const router = useRouter();
     const createPodcastModal = useCreatePodcastModal();
@@ -21,10 +23,36 @@ const CreatePodcastModal = () => {
 
     const supabaseClient = useSupabaseClient();
 
+    const [tags, setTags] = useState<PodcastTag[]>([]);
+
+    const [selectOpen, setSelectOpen] = useState(false);
+
+    const [selectedTag, setSelectedTag] = useState<string | undefined>(undefined);
+
+    useEffect(() => {
+        const fetchTags = async () => {
+            const { data: tagsData, error } = await supabaseClient
+                .from('podcast_tags')
+                .select('*');
+
+            if (error) {
+                return toast.error(error.message);
+            }
+
+            console.log(tagsData);
+
+            setTags(tagsData);
+        }
+
+        fetchTags();
+    }, [])
+
     const {
         register,
         handleSubmit,
-        reset
+        reset,
+        setValue,
+        control
     } = useForm<FieldValues>({
         defaultValues: {
             name: '',
@@ -39,6 +67,7 @@ const CreatePodcastModal = () => {
     const onChange = (open: boolean) => {
         if (!open) {
             reset();
+            setSelectOpen(false);
             createPodcastModal.onClose();
         }
     }
@@ -83,7 +112,13 @@ const CreatePodcastModal = () => {
             } = await supabaseClient
                 .from(`podcasts`)
                 .insert({
-                    // TODO: do this
+                    user_id: user.id,
+                    name: values.name,
+                    subtitle: values.subtitle,
+                    description: values.description,
+                    author: values.author,
+                    image_path: imageData.path,
+                    tag_id: selectedTag,
                 });
 
             if (supabaseError) {
@@ -111,6 +146,16 @@ const CreatePodcastModal = () => {
             isOpen={createPodcastModal.isOpen}
             onChange={onChange}
         >
+            <SearchSelect
+                disabled={isLoading}
+                data={tags.map(tag => ({ id: tag.id, name: tag.name }))}
+                isOpen={selectOpen}
+                onOpenChange={() => setSelectOpen(!selectOpen)}
+                placeholder="Select a Tag"
+                className="mb-4"
+                selected={selectedTag}
+                onSelect={(selectedTag) => setSelectedTag(selectedTag)} 
+                />
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
                 <Input
                     id="name"

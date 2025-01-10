@@ -91,6 +91,11 @@ export interface Podcast {
     image_path: string;
 }
 
+export interface PodcastTag {
+    id: string;
+    name: string;
+}
+
 export interface ProductWithPrice extends Product {
     prices?: Price[];
 }
