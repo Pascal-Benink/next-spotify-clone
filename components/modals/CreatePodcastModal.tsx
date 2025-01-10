@@ -13,6 +13,7 @@ import { useForm, FieldValues, SubmitHandler, Controller } from "react-hook-form
 import toast from "react-hot-toast";
 import { PodcastTag } from "@/types";
 import SearchSelect from "../SearchSelect";
+import { twMerge } from "tailwind-merge";
 const CreatePodcastModal = () => {
     const router = useRouter();
     const createPodcastModal = useCreatePodcastModal();
@@ -28,6 +29,8 @@ const CreatePodcastModal = () => {
     const [selectOpen, setSelectOpen] = useState(false);
 
     const [selectedTag, setSelectedTag] = useState<string | undefined>(undefined);
+
+    const [selectedtagList, setSelectedTagList] = useState<{ id: string, listId: string}[]>([]);
 
     useEffect(() => {
         const fetchTags = async () => {
@@ -51,8 +54,6 @@ const CreatePodcastModal = () => {
         register,
         handleSubmit,
         reset,
-        setValue,
-        control
     } = useForm<FieldValues>({
         defaultValues: {
             name: '',
@@ -139,6 +140,16 @@ const CreatePodcastModal = () => {
         }
     }
 
+    const AddTag = () => {
+        if (selectedTag) {
+            setSelectedTagList([...selectedtagList, { id: selectedTag, listId: uniqid() }]);
+        }
+    }
+
+    const RemoveTag = (tag: { id: string, listId: string }) => {
+        setSelectedTagList(selectedtagList.filter(t => t.listId !== tag.listId));
+    }
+
     return (
         <Modal
             title="Create Podcast"
@@ -146,16 +157,39 @@ const CreatePodcastModal = () => {
             isOpen={createPodcastModal.isOpen}
             onChange={onChange}
         >
-            <SearchSelect
-                disabled={isLoading}
-                data={tags.map(tag => ({ id: tag.id, name: tag.name }))}
-                isOpen={selectOpen}
-                onOpenChange={() => setSelectOpen(!selectOpen)}
-                placeholder="Select a Tag"
-                className="mb-4"
-                selected={selectedTag}
-                onSelect={(selectedTag) => setSelectedTag(selectedTag)} 
+            <div className="mb-4">
+                <SearchSelect
+                    disabled={isLoading}
+                    data={tags.map(tag => ({ id: tag.id, name: tag.name }))}
+                    isOpen={selectOpen}
+                    onOpenChange={() => setSelectOpen(!selectOpen)}
+                    placeholder="Select a Tag"
+                    className="mb-4"
+                    selected={selectedTag}
+                    onSelect={(selectedTag) => setSelectedTag(selectedTag)}
                 />
+                <Button disabled={isLoading} onClick={AddTag}>
+                    Add Tag To Podcast
+                </Button>
+            </div>
+            <div className={twMerge(
+                "flex flex-wrap gap-2",
+                selectedtagList.length !== 0 && "mb-4"
+                )}>
+                {selectedtagList.map((tag) => {
+                    const tagData = tags.find(t => t.id === tag.id);
+                    return (
+                        <div key={tag.id} className="bg-neutral-700 rounded-full px-4 py-2 flex flex-row items-center gap-x-2">
+                            {tagData?.name}
+                            <button onClick={() => RemoveTag(tag)}>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    );
+                })}
+            </div>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
                 <Input
                     id="name"
