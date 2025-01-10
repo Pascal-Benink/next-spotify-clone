@@ -48,7 +48,7 @@ const PodcastPage = async ({ params }: Props) => {
                     gap-x-5
                     "
                     >
-                        <div className="relative h-32 w-32 lg:h-44 lg:w-44">
+                        <div className="relative h-32 w-32 lg:h-44 lg:w-44 flex flex-shrink-0 min-w-[8rem] lg:min-w-[11rem]">
                             <Image
                                 fill
                                 alt="Podcast"
@@ -99,12 +99,14 @@ const PodcastPage = async ({ params }: Props) => {
                         <p className="mt-2">
                             {podcast.description}
                         </p>
-                        <div className="w-full h-[10px]"/>
-                        {tags.map((tag) => (
-                            <div key={tag.id}>
-                                <TagButton tag={tag} />
-                            </div>
-                        ))}
+                        <div className="w-full h-[10px]" />
+                        <div>
+                            {tags.map((tag) => (
+                                <div key={tag.id}>
+                                    <TagButton tag={tag} />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
