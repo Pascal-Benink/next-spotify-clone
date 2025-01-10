@@ -59,8 +59,8 @@ const ModalProvider: React.FC<ModalProviderProps> = ({
             <ClonePlaylistModal />
             <CreateAlbumModal />
             <AlbumEditModal />
-            <CreatePodcastModal />
             <CreatePodcastTagModal />
+            <CreatePodcastModal />
             <DeletePodcastModal />
             <EditPodcastModal />
         </>

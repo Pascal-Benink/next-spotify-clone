@@ -96,6 +96,7 @@ export interface Podcast {
 export interface PodcastTag {
     id: string;
     name: string;
+    listId: string;
 }
 
 export interface ProductWithPrice extends Product {

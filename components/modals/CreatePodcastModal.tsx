@@ -146,6 +146,7 @@ const CreatePodcastModal = () => {
                         podcast_id: podcastData.id,
                         tag_id: tag.id,
                         user_id: user.id,
+                        list_id: tag.listId,
                     });
 
                 if (tagError) {
