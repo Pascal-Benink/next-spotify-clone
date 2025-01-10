@@ -8,7 +8,6 @@ import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useDeletePodcastModal } from "@/hooks/useDeletePodcastModal";
-import CheckBox from "../CheckBox";
 
 const DeletePodcastModal = () => {
     const router = useRouter();
