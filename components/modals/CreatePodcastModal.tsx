@@ -69,6 +69,8 @@ const CreatePodcastModal = () => {
         if (!open) {
             reset();
             setSelectOpen(false);
+            setSelectedTagList([]);
+            setSelectedTag(undefined);
             createPodcastModal.onClose();
         }
     }
@@ -131,6 +133,9 @@ const CreatePodcastModal = () => {
             setIsLoading(false);
             toast.success("Podcast Created successfully");
             reset();
+            setSelectOpen(false);
+            setSelectedTagList([]);
+            setSelectedTag(undefined);
             createPodcastModal.onClose();
         } catch (error) {
             console.error(error);
