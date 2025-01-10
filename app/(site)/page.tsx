@@ -9,6 +9,7 @@ import getPublicPlaylists from "@/actions/getPublicPlaylists";
 import getUser from "@/actions/getUser";
 import AlbumContent from "./components/AlbumContent";
 import getAlbums from "@/actions/getAlbums";
+import PodcastContent from "./components/PodcastContent";
 
 export const revalidate = 0;
 
@@ -121,6 +122,57 @@ export default async function Home() {
         </div>
         <div>
           <AlbumContent albums={albums} userId={userId} />
+        </div>
+      </div>
+      <div className="mt-2 mb-7 px-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-white text-2xl font-semibold mb-2">
+            My Podcasts
+          </h1>
+          <Link href="/podcasts/list/all">
+            <p className="text-white text-sm font-semibold mr-3 hover:underline">
+              View All
+            </p>
+          </Link>
+        </div>
+        <div>
+          {/* <PageContent songs={songs} /> */}
+          <PodcastContent podcasts={MyPodcasts} userId={userId} />
+          {/* <p className="text-red-500">This is in development</p> */}
+        </div>
+      </div>
+      <div className="mt-2 mb-7 px-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-white text-2xl font-semibold mb-2">
+            Following Podcasts
+          </h1>
+          <Link href="/podcasts/list/following">
+            <p className="text-white text-sm font-semibold mr-3 hover:underline">
+              View All
+            </p>
+          </Link>
+        </div>
+        <div>
+          {/* <PageContent songs={songs} /> */}
+          <PodcastContent podcasts={FollowPodcasts} userId={userId} />
+          {/* <p className="text-red-500">This is in development</p> */}
+        </div>
+      </div>
+      <div className="mt-2 mb-7 px-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-white text-2xl font-semibold mb-2">
+            Podcasts
+          </h1>
+          <Link href="/podcasts/list/all">
+            <p className="text-white text-sm font-semibold mr-3 hover:underline">
+              View All
+            </p>
+          </Link>
+        </div>
+        <div>
+          {/* <PageContent songs={songs} /> */}
+          <PodcastContent podcasts={Podcasts} userId={userId} />
+          {/* <p className="text-red-500">This is in development</p> */}
         </div>
       </div>
     </div>
