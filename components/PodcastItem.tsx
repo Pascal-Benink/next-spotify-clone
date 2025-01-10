@@ -56,11 +56,14 @@ const PodcastItem: React.FC<PodcastItemProps> = ({
                             />
                         </div>
                         <div className="flex flex-col items-start w-full pt-4 gap-y-1">
-                            <p className={twMerge("font-semibold truncate w-full", playing && "text-green-500")}>
+                            <p className={twMerge("font-semibold truncate w-full", playing && "text-green-500")} title={data.name}>
                                 {data.name}
                             </p>
-                            <p className="text-neutral-400 text-sm pb-4 w-full truncate">
+                            <p className="text-neutral-400 text-sm w-full truncate">
                                 {data.description}
+                            </p>
+                            <p className="text-neutral-400 text-sm pb-2 w-full truncate" title={data.author}>
+                                By {data.author}
                             </p>
                         </div>
                         {/* <div

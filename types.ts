@@ -88,6 +88,7 @@ export interface Podcast {
     name: string;
     subtitle: string;
     description: string;
+    author: string;
     image_path: string;
     isFollowed?: boolean;
 }
