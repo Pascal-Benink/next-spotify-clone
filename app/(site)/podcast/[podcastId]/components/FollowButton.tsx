@@ -59,7 +59,7 @@ const FollowButton = ({ isFollowing, user_id, podcast_id }: FollowButtonProps) =
     }
 
     return (
-        <Button className="bg-transparent border border-primary-500 text-primary-500 my-16 lg:w-[5vw] lg:h-[3vh] text-md font-semibold flex items-center justify-center" onClick={ChangeFollow}>
+        <Button className="bg-transparent border border-primary-500 text-primary-500 lg:w-[5vw] lg:h-[3vh] text-md font-semibold flex items-center justify-center" onClick={ChangeFollow}>
             {isFollowing ? 'Following' : 'Follow'} {!isFollowing && (<AiOutlinePlus color="white" className="ml-2" />)}
         </Button>
     );

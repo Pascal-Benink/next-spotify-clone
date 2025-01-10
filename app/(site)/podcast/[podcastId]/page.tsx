@@ -8,6 +8,7 @@ import getUser from "@/actions/getUser";
 import FollowButton from "./components/FollowButton";
 import getPodcastTags from "@/actions/getPodcastTags";
 import TagButton from "./components/TagButton";
+import PodcastPopover from "./components/PodcastPopover";
 
 export const revalidate = 0;
 
@@ -84,7 +85,10 @@ const PodcastPage = async ({ params }: Props) => {
                         </div>
                     </div>
                 </div>
-                <FollowButton isFollowing={podcast.isFollowed} user_id={user?.id} podcast_id={podcastId} />
+                <div className="my-16 flex flex-row items-center gap-x-4">
+                    <FollowButton isFollowing={podcast.isFollowed} user_id={user?.id} podcast_id={podcastId} />
+                    <PodcastPopover podcastId={podcastId} podcast={podcast} isOwner={podcast.user_id === user?.id}/>
+                </div>
                 {/* TODO: Add the ... */}
             </Header>
             <div className="flex flex-col-reverse lg:flex-row gap-4 p-4 w-full">
