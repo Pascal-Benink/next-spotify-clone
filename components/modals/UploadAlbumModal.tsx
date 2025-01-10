@@ -15,6 +15,7 @@ import CheckBox from "../CheckBox";
 import { useUploadAlbumModal } from "@/hooks/useUploadAlbumModal";
 import JSZip from "jszip";
 import { getMimeType } from "@/lib/getMimeType";
+import ProgressBar from "../ProgressBar";
 
 const UploadAlbumModal = () => {
     const router = useRouter();
@@ -25,6 +26,12 @@ const UploadAlbumModal = () => {
     const { user } = useUser();
 
     const supabaseClient = useSupabaseClient();
+
+    const [progress, setProgress] = useState(0);
+
+    const [totalSongs, setTotalSongs] = useState(0);
+
+    const [isuploading, setIsUploading] = useState(false);
 
     const {
         register,
@@ -142,6 +149,10 @@ const UploadAlbumModal = () => {
 
             const albumId = albumData.id;
 
+            setTotalSongs(songFiles.length);
+
+            setIsUploading(true);
+
             // Upload each song
             for (const songFile of songFiles) {
                 const songName = songFile.name.replace('.mp3', '');
@@ -169,6 +180,10 @@ const UploadAlbumModal = () => {
                     return toast.error("Failed to upload song: " + songName);
                 }
 
+                setProgress((prevProgress) => prevProgress + 1);
+
+                console.log(songData);
+
                 const { error: supabaseSongError } = await supabaseClient
                     .from(`songs`)
                     .insert({
@@ -185,12 +200,18 @@ const UploadAlbumModal = () => {
                     setIsLoading(false);
                     return toast.error(supabaseSongError.message);
                 }
+
             }
+
+            setIsUploading(false);
 
             router.refresh();
             setIsLoading(false);
             toast.success("Song uploaded successfully");
             reset();
+            setProgress(0);
+            setTotalSongs(0);
+            setIsUploading(false);
             uploadAlbumModal.onClose();
         } catch (error) {
             console.error(error);
@@ -253,6 +274,12 @@ const UploadAlbumModal = () => {
                 <Button disabled={isLoading} type="submit">
                     Create Album
                 </Button>
+                {isuploading && (
+                    <div className="flex flex-row items-center gap-x-4">
+                        Uploading {progress} of {totalSongs} songs
+                        <ProgressBar progress={(progress / totalSongs) * 100} />
+                    </div>
+                )}
             </form>
         </Modal>
     );

@@ -68,7 +68,8 @@ const AlbumEditModal = () => {
     const {
         register,
         handleSubmit,
-        reset
+        reset,
+        watch,
     } = useForm<FieldValues>({
         defaultValues: {
             id: album?.id || albumId,
@@ -77,7 +78,19 @@ const AlbumEditModal = () => {
             is_public: album?.is_public || true,
             name: album?.name || '',
         }
-    })
+    });
+
+    useEffect(() => {
+        if (album) {
+            reset({
+                id: album.id,
+                user_id: album.user_id,
+                author: album.author,
+                is_public: album.is_public,
+                name: album.name,
+            });
+        }
+    }, [album, reset]);
 
     const onChange = (open: boolean) => {
         if (!open) {
@@ -106,6 +119,22 @@ const AlbumEditModal = () => {
                 return toast.error(supabaseError.message);
             }
 
+            if (values.is_public != album?.is_public) {
+                const {
+                    error: supabaseError
+                } = await supabaseClient
+                    .from(`songs`)
+                    .update({
+                        is_private: !values.is_public
+                    })
+                    .eq('album_id', albumId)
+
+                if (supabaseError) {
+                    setIsLoading(false);
+                    return toast.error(supabaseError.message);
+                }
+            }
+
             router.refresh();
             setIsLoading(false);
             toast.success("Album editted successfully");
@@ -119,15 +148,7 @@ const AlbumEditModal = () => {
         }
     }
 
-    useEffect(() => {
-        reset({
-            id: album?.id || albumId,
-            user_id: album?.user_id || '',
-            author: album?.author || '',
-            is_public: album?.is_public || true,
-            name: album?.name || '',
-        });
-    }, [album])
+    const isPublic = watch('is_public', album?.is_public);
 
     return (
         <Modal
@@ -152,8 +173,8 @@ const AlbumEditModal = () => {
                 <CheckBox
                     id="is_public"
                     label="Public Album"
-                    checked
                     disabled={isLoading}
+                    checked={isPublic}
                     {...register('is_public')}
                 />
                 <Button disabled={isLoading} type="submit">
