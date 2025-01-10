@@ -121,12 +121,38 @@ const CreatePodcastModal = () => {
                     description: values.description,
                     author: values.author,
                     image_path: imageData.path,
-                    tag_id: selectedTag,
                 });
 
             if (supabaseError) {
                 setIsLoading(false);
                 return toast.error(supabaseError.message);
+            }
+
+            const { data: podcastData, error: podcastError } = await supabaseClient
+                .from('podcasts')
+                .select('*')
+                .eq('image_path', imageData.path)
+                .single();
+
+            if (podcastError) {
+                setIsLoading(false);
+                return toast.error(podcastError.message);
+            }
+
+            for (const tag of selectedtagList) {
+                const { error: tagError } = await supabaseClient
+                    .from('podcast_has_tags')
+                    .insert({
+                        podcast_id: podcastData.id,
+                        tag_id: tag.id,
+                        user_id: user.id,
+                    });
+
+                if (tagError) {
+                    setIsLoading(false);
+                    console.error(tagError);
+                    return toast.error(tagError.message);
+                }
             }
 
             router.refresh();
