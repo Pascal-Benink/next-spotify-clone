@@ -31,6 +31,7 @@ const CreatePodcastModal = () => {
             subtitle: '',
             description: '',
             author: '',
+            tag_id: '',
             image: null,
         }
     })
@@ -80,13 +81,9 @@ const CreatePodcastModal = () => {
             const {
                 error: supabaseError
             } = await supabaseClient
-                .from(`playlists`)
+                .from(`podcasts`)
                 .insert({
-                    user_id: user.id,
-                    name: values.name,
-                    description: values.description,
-                    is_public: values.isPublic,
-                    image_path: imageData.path,
+                    // TODO: do this
                 });
 
             if (supabaseError) {
@@ -96,7 +93,7 @@ const CreatePodcastModal = () => {
 
             router.refresh();
             setIsLoading(false);
-            toast.success("Playlist Created successfully");
+            toast.success("Podcast Created successfully");
             reset();
             createPodcastModal.onClose();
         } catch (error) {
@@ -119,25 +116,25 @@ const CreatePodcastModal = () => {
                     id="name"
                     disabled={isLoading}
                     {...register('name', { required: true })}
-                    placeholder="Playlist Name"
+                    placeholder="Podcast Name"
                 />
                 <Input
                     id="subtitle"
                     disabled={isLoading}
                     {...register('subtitle', { required: true })}
-                    placeholder="Playlist Subtitle"
+                    placeholder="Podcast Subtitle"
                 />
                 <Input
                     id="description"
                     disabled={isLoading}
                     {...register('description', { required: true })}
-                    placeholder="Playlist Description"
+                    placeholder="Podcast Description"
                 />
                 <Input
                     id="author"
                     disabled={isLoading}
                     {...register('author', { required: true })}
-                    placeholder="Playlist Author"
+                    placeholder="Podcast Author"
                 />
                 <div>
                     <div className="pb-1">
