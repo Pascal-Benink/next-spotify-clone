@@ -261,9 +261,9 @@ const SongEditModal = () => {
                 isOpen={selectOpen}
                 onOpenChange={() => setSelectOpen(!selectOpen)}
                 data={albumData.map(album => ({ id: album.id, name: album.name }))}
-                onSelect={(selected) => setSelectedAlbum(selected === 'no-album' ? undefined : selected)}
+                onSelect={(selected) => setSelectedAlbum(selected === 'no-album' ? 'no-album' : selected)}
                 selected={selectedAlbum}
-                placeholder={selectedAlbum ? albumData.find(album => album.id === selectedAlbum)?.name || "Select an Album" : "Select an Album"}
+                placeholder=""
                 className="mb-4"
             />
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
@@ -299,15 +299,21 @@ const SongEditModal = () => {
                     />
                     {song?.image_path && (
                         <div className="mb-2">
-                            <img src={supabaseClient.storage.from('images').getPublicUrl(song.image_path).data.publicUrl} alt="Current Song Image" className="mb-2 w-[100px]" />
+                            <div className="flex flex-row gap-3">
+                                <img src={supabaseClient.storage.from('images').getPublicUrl(song.image_path).data.publicUrl} alt="Current Song Image" className="mb-2 w-[100px] flex-shrink-0" />
+
+                            </div>
+
                             <div className="text-sm text-gray-500">Current Image: {song.image_path.split('/').pop()}</div>
+
                         </div>
                     )}
+                    <Button disabled={isLoading} type="submit" className="h-[50px]">
+                        Edit Song
+                    </Button>
 
                 </div>
-                <Button disabled={isLoading} type="submit">
-                    Edit Song
-                </Button>
+
             </form>
         </Modal>
     );

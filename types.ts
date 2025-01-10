@@ -90,7 +90,7 @@ export interface Podcast {
     description: string;
     author: string;
     image_path: string;
-    isFollowed?: boolean;
+    isFollowed: boolean;
 }
 
 export interface PodcastTag {

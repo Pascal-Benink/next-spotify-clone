@@ -25,6 +25,8 @@ const PodcastPage = async ({ params }: Props) => {
     const tags = await getPodcastTags(podcastId);
     const episodes = await getPodcastEpisodes(podcastId);
 
+    console.log(podcast);
+
     return (
         <div
             className="
@@ -82,7 +84,7 @@ const PodcastPage = async ({ params }: Props) => {
                         </div>
                     </div>
                 </div>
-                <FollowButton isFollowing={false} user_id={user?.id} podcast_id={""} />
+                <FollowButton isFollowing={podcast.isFollowed} user_id={user?.id} podcast_id={podcastId} />
                 {/* TODO: Add the ... */}
             </Header>
             <div className="flex flex-col-reverse lg:flex-row gap-4 p-4 w-full">
