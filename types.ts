@@ -82,6 +82,15 @@ export interface Album {
     image_path: string;
 }
 
+export interface Podcast {
+    id: string;
+    user_id: string;
+    name: string;
+    subtitle: string;
+    description: string;
+    image_path: string;
+}
+
 export interface ProductWithPrice extends Product {
     prices?: Price[];
 }
