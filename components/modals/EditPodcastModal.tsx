@@ -12,6 +12,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useEditPodcastModal } from "@/hooks/useEditPodcastModal";
 import CheckBox from "../CheckBox";
+import { PodcastTag } from "@/types";
 
 const PodcastEditModal = () => {
     const router = useRouter();
@@ -34,6 +35,14 @@ const PodcastEditModal = () => {
     }
 
     const [podcast, setPodcast] = useState<Podcast | null>(null);
+
+    const [tags, setTags] = useState<PodcastTag[]>([]);
+
+    const [selectOpen, setSelectOpen] = useState(false);
+
+    const [selectedTag, setSelectedTag] = useState<string | undefined>(undefined);
+
+    const [selectedtagList, setSelectedTagList] = useState<{ id: string, listId: string }[]>([]);
 
     const fetchPodcast = async () => {
         try {

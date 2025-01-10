@@ -94,7 +94,8 @@ const SongEditModal = () => {
             try {
                 const { data, error } = await supabaseClient
                     .from('albums')
-                    .select('id, name');
+                    .select('id, name')
+                    .eq('user_id', user?.id);
 
                 if (error) {
                     console.error(error);
