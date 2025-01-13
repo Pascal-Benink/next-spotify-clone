@@ -14,8 +14,10 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import CheckBox from "../CheckBox";
 import { PodcastEpisode } from "@/types";
+import { getMimeType } from "@/lib/getMimeType";
 
 const UploadPodcastEpisodeModal = () => {
+    const MAX_CHUNK_SIZE = 50 * 1024 * 1024; // 50MB
     const router = useRouter();
     const uploadPodcastEpisodeModal = useUploadPodcastEpisodeModal();
 
@@ -75,6 +77,7 @@ const UploadPodcastEpisodeModal = () => {
         defaultValues: {
             episode_number: newEpisodeNumber,
             title: '',
+            episode_description: '',
             is_private: false,
             episode: null,
         }
@@ -84,6 +87,7 @@ const UploadPodcastEpisodeModal = () => {
         reset({
             episode_number: newEpisodeNumber || '',
             title: '',
+            episode_description: '',
             is_private: false,
             episode: null,
         });
@@ -104,70 +108,65 @@ const UploadPodcastEpisodeModal = () => {
         try {
             setIsLoading(true);
 
-            const imageFile = values.image?.[0];
-            const songFile = values.song?.[0];
+            const episodeFile = values.episode?.[0];
 
-            if (!imageFile || !songFile || !user) {
+            if (!episodeFile || !user) {
                 toast.error("Missing fields");
                 return;
+            }
+
+            const {
+                error: supabaseError
+            } = await supabaseClient
+                .from(`podcast_episodes`)
+                .insert({
+                    user_id: user.id,
+                    title: values.title,
+                    author: values.author,
+                    is_private: values.is_private,
+                });
+
+            if (supabaseError) {
+                setIsLoading(false);
+                return toast.error(supabaseError.message);
             }
 
             const sanitizedFileName = sanitizeFileName(values.title);
 
             const uniqueID = uniqid();
 
-            // upload song
-            const {
-                data: songData,
-                error: songError
-            } = await supabaseClient
-                .storage
-                .from('songs')
-                .upload(`song-${sanitizedFileName}-${uniqueID}`, songFile, {
-                    cacheControl: '3600',
-                    upsert: false,
-                });
+            const totalChunks = Math.ceil(episodeFile.size / MAX_CHUNK_SIZE);
 
-            if (songError) {
-                setIsLoading(false);
-                console.error(songError);
-                return toast.error("Failed to upload song");
-            }
+            for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+                const start = chunkIndex * MAX_CHUNK_SIZE;
+                const end = Math.min(start + MAX_CHUNK_SIZE, episodeFile.size);
+                const chunk = episodeFile.slice(start, end);
 
-            // upload image
-            const {
-                data: imageData,
-                error: imageError
-            } = await supabaseClient
-                .storage
-                .from('images')
-                .upload(`image-${sanitizedFileName}-${uniqueID}`, imageFile, {
-                    cacheControl: '3600',
-                    upsert: false,
-                });
+                const mimeType = getMimeType(episodeFile.name);
 
-            if (imageError) {
-                setIsLoading(false);
-                console.error(imageError);
-                return toast.error("Failed to upload image");
-            }
+                const correctBlob = new Blob([chunk], { type: 'audio/mpeg' });
 
-            const {
-                error: supabaseError
-            } = await supabaseClient
-                .from(`songs`)
-                .insert({
-                    user_id: user.id,
-                    title: values.title,
-                    author: values.author,
-                    is_private: values.is_private,
-                    image_path: imageData.path,
-                    song_path: songData.path,
-                });
+                console.log(`Uploading chunk ${chunkIndex + 1} of ${totalChunks} for episode ${values.title} (${values.episode_number}) with episode-${values.episode_number}-${sanitizedFileName}-${uniqueID}-chunk-${chunkIndex} Mime Type: ${mimeType} chunck: ${correctBlob}`);
 
-            if (supabaseError) {
-                setIsLoading(false);
-                return toast.error(supabaseError.message);
+                const {
+                    data: episodeData,
+                    error: episodeError
+                } = await supabaseClient
+                    .storage
+                    .from('podcast_episodes')
+                    .upload(`episode-${values.episode_number}-${sanitizedFileName}-${uniqueID}-chunk-${chunkIndex}`, correctBlob, {
+                        cacheControl: '3600',
+                        upsert: false,
+                        contentType: mimeType
+                    });
+
+                console.log(episodeData);
+
+                if (episodeError) {
+                    setIsLoading(false);
+                    console.error(episodeError);
+                    return toast.error("Failed to upload episode chunk");
+                }
             }
 
             router.refresh();
@@ -192,10 +191,22 @@ const UploadPodcastEpisodeModal = () => {
         >
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
                 <Input
+                    id="episode_number"
+                    disabled={isLoading}
+                    {...register('episode_number', { required: true })}
+                    placeholder="Episode Number"
+                />
+                <Input
                     id="title"
                     disabled={isLoading}
                     {...register('title', { required: true })}
                     placeholder="Episode Title"
+                />
+                <Input
+                    id="episode_description"
+                    disabled={isLoading}
+                    {...register('episode_description', { required: true })}
+                    placeholder="Episode Description"
                 />
                 <CheckBox
                     id="is_private"
