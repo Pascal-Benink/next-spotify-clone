@@ -82,6 +82,33 @@ export interface Album {
     image_path: string;
 }
 
+export interface Podcast {
+    id: string;
+    user_id: string;
+    name: string;
+    subtitle: string;
+    description: string;
+    author: string;
+    image_path: string;
+    isFollowed: boolean;
+}
+
+export interface PodcastTag {
+    id: string;
+    name: string;
+    listId: string;
+}
+
+export interface PodcastEpisode {
+    id: string;
+    user_id: string;
+    episode_number: string;
+    name: string;
+    episode_description: string;
+    episode_path: string;
+    podcast_id: string;
+}
+
 export interface ProductWithPrice extends Product {
     prices?: Price[];
 }
