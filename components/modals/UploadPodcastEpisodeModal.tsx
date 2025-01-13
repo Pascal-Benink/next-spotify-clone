@@ -3,7 +3,7 @@
 import uniqid from "uniqid";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
-import { useUploadModal } from "@/hooks/useUploadModal";
+import { useUploadPodcastEpisodeModal } from "@/hooks/useUploadPodcastEpisodeModal";
 import Modal from "../Modal";
 import { useEffect, useState } from "react";
 import Input from "../Input";
@@ -13,11 +13,15 @@ import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import CheckBox from "../CheckBox";
-import SearchSelect from "../SearchSelect";
+import { PodcastEpisode } from "@/types";
 
 const UploadPodcastEpisodeModal = () => {
     const router = useRouter();
-    const uploadModal = useUploadModal();
+    const uploadPodcastEpisodeModal = useUploadPodcastEpisodeModal();
+
+    const { PodcastId } = uploadPodcastEpisodeModal;
+
+    const [podcastEpisodes, setPodcastEpisodes] = useState<PodcastEpisode[]>([]);
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -25,23 +29,70 @@ const UploadPodcastEpisodeModal = () => {
 
     const supabaseClient = useSupabaseClient();
 
+    const getMaxEpisodeNumber = () => {
+        if (podcastEpisodes.length === 0) return 0;
+        return Math.max(...podcastEpisodes.map(episode => parseInt(episode.episode_number)));
+    };
+
+    const newEpisodeNumber = getMaxEpisodeNumber() + 1;
+
+    const fetchPodcastEpisodes = async () => {
+        if (!PodcastId) {
+            return;
+        }
+
+        const { data, error } = await supabaseClient
+            .from('podcast_episodes')
+            .select('*')
+            .eq('podcast_id', PodcastId);
+
+        if (error) {
+            console.error('Error fetching podcast episodes:', error);
+            toast.error("Failed to fetch podcast episodes");
+            return;
+        }
+
+        if (!data) {
+            console.warn('No data returned for podcast episodes');
+            toast.error("No podcast episodes found");
+            return;
+        }
+
+        setPodcastEpisodes(data.map((item) => ({
+            ...item,
+        })));
+    }
+
+    useEffect(() => {
+        fetchPodcastEpisodes();
+    }, [PodcastId]);
+
     const {
         register,
         handleSubmit,
         reset
     } = useForm<FieldValues>({
         defaultValues: {
-            episode_number: '',
+            episode_number: newEpisodeNumber,
             title: '',
             is_private: false,
             episode: null,
         }
     })
 
+    useEffect(() => {
+        reset({
+            episode_number: newEpisodeNumber || '',
+            title: '',
+            is_private: false,
+            episode: null,
+        });
+    }, [newEpisodeNumber])
+
     const onChange = (open: boolean) => {
         if (!open) {
             reset();
-            uploadModal.onClose();
+            uploadPodcastEpisodeModal.onClose();
         }
     }
 
@@ -123,7 +174,7 @@ const UploadPodcastEpisodeModal = () => {
             setIsLoading(false);
             toast.success("Song uploaded successfully");
             reset();
-            uploadModal.onClose();
+            uploadPodcastEpisodeModal.onClose();
         } catch (error) {
             console.error(error);
             toast.error("Something went wrong");
@@ -134,9 +185,9 @@ const UploadPodcastEpisodeModal = () => {
 
     return (
         <Modal
-            title="Upload Content"
-            description="Upload your content to the platform"
-            isOpen={uploadModal.isOpen}
+            title="Upload Episode"
+            description="Upload your podcast episode to the platform"
+            isOpen={uploadPodcastEpisodeModal.isOpen}
             onChange={onChange}
         >
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
@@ -144,30 +195,24 @@ const UploadPodcastEpisodeModal = () => {
                     id="title"
                     disabled={isLoading}
                     {...register('title', { required: true })}
-                    placeholder="Song Title"
-                />
-                <Input
-                    id="author"
-                    disabled={isLoading}
-                    {...register('author', { required: true })}
-                    placeholder="Song Author"
+                    placeholder="Episode Title"
                 />
                 <CheckBox
                     id="is_private"
-                    label="Private Song"
+                    label="Private Episode"
                     disabled={isLoading}
                     {...register('is_private')}
                 />
                 <div>
                     <div className="pb-1">
-                        Select a song file
+                        Select a episode file
                     </div>
                     <Input
-                        id="song"
+                        id="episode"
                         type="file"
                         disabled={isLoading}
                         accept=".mp3" // change to audio/* if want to
-                        {...register('song', { required: true })}
+                        {...register('episode', { required: true })}
                     />
                 </div>
                 <Button disabled={isLoading} type="submit">

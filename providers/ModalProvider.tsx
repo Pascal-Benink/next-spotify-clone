@@ -23,6 +23,7 @@ import CreatePodcastModal from "@/components/modals/CreatePodcastModal";
 import CreatePodcastTagModal from "@/components/modals/CreatePodcastTagModal";
 import DeletePodcastModal from "@/components/modals/DeletePodcastModal";
 import EditPodcastModal from "@/components/modals/EditPodcastModal";
+import UploadPodcastEpisodeModal from "@/components/modals/UploadPodcastEpisodeModal";
 
 interface ModalProviderProps {
     products: ProductWithPrice[];
@@ -63,6 +64,7 @@ const ModalProvider: React.FC<ModalProviderProps> = ({
             <CreatePodcastModal />
             <DeletePodcastModal />
             <EditPodcastModal />
+            <UploadPodcastEpisodeModal />
         </>
     );
 }
